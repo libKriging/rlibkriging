@@ -1,0 +1,56 @@
+# IDE configs
+.idea
+
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# code coverage files
+*.gcov
+*.gcda
+*.gcno
+
+# editor backup files
+.\#*
+*~
+*.bak
+
+# macOS metadata files
+.DS_Store
+
+# build stuffs
+cmake-build*/
+build*/
+/dist
+/pylibkriging.egg-info
+CMakeCache.txt
+CMakeFiles
+
+# armadillo 'in source' generated Makefile
+dependencies/armadillo-code/examples/Makefile
+.Rproj.user
