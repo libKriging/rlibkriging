@@ -37,9 +37,10 @@ jobs:
     - run: |
         GIT_BRANCH=${GITHUB_BASE_REF:-${GITHUB_REF#refs/heads/}}
         echo "GIT_BRANCH=$GIT_BRANCH" >> $GITHUB_ENV
+      shell: bash
 
     - run: |
-        Rscript -e "if (R.Version()$os!='linux-gnu') options(install.packages.compile.from.source='never'); install.packages('remotes', repos = 'https://cloud.r-project.org'); download.file('https://raw.githubusercontent.com/libKriging/rlibkriging/$GIT_BRANCH/DESCRIPTION','DESCRIPTION'); remotes::install_deps(dependencies=TRUE)" > ${{ matrix.os }}-R${{ matrix.r-version }}/install.Rout; \
+        Rscript -e "if (R.Version()$os!='linux-gnu') options(install.packages.compile.from.source='never'); install.packages('remotes', repos = 'https://cloud.r-project.org'); download.file('https://raw.githubusercontent.com/libKriging/rlibkriging/$GIT_BRANCH/DESCRIPTION','DESCRIPTION'); remotes::install_deps(dependencies=TRUE)" > ${{ matrix.os }}-R${{ matrix.r-version }}/install.Rout;
         Rscript -e "install.packages('devtools', repos= 'https://cloud.r-project.org'); devtools::install_github('libKriging/rlibkriging@$GIT_BRANCH',dependencies=FALSE, INSTALL_opts=c('--no-multiarch'))" > ${{ matrix.os }}-R${{ matrix.r-version }}/install.Rout
       shell: bash
 
