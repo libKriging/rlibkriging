@@ -36,7 +36,7 @@ jobs:
         Rscript -e "install.packages('devtools', repos= 'https://cloud.r-project.org'); devtools::install_github('libKriging/rlibkriging',dependencies=FALSE, INSTALL_opts=c('--no-multiarch'))" > ${{ matrix.os }}-R${{ matrix.R }}/install.Rout
       shell: bash
 
-    - run: Rscript -e "download.file('https://raw.githubusercontent.com/libKriging/rlibkriging/master/tests/testthat/test-rlibkriging-demo.R'); source('test-rlibkriging-demo.R')"
+    - run: Rscript -e "download.file('https://raw.githubusercontent.com/libKriging/rlibkriging/master/tests/testthat/test-rlibkriging-demo.R','test-rlibkriging-demo.R'); source('test-rlibkriging-demo.R')"
       shell: bash
 
     - uses: actions/upload-artifact@v2
