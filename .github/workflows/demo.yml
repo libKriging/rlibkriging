@@ -1,4 +1,4 @@
-name: demo
+name: Demo
 
 on:
   push:
@@ -30,6 +30,8 @@ jobs:
         brew install automake
         ln -s /Library/Frameworks/R.framework/Versions/3.6 /Library/Frameworks/R.framework/Versions/3.5
         echo "/Library/Frameworks/R.framework/Resources/bin" >> $GITHUB_PATH
+    - if: matrix.os == 'ubuntu-latest'
+      run: sudo apt install -y libcurl4-openssl-dev
 
     - run: |
         Rscript -e "if (R.Version()$os!='linux-gnu') options(install.packages.compile.from.source='never'); install.packages('remotes', repos = 'https://cloud.r-project.org'); download.file('https://raw.githubusercontent.com/libKriging/rlibkriging/master/DESCRIPTION','DESCRIPTION'); remotes::install_deps(dependencies=TRUE)" > ${{ matrix.os }}-R${{ matrix.R }}/install.Rout; \
