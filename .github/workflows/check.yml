@@ -26,8 +26,8 @@ jobs:
           r-version: ${{ matrix.r-version }}
 
       - run: |
-        Rscript -e "if (R.Version()$os!='linux-gnu') options(install.packages.compile.from.source='never'); install.packages('remotes', repos = 'https://cloud.r-project.org')"; \
-        Rscript -e "remotes::install_deps(dependencies = TRUE)"
+          Rscript -e "if (R.Version()$os!='linux-gnu') options(install.packages.compile.from.source='never'); install.packages('remotes', repos = 'https://cloud.r-project.org')"; \
+          Rscript -e "remotes::install_deps(dependencies = TRUE)"
 
       - if: failure()
         uses: actions/upload-artifact@v2
