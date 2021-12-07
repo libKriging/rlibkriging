@@ -1,0 +1,8 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+LICENSE
+^.*\.png$
+^.*\.Rdata$
+^\.git.*
+^.*\.txt
+^.*\.HTML

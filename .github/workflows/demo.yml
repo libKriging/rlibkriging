@@ -1,0 +1,45 @@
+name: demo
+
+on:
+  push:
+    branches: [ master ]
+    tags: [ '*.*' ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  examples:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        R: [ 3.6, oldrel, release, devel ]
+    runs-on: ${{ matrix.os }}
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+    - uses: r-lib/actions/setup-r@latest
+      with:
+        r-version: ${{ matrix.R }}
+
+    - run: mkdir ${{ matrix.os }}-R${{ matrix.R }}
+      shell: bash
+
+    - if: matrix.os == 'macos-latest'
+      run: |
+        brew install automake
+        ln -s /Library/Frameworks/R.framework/Versions/3.6 /Library/Frameworks/R.framework/Versions/3.5
+        echo "/Library/Frameworks/R.framework/Resources/bin" >> $GITHUB_PATH
+
+    - run: |
+        Rscript -e "if (R.Version()$os!='linux-gnu') options(install.packages.compile.from.source='never'); install.packages('remotes', repos = 'https://cloud.r-project.org'); download.file('https://raw.githubusercontent.com/libKriging/rlibkriging/master/DESCRIPTION','DESCRIPTION'); remotes::install_deps(dependencies=TRUE)" > ${{ matrix.os }}-R${{ matrix.R }}/install.Rout; \
+        Rscript -e "install.packages('devtools', repos= 'https://cloud.r-project.org'); devtools::install_github('libKriging/rlibkriging',dependencies=FALSE, INSTALL_opts=c('--no-multiarch'))" > ${{ matrix.os }}-R${{ matrix.R }}/install.Rout
+      shell: bash
+
+    - run: Rscript -e "download.file('https://raw.githubusercontent.com/libKriging/rlibkriging/master/tests/testthat/test-rlibkriging-demo.R'); source('test-rlibkriging-demo.R')"
+      shell: bash
+
+    - uses: actions/upload-artifact@v2
+      if: ${{ always() }}
+      with:
+        path: ./${{ matrix.os }}-*

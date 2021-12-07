@@ -1,0 +1,42 @@
+name: Check
+
+on:
+  push:
+    branches: [ master ]
+    tags: [ '*.*' ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  check:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ windows-latest, macOS-latest, ubuntu-latest ]
+        r-version: [ 3.6, oldrel, release, devel ]
+
+    runs-on: ${{ matrix.os }}
+    name: ${{ matrix.os }}-R${{ matrix.r-version }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: r-lib/actions/setup-r@latest
+        with:
+          r-version: ${{ matrix.r-version }}
+
+      - run: Rscript -e "if (R.Version()$os!='linux-gnu') options(install.packages.compile.from.source='never'); install.packages('remotes', repos = 'https://cloud.r-project.org')" -e "remotes::install_deps(dependencies = TRUE)"
+
+      - if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          name: artifacts-${{ matrix.os }}-R${{ matrix.r-version }}
+          path: |
+            *.txt
+            *.log
+            *.out
+            *.Rout
+
+      - uses: s-u/R-actions/pkg-check@master
+        with:
+          check-flags: --as-cran --no-multiarch
