@@ -39,8 +39,18 @@ jobs:
             *.log
             *.out
             *.Rout
-            */*.out
 
       - uses: s-u/R-actions/pkg-check@master
         with:
           check-flags: --as-cran --no-multiarch
+
+      - if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          name: artifacts-${{ matrix.os }}-R${{ matrix.r-version }}
+          path: |
+            *.txt
+            *.log
+            *.out
+            *.Rout
+            *.Rcheck
