@@ -48,9 +48,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: artifacts-${{ matrix.os }}-R${{ matrix.r-version }}
-          path: |
-            *.txt
-            *.log
-            *.out
-            *.Rout
-            *.Rcheck
+          path: ../*.Rcheck

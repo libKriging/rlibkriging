@@ -39,9 +39,12 @@ jobs:
         echo "GIT_BRANCH=$GIT_BRANCH" >> $GITHUB_ENV
       shell: bash
 
-    - run: |
-        Rscript -e "if (R.Version()$os!='linux-gnu') options(install.packages.compile.from.source='never'); install.packages('remotes', repos = 'https://cloud.r-project.org'); download.file('https://raw.githubusercontent.com/libKriging/rlibkriging/$GIT_BRANCH/DESCRIPTION','DESCRIPTION'); remotes::install_deps(dependencies=TRUE)" > ${{ matrix.os }}-R${{ matrix.r-version }}/install.Rout;
-        Rscript -e "install.packages('devtools', repos= 'https://cloud.r-project.org'); devtools::install_github('libKriging/rlibkriging@$GIT_BRANCH',dependencies=FALSE, INSTALL_opts=c('--no-multiarch'))" > ${{ matrix.os }}-R${{ matrix.r-version }}/install.Rout
+#    - run: |
+#        Rscript -e "if (R.Version()$os!='linux-gnu') options(install.packages.compile.from.source='never'); install.packages('remotes', repos = 'https://cloud.r-project.org'); download.file('https://raw.githubusercontent.com/libKriging/rlibkriging/$GIT_BRANCH/DESCRIPTION','DESCRIPTION'); remotes::install_deps(dependencies=TRUE)" > ${{ matrix.os }}-R${{ matrix.r-version }}/install.Rout;
+#        Rscript -e "install.packages('devtools', repos= 'https://cloud.r-project.org'); devtools::install_github('libKriging/rlibkriging@$GIT_BRANCH',dependencies=FALSE, INSTALL_opts=c('--no-multiarch'))" > ${{ matrix.os }}-R${{ matrix.r-version }}/install.Rout
+#      shell: bash
+# For now, use full-devtools install, including deps
+    - run: Rscript -e "install.packages('devtools', repos= 'https://cloud.r-project.org'); devtools::install_github('libKriging/rlibkriging@$GIT_BRANCH')" > ${{ matrix.os }}-R${{ matrix.r-version }}/install.Rout
       shell: bash
 
     - run: Rscript -e "download.file('https://raw.githubusercontent.com/libKriging/rlibkriging/$GIT_BRANCH/tests/testthat/test-rlibkriging-demo.R','test-rlibkriging-demo.R'); source('test-rlibkriging-demo.R')"
