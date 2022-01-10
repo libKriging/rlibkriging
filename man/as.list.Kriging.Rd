@@ -3,30 +3,36 @@
 \name{as.list.Kriging}
 \alias{as.list.Kriging}
 \alias{as.list,Kriging,Kriging-method}
-\title{List Kriging object content}
+\title{Coerce a \code{Kriging} Object into a List}
 \usage{
 \method{as.list}{Kriging}(x, ...)
 }
 \arguments{
-\item{x}{S3 Kriging object}
+\item{x}{An object with class \code{"Kriging"}.}
 
 \item{...}{Ignored}
 }
 \value{
-list of Kriging object fields: kernel, optim, objective, theta, sigma2, X, centerX, scaleX, y, centerY, scaleY, regmodel, F, T, M, z, beta
+A list with its elements copying the content of the
+    \code{Kriging} object fields: \code{kernel}, \code{optim},
+    \code{objective}, \code{theta} (vector of ranges),
+    \code{sigma2} (variance), \code{X}, \code{centerX},
+    \code{scaleX}, \code{y}, \code{centerY}, \code{scaleY},
+    \code{regmodel}, \code{F}, \code{T}, \code{M}, \code{z},
+    \code{beta}.
 }
 \description{
-List Kriging object content
+Coerce a \code{Kriging} Object into a List
 }
 \examples{
-f = function(x) 1-1/2*(sin(12*x)/(1+x)+2*cos(7*x)*x^5+0.7)
+f <- function(x) 1 - 1 / 2 * (sin(12 * x) / (1 + x ) + 2 * cos(7 * x) * x^5 + 0.7)
 set.seed(123)
 X <- as.matrix(runif(5))
 y <- f(X)
-r <- Kriging(y, X, "gauss")
-l = as.list(r)
-cat(paste0(names(l)," =" ,l,collapse="\n"))
+r <- Kriging(y, X, kernel = "gauss")
+l <- as.list(r)
+cat(paste0(names(l), " =" , l, collapse = "\n"))
 }
 \author{
-Yann Richet (yann.richet@irsn.fr)
+Yann Richet \email{yann.richet@irsn.fr}
 }

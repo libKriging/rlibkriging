@@ -25,18 +25,18 @@ length(x) x nsim matrix containing simulated path at x points
 Simulate (conditional) Kriging model at given points
 }
 \examples{
-f = function(x) 1-1/2*(sin(12*x)/(1+x)+2*cos(7*x)*x^5+0.7)
-  plot(f)
+f <- function(x) 1-1 / 2 * (sin(12 * x) / (1 + x) + 2 * cos(7 * x) * x^5 + 0.7)
+plot(f)
 set.seed(123)
 X <- as.matrix(runif(5))
 y <- f(X)
-  points(X,y,col='blue')
-r <- Kriging(y, X, "gauss")
-x = seq(0,1,,101)
-s_x = simulate(r, nsim=3, x=x)
-  lines(x,s_x[,1],col='blue')
-  lines(x,s_x[,2],col='blue')
-  lines(x,s_x[,3],col='blue')
+points(X, y, col = 'blue')
+r <- Kriging(y, X, kernel = "gauss")
+x <- seq(from = 0, to = 1, length.out = 101)
+s_x <- simulate(r, nsim = 3, x = x)
+lines(x, s_x[ , 1], col = 'blue')
+lines(x, s_x[ , 2], col = 'blue')
+lines(x, s_x[ , 3], col = 'blue')
 }
 \author{
 Yann Richet (yann.richet@irsn.fr)

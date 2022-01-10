@@ -2,7 +2,7 @@
 % Please edit documentation in R/methods.R
 \name{logLikelihood}
 \alias{logLikelihood}
-\title{Compute model log-Likelihood at given args}
+\title{Compute Model log-Likelihood at Given Args}
 \usage{
 logLikelihood(...)
 }
@@ -13,5 +13,5 @@ logLikelihood(...)
 log-Likelihood
 }
 \description{
-Compute model log-Likelihood at given args
+Compute Model log-Likelihood at Given Args
 }

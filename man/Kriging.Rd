@@ -2,42 +2,82 @@
 % Please edit documentation in R/methods.R
 \name{Kriging}
 \alias{Kriging}
-\title{Build a "Kriging" object from libKriging.}
+\title{Build a \code{"Kriging"} Object using \bold{libKriging}}
 \usage{
 Kriging(
   y,
   X,
   kernel,
-  regmodel = "constant",
+  regmodel = c("constant", "linear", "interactive"),
   normalize = FALSE,
-  optim = "BFGS",
-  objective = "LL",
+  optim = c("BFGS", "Newton", "none"),
+  objective = c("LL", "LOO", "LMP"),
   parameters = NULL
 )
 }
 \arguments{
-\item{y}{Array of response values}
+\item{y}{Array of response values. XXX vector?}
 
-\item{X}{Matrix of input design}
+\item{X}{Numeric matrix of input design.}
 
-\item{kernel}{Covariance model: "gauss", "exp", ...}
+\item{kernel}{Character defining the covariance model:
+\code{"gauss"}, \code{"exp"}, ... See XXX.}
 
-\item{regmodel}{Universal Kriging linear trend: "constant", "linear", "interactive" ("constant" by default)}
+\item{regmodel}{Universal Kriging linear trend.}
 
-\item{normalize}{Normalize X and y in [0,1] (FALSE by default)}
+\item{normalize}{Logical. If \code{TRUE} both the input matrix
+\code{X} and the response \code{y} in normalized to take
+values in the interval \eqn{[0, 1]}.}
 
-\item{optim}{Optimization method to fit hyper-parameters: "BFGS", "Newton" (uses objective Hessian), "none" (keep initial "parameters" values)}
+\item{optim}{Character giving the Optimization method used to fit
+hyper-parameters. Possible values are: \code{"BFGS"},
+\code{"Newton"} which uses both the gradietn and the Hessian
+of the objective, and \code{"none"} which simply keeps the
+values given in \code{parameters}.}
 
-\item{objective}{Objective function to optimize: "LL" (log-Likelihood, by default), "LOO" (leave one out)}
+\item{objective}{Character giving the bjective function to
+optimize. Possible values are: \code{"LL"} for the
+log-Likelihood, \code{"LOO"} for the leave-one-out sum of
+squares (XXX) \code{"LMP"} for the log Marginal Posterior.}
 
-\item{parameters}{Initial hyper parameters: list(sigma2=..., theta=...). If theta has many rows, each is used as a starting point for optim.}
+\item{parameters}{Initial values for the hyper-parameters. When
+provided this must be named list with elements \code{"sigma2"}
+and \code{"theta"} containing the initial value(s) for the
+variance and for the range parameters. If \code{theta} is a
+matrix with more than one row, each row is used as a starting
+point for optimization.}
 }
 \value{
-S3 Kriging object. Should be used with its predict, simulate, update methods.
+An object with S3 class \code{"Kriging"}. Should be used
+    with its \code{predict}, \code{simulate}, \code{update}
+    methods.
 }
 \description{
-Build a "Kriging" object from libKriging.
+The hyper-parameters (variance and vector of correlation ranges)
+are estimated thanks to the optimization of a criterion given by
+\code{objective}, using the method given in \code{optim}.
+}
+\examples{
+X <- as.matrix(c(0.0, 0.25, 0.5, 0.75, 1.0))
+f <- function(x) 1 - 1 / 2 * (sin(12 * x) / (1 + x) + 2 * cos(7 * x) * x^5 + 0.7)
+y <- f(X)
+## fit and print
+(k_R <- Kriging(y, X, kernel = "gauss"))
+
+x <- as.matrix(seq(from = 0, to = 1, length.out =100))
+p <- predict(k_R, newdata = x, TRUE, FALSE)
+plot(f)
+points(X, y)
+lines(x, p$mean, col = 'blue')
+polygon(c(x, rev(x)), c(p$mean - 2 * p$stdev, rev(p$mean + 2 * p$stdev)),
+        border = NA, col = rgb(0, 0, 1, 0.2))
+s <- simulate(k_R, nsim = 10, seed = 123, x = x)
+plot(f)
+points(X,y)
+matlines(x, s, col = rgb(0, 0, 1, 0.2), type = 'l', lty = 1)
+k_R <- Kriging(y, X, "gauss")
+print(k_R)
 }
 \author{
-Yann Richet (yann.richet@irsn.fr)
+Yann Richet <yann.richet@irsn.fr>
 }

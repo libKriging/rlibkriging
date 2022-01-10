@@ -10,7 +10,7 @@
 \arguments{
 \item{object}{S3 Kriging object}
 
-\item{theta}{new points in model output space}
+\item{theta}{range parameters to evaluate}
 
 \item{grad}{return Gradient ? (default is TRUE)}
 
@@ -23,16 +23,17 @@ log-Likelihood computed for given theta
 Compute log-Likelihood of Kriging model
 }
 \examples{
-f = function(x) 1-1/2*(sin(12*x)/(1+x)+2*cos(7*x)*x^5+0.7)
+f <- function(x) 1 - 1 / 2 * (sin(12 * x) / (1 + x) + 2 * cos(7 * x) * x^5 + 0.7)
 set.seed(123)
 X <- as.matrix(runif(5))
 y <- f(X)
-r <- Kriging(y, X, "gauss")
+r <- Kriging(y, X, kernel = "gauss")
 print(r)
-ll = function(theta) logLikelihood(r,theta)$logLikelihood
-t = seq(0.0001,2,,101)
-  plot(t,ll(t),type='l')
-  abline(v=as.list(r)$theta,col='blue')
+ll <- function(theta) logLikelihood(r, theta)$logLikelihood
+t <- seq(from = 0.0001, to = 2, length.out = 101)
+plot(t, ll(t), type = 'l')
+abline(v = as.list(r)$theta, col = 'blue')
+
 }
 \author{
 Yann Richet (yann.richet@irsn.fr)

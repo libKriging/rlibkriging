@@ -3,9 +3,9 @@
 \name{predict.Kriging}
 \alias{predict.Kriging}
 \alias{predict,Kriging,Kriging-method}
-\title{Predict Kriging model at given points}
+\title{Predict Kriging Model at Given Points}
 \usage{
-\method{predict}{Kriging}(object, x, stdev = T, cov = F, ...)
+\method{predict}{Kriging}(object, x, stdev = TRUE, cov = FALSE, ...)
 }
 \arguments{
 \item{object}{S3 Kriging object}
@@ -22,21 +22,21 @@
 list containing: mean, stdev, cov
 }
 \description{
-Predict Kriging model at given points
+Predict Kriging Model at Given Points
 }
 \examples{
-f = function(x) 1-1/2*(sin(12*x)/(1+x)+2*cos(7*x)*x^5+0.7)
-  plot(f)
+f <- function(x) 1 - 1 / 2 * (sin(12 * x) / (1 + x) + 2 * cos(7 * x) * x^5 + 0.7)
+plot(f)
 set.seed(123)
 X <- as.matrix(runif(5))
 y <- f(X)
-  points(X,y,col='blue')
+points(X, y, col = 'blue')
 r <- Kriging(y, X, "gauss")
-x = seq(0,1,,101)
-p_x = predict(r, x)
-  lines(x,p_x$mean,col='blue')
-  lines(x,p_x$mean-2*p_x$stdev,col='blue')
-  lines(x,p_x$mean+2*p_x$stdev,col='blue')
+x <-seq(from = 0, to = 1, length.out = 101)
+p_x <- predict(r, x)
+lines(x, p_x$mean, col = 'blue')
+lines(x, p_x$mean - 2 * p_x$stdev, col = 'blue')
+lines(x, p_x$mean + 2 * p_x$stdev, col = 'blue')
 }
 \author{
 Yann Richet (yann.richet@irsn.fr)
