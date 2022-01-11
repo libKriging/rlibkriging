@@ -185,10 +185,10 @@ test_that("DiceKriging::leaveOneOut == rlibkriging::leaveOneOut",
                        rlibkriging::leaveOneOut(KM2@Kriging,x)$leaveOneOut[1]))
 
 x <- matrix(x,ncol=d)
-test_that("DiceKriging::predict == rlibkriging::predict",
+test_that("Consitency of 'DiceKriging' and 'rlibkriging' 'predict' methods",
           expect_equal(DiceKriging::predict(km2,newdata = x, type = "UK",
                                             checkNames = FALSE)$mean[1],
-                       rlibkriging::predict(KM2, newdata = x,type = "UK")$mean[1],
+                       predict(KM2, newdata = x, type = "UK")$mean[1],
                        tol = 0.01))
 
 x <- matrix(X[2, ], ncol = d) + 0.001
@@ -281,7 +281,7 @@ test_args <-  function(formula, design, response ,covtype, estim.method ) {
     test_that("DiceKriging::predict == rlibkriging::predict",
               expect_equal(DiceKriging::predict(km2, newdata = x, type = "UK",
                                                 checkNames = FALSE)$mean[1],
-                           rlibkriging::predict(KM2, newdata = x, type = "UK")$mean[1],
+                           predict(KM2, newdata = x, type = "UK")$mean[1],
                            tol = 0.01))
     
     n <- 1000

@@ -1,10 +1,12 @@
-## XXXY added by Yves
+## This file contains stuff related to the S4 class "KM" including its
+## definition as a class extending "km" from the DiceKriging package.
 
 if (!requireNamespace("DiceKriging", quietly = TRUE)) {
     stop("Package \"DiceKriging\" not found")
 }
     
-## register the S3 class "Kriging"
+## Register the S3 class "Kriging" to define the class of the @Kriging
+## slot in a `KM` object
 setOldClass("Kriging")
 
 ##' @title S4 class for Kriging Models Extending the \code{"km"} Class
@@ -22,9 +24,7 @@ setOldClass("Kriging")
 ##' \eqn{\hat{\boldsymbol{\beta}}}{betaHat} of estimated (or fixed)
 ##' trend coefficients with length \eqn{p}.
 ##'
-##' @slot covariance A
-##' 
-##' @section Useful material:
+##' @slot covariance A XXXY
 ##'
 ##' @author Yann Richet \email{yann.richet@irsn.fr}
 ##'
@@ -35,102 +35,6 @@ setOldClass("Kriging")
 ##' @export
 setClass("KM", slots = c("Kriging" = "Kriging"), contains = "km")
 
-
-##' Coerce a \code{Kriging} object into the class
-##' \code{"km"} from the DiceKriging package.
-##'
-##' @title Coerce a \code{Kriging} Object into the Class \code{"km"}
-##' 
-##' @author Yann Richet \email{yann.richet@irsn.fr}
-##' 
-##' @param x An object with S3 class \code{"Kriging"}.
-##' 
-##' @param .call Force the "call" to be filled in \code{km} object.
-##'
-##' @return An object of having the S4 class \code{"KM"} which
-##'     extends \code{DiceKriging::km} and contains an extra
-##'     \code{"Kriging"} slot.
-##'
-##' ## @importFrom utils installed.packages XXXY
-##'
-##' @method as.km Kriging
-##' @importFrom methods new
-##' @importFrom stats model.matrix
-##' @export KM
-##' @aliases KM,Kriging,Kriging-method
-##' @examples
-##' f <- function(x) 1 - 1 / 2 * (sin(12 * x) / (1 + x) + 2 * cos(7 * x) * x^5 + 0.7)
-##' set.seed(123)
-##' X <- as.matrix(runif(5))
-##' y <- f(X)
-##' r <- Kriging(y, X, "gauss")
-##' print(r)
-##' k <- KM(r)
-##' print(k)
-##' 
-as.km.Kriging <- function(x, .call = NULL) {
-    
-    ## loadDiceKriging()
-    ## if (! "DiceKriging" %in% installed.packages())
-    ##     stop("DiceKriging must be installed to use its wrapper from libKriging.")
-
-    if (!requireNamespace("DiceKriging", quietly = TRUE))
-        stop("Package \"DiceKriging\" not found")
-    
-    model <- new("KM")
-    model@Kriging <- x
-    
-    if (is.null(.call))
-        model@call <- match.call()
-    else
-        model@call <- .call
-    
-    m <- kriging_model(x)
-    data <- data.frame(m$X)
-    model@trend.formula <- regmodel2formula(m$regmodel)
-    model@trend.coef <- as.numeric(m$beta)
-    model@X <- m$X
-    model@y <- m$y
-    model@d <- ncol(m$X)
-    model@n <- nrow(m$X)
-    model@F <- m$F
-    colnames(model@F) <- colnames(model.matrix(model@trend.formula,data))
-    model@p <- ncol(m$F)
-    model@noise.flag <- FALSE
-    model@noise.var <- 0
-    
-    model@case <- "LLconcentration_beta_sigma2"
-    
-    model@known.param <- "None"
-    model@param.estim <- NA
-    model@method <- m$objective
-    model@optim.method <- m$optim
-    
-    model@penalty <- list()
-    model@lower <- 0
-    model@upper <- Inf
-    model@control <- list()
-    
-    model@gr <- FALSE
-    
-    model@T <- m$T
-    model@z <- as.numeric(m$z)
-    model@M <- m$M
-    
-    covStruct <-  new("covTensorProduct", d = model@d, name = m$kernel, 
-                      sd2 = m$sigma2, var.names = names(data), 
-                      nugget = 0, nugget.flag = FALSE, nugget.estim = FALSE,
-                      known.covparam = "")
-    
-    covStruct@range.names <- "theta" 
-    covStruct@paramset.n <- as.integer(1)
-    covStruct@param.n <- as.integer(model@d)
-    covStruct@range.n <- as.integer(model@d)
-    covStruct@range.val <- as.numeric(m$theta)
-    model@covariance <- covStruct 
-    
-    return(model)
-}
 
 ##' Create an object of S4 class \code{"KM"} similar to a
 ##' \code{"km"} object in the DiceKriging package.
@@ -166,7 +70,10 @@ as.km.Kriging <- function(x, .call = NULL) {
 ##'     will be optimized using \code{optim.method}.
 ##' @param ... Ignored.
 ##'
-##' @return KM object. See \bold{Details}. 
+##' @return A KM object. See \bold{Details}.
+##'
+##' @seealso \code{\link[DiceKriging]{km}} in the DiceKriginfg
+##'     package.
 ##'
 ##' @export KM
 ##' @examples
@@ -177,10 +84,10 @@ as.km.Kriging <- function(x, .call = NULL) {
 ##' 
 ##' # Using `km` from DiceKriging and a similar `KM` object 
 ##' # kriging model 1 : matern5_2 covariance structure, no trend, no nugget effect
-##' km1 <- km(design = design.fact, response = y, covtype = "gauss",
-##'           parinit = c(.5, 1), control = list(trace = FALSE))
-##' KM11 <- KM(design = design.fact, response = y, covtype = "gauss",
-##'            parinit = c(.5, 1))
+##' km1 <- DiceKriging::km(design = design.fact, response = y, covtype = "gauss",
+##'                        parinit = c(.5, 1), control = list(trace = FALSE))
+##' KM1 <- KM(design = design.fact, response = y, covtype = "gauss",
+##'           parinit = c(.5, 1))
 ##' 
 KM <- function(formula = ~1, design, response, covtype = "matern5_2",
                coef.cov = NULL, coef.var = NULL, coef.trend = NULL,
@@ -232,34 +139,53 @@ KM <- function(formula = ~1, design, response, covtype = "matern5_2",
 }
 
 
-## setMethod("KM", "Kriging", KM.Kriging)
-## setGeneric(name = "KM", def = function(...) standardGeneric("KM"))
+## setMethod("KM", "Kriging", KM.Kriging) setGeneric(name = "KM", def
+## = function(...) standardGeneric("KM")) '
 
-##' Overload DiceKriging::predict.km for \code{KM} objects (expected faster).
+
+##' Compute predictions for the response at new given input
+##' points. These conditional mean, the conditional standard deviation
+##' and confidence limits at the 95\% level. Optionnally the
+##' conditional covariance can be returned as well.
 ##'
+##' Without a dedicated \code{predict} method for the class
+##' \code{"KM"}, this method would have been inherited from the
+##' \code{"km"} class. The dedicated method is expected to run faster.
+##' A comparison can be made by coercing a \code{KM} object to a
+##' \code{km} object with \code{\link{as.km}} before calling
+##' \code{predict}.
+##' 
+##' @title Prediction Method for \code{KM} Objects
+##' 
 ##' @author Yann Richet \email{yann.richet@irsn.fr}
 ##' 
 ##' @param object An \code{KM} object.
-##' @param newdata Matrix of points where to perform prediction.
+##' @param newdata Matrix of "new" input points where to perform
+##'     prediction.
 ##' @param type Character giving the kriging type. For now only
 ##'     \code{"UK"} is possible.
 ##' @param se.compute Logical. Should the standard error be computed?
 ##' @param cov.compute Logical. Should the covariance matrix between
 ##'     newdata points be computed?
-##' @param light.return return no other intermediate objects (like T
+##' @param light.return Logical. If \code{TRUE}, no auxiliary results
+##'     will be returned (such as the Cholesky root of the correlation
 ##'     matrix).
-##' @param bias.correct fix UK variance and covaariance (defualt is
-##'     FALSE)
-##' @param checkNames check consistency between object design data: X
-##'     and newdata (default is FALSE)
-##' @param ... Ignored
+##' @param bias.correct Logical. If \code{TRUE} the UK variance and
+##'     covariance are .
+##' @param checkNames Check the consistency of the column names
+##'     between the design stored in \code{object@X} and the new one
+##'     given \code{newdata}.
+##' @param ... Ignored.
 ##'
-##' @return list of predict data: mean, sd, trend, cov, upper95 and
-##'     lower95 quantiles.
+##' @return A named list. The elements are the conditional mean and
+##'     standard deviation (\code{mean} and \code{sd}), the predicted
+##'     trend (\code{trend}) and the confidence limits (\code{lower95}
+##'     and \code{upper95}). Optionnally, the conditional covariance matrix
+##'     is returned in \code{cov}.
 ##' 
 ##' @importFrom stats qt
 ##' @method predict KM
-##' @export predict
+##' @export 
 ##' @aliases predict,KM,KM-method
 ##'
 ##' @examples
@@ -272,16 +198,16 @@ KM <- function(formula = ~1, design, response, covtype = "matern5_2",
 ##' ## kriging model 1 : matern5_2 covariance structure, no trend, no nugget effect
 ##' ## m1 <- km(design = design.fact, response = y, covtype = "gauss",
 ##' ##          parinit = c(.5, 1), control = list(trace=F))
-##' as_m1 <- KM(design = design.fact, response = y, covtype = "gauss",
+##' KM1 <- KM(design = design.fact, response = y, covtype = "gauss",
 ##'                parinit = c(.5, 1))
-##' as_p <- predict(as_m1,newdata = matrix(.5,ncol = 2), type = "UK",
+##' Pred <- predict(KM1, newdata = matrix(.5,ncol = 2), type = "UK",
 ##'                 checkNames = FALSE, light.return = TRUE)
 predict.KM <- function(object, newdata, type = "UK",
-                          se.compute = TRUE,
-                          cov.compute = FALSE,
-                          light.return = TRUE,
-                          bias.correct = FALSE, checkNames = FALSE,...) {
-
+                       se.compute = TRUE,
+                       cov.compute = FALSE,
+                       light.return = TRUE,
+                       bias.correct = FALSE, checkNames = FALSE,...) {
+    
     if (length(L <- list(...)) > 0) warnOnDots(L)
     
     if (isTRUE(checkNames)) stop("'checkNames = TRUE' unsupported.")
@@ -290,7 +216,7 @@ predict.KM <- function(object, newdata, type = "UK",
     if (type != "UK") stop("'type != UK' unsupported.")
     
     y.predict <- predict.Kriging(object@Kriging, x = newdata,
-                                stdev = se.compute, cov = cov.compute)
+                                 stdev = se.compute, cov = cov.compute)
     
     output.list <- list()
     ## output.list$trend <- y.predict.trend
@@ -321,14 +247,21 @@ predict.KM <- function(object, newdata, type = "UK",
 setMethod("predict", "KM", predict.KM)
 
 
-##' Overload the \code{simulate} method from DiceKriging for
-##' \code{KM} objects. This is expected to be faster.
+##' The \code{simulate} method is used to simulate paths from the
+##' kriging model described in \code{object}.
+##'
+##' Without a dedicated \code{simulate} method for the class
+##' \code{"KM"}, this method would have been inherited from the
+##' \code{"km"} class. The dedicated method is expected to run faster.
+##' A comparison can be made by coercing a \code{KM} object to a
+##' \code{km} object with \code{\link{as.km}} before calling
+##' \code{simulate}.
 ##'
 ##' @title Simulation from a \code{KM} Object
 ##' 
 ##' @author Yann Richet \email{yann.richet@irsn.fr}
 ##' 
-##' @param object An \code{KM} object.
+##' @param object A \code{KM} object.
 ##'
 ##' @param nsim Integer: number of response vectors to simulate.
 ##'
@@ -385,30 +318,54 @@ simulate.KM <- function(object, nsim = 1, seed = NULL, newdata,
 setMethod("simulate", "KM", simulate.KM)
 
 
-##' Overload DiceKriging::update.km method for `KM` objects (expected faster).
+##' The \code{update} method is used when new observations are added
+##' to a fitted kriging model. Rather than fitting the model from
+##' scratch with the updated observations, the results of the fit as
+##' stored in \code{object} are used to achieve some savings.
 ##'
-##' @title Overload the `update` Method from \bold{DiceKriging}
+##' Without a dedicated \code{update} method for the class
+##' \code{"KM"}, this would have been inherited from the class
+##' \code{"km"}. The dedicated method is expected to run faster.  A
+##' comparison can be made by coercing a \code{KM} object to a
+##' \code{km} object with \code{\link{as.km}} before calling
+##' \code{update}.
+##'
+##' @title \code{update} Method for \code{KM} Objects
 ##'
 ##' @author Yann Richet \email{yann.richet@irsn.fr}
 ##' 
-##' @param object KM object
-##' @param newX new design points: matrix of object@d columns
-##' @param newy new response points
-##' @param newX.alreadyExist if TRUE, newX contains some ppoints
-##'     already in object@X
-##' @param cov.reestim fit object to newdata: estimate theta (only
-##'     supports TRUE)
-##' @param trend.reestim fit object to newdata: estimate beta (only
-##'     supports TRUE)
-##' @param nugget.reestim fit object to newdata: estimate nugget
-##'     effect (only support FALSE)
-##' @param newnoise.var add noise to newy response
-##' @param kmcontrol parametrize fit (unsupported)
-##' @param newF New trend matrix.
-##' @param ... Ignored
+##' @param object A KM object.
+##' @param newX A numeric matrix containing the new design points. It
+##'     must have \code{object@d} columns in correspondence with those
+##'     of the design matrix used to fit the model which is stored as
+##'     \code{object@X}.
+##' @param newy A numeric vector of new response values, in
+##'     correspondence with the rows of \code{newX}.
+##' @param newX.alreadyExist Logical. If TRUE, \code{newX} can contain
+##'     some input points that are already in \code{object@X}.
+##' @param cov.reestim Logical. If \code{TRUE}, the vector
+##'     \code{theta} of correlation ranges will be re-estimated using
+##'     the new observations as well as the observations already used
+##'     when fitting \code{object}. Only \code{TRUE} can be used for
+##'     now.
+##' @param trend.reestim Logical. If \code{TRUE} the vector
+##'     \code{beta} of trend coefficients will be re-estimated using
+##'     all the observations. Only \code{TRUE} can be used for now.
+##' @param nugget.reestim Logical. If \code{TRUE} the nugget effect
+##'     will be re-estimated using all the observations. Only
+##'     \code{FALSE} can be used for now.
+##' @param newnoise.var Optional variance of an additional noise on
+##'     the new response.
+##' @param kmcontrol A list of options to tune the fit. Not available
+##'     yet.
+##' @param newF New trend matrix. XXXY?
+##' @param ... Ignored.
+##'
+##' @seealso \code{\link{as.km}} to coerce a \code{KM} object to the
+##'     class \code{"km"}.
 ##'
 ##' @method update KM
-##' @export update
+##' @export
 ##' @aliases update,KM,KM-method
 ##' @examples
 ##' f <- function(x) 1 - 1 / 2 * (sin(12 * x) / (1 + x) + 2 * cos(7 * x) * x^5 + 0.7)
@@ -416,39 +373,42 @@ setMethod("simulate", "KM", simulate.KM)
 ##' set.seed(123)
 ##' X <- as.matrix(runif(5))
 ##' y <- f(X)
-##' points(X,y,col='blue')
+##' points(X, y, col = "blue")
 ##' k <- KM(design=X, response=y,covtype = "gauss")
 ##' x <-  seq(from = 0, to = 1, length.out = 101)
 ##' p_x <- predict(k, x)
-##' lines(x, p_x$mean, col = 'blue')
-##' lines(x, p_x$lower95, col = 'blue')
-##' lines(x, p_x$upper95, col = 'blue')
+##' lines(x, p_x$mean, col = "blue")
+##' lines(x, p_x$lower95, col = "blue")
+##' lines(x, p_x$upper95, col = "blue")
 ##' newX <- as.matrix(runif(3))
 ##' newy <- f(newX)
-##' points(newX, newy, col = 'red')
+##' points(newX, newy, col = "red")
 ##' update(k, newy, newX)
 ##' x <- seq(from = 0, to = 1, length.out = 101)
 ##' p2_x <- predict(k, x)
-##' lines(x, p2_x$mean, col = 'red')
-##' lines(x, p2_x$lower95, col = 'red')
-##' lines(x, p2_x$upper95, col = 'red')
+##' lines(x, p2_x$mean, col = "red")
+##' lines(x, p2_x$lower95, col = "red")
+##' lines(x, p2_x$upper95, col = "red")
 update.KM <- function(object,
-                         newX,
-                         newy,
-                         newX.alreadyExist =  FALSE,
-                         cov.reestim = TRUE,trend.reestim = cov.reestim,
-                         nugget.reestim=FALSE,
-                         newnoise.var = NULL, kmcontrol = NULL, newF = NULL,
-                         ...) {
+                      newX,
+                      newy,
+                      newX.alreadyExist =  FALSE,
+                      cov.reestim = TRUE,trend.reestim = cov.reestim,
+                      nugget.reestim = FALSE,
+                      newnoise.var = NULL,
+                      kmcontrol = NULL, newF = NULL,
+                      ...) {
     
     if (length(list(...)) > 0) warnOnDots()
     
-    if (isTRUE(newX.alreadyExist)) stop("'newX.alreadyExist = TRUE' unsupported.")
-    if (!is.null(newnoise.var)) stop("'newnoise.var != NULL' unsupported.")
+    if (isTRUE(newX.alreadyExist))
+        stop("'newX.alreadyExist = TRUE' unsupported.")
+    if (!is.null(newnoise.var))
+        stop("'newnoise.var != NULL' unsupported.")
     if (!is.null(kmcontrol)) stop("'kmcontrol != NULL' unsupported.")
     if (!is.null(newF)) stop("'newF != NULL' unsupported.")
     
-    update.Kriging(object@Kriging,newy,newX)
+    update.Kriging(object@Kriging,newy, newX)
   
     return(object)
     
@@ -456,25 +416,3 @@ update.KM <- function(object,
 
 setMethod("update", "KM", update.KM)
 
-
-## XXXY use 'identical' with formula objects seesm cleaner
-formula2regmodel = function(form) {
-    if (format(form) == "~1")
-        return("constant")
-    else if (format(form) == "~.")
-        return("linear")
-    else if (format(form) == "~.^2")
-        return("interactive")
-    else stop("Unsupported formula ", form)
-}
-
-
-regmodel2formula = function(regmodel) {
-  if (regmodel == "constant")
-    return(~1)
-  else if (regmodel == "linear")
-    return(~.)
-  else if (regmodel == "interactive")
-    return(~.^2)
-  else stop("Unsupported regmodel ",regmodel)
-}
