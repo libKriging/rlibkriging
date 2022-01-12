@@ -72,9 +72,9 @@ design.fact <- expand.grid(x1 = seq(0, 1, length = 4), x2 = seq(0, 1, length = 4
 y <- apply(design.fact, 1, DiceKriging::branin) 
 
 ## library(DiceKriging)
-## kriging model 1 : matern5_2 covariance structure, no trend, no nugget effect
+## kriging model 1 : matern5_2 covariance structure, no trend, no nugget
 ## m1 <- km(design = design.fact, response = y, covtype = "gauss",
-##          parinit = c(.5, 1), control = list(trace=F))
+##          parinit = c(.5, 1), control = list(trace = FALSE))
 KM1 <- KM(design = design.fact, response = y, covtype = "gauss",
                parinit = c(.5, 1))
 Pred <- predict(KM1, newdata = matrix(.5,ncol = 2), type = "UK",

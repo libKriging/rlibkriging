@@ -11,7 +11,7 @@
 \item{object}{A \code{Kriging} object.}
 
 \item{theta}{A numeric vector of range parameters at which the LOO
-will be evaluated}
+will be evaluated.}
 
 \item{grad}{Logical. Should the gradient (w.r.t. \code{theta}) be
 returned?}
@@ -23,8 +23,8 @@ The leave-One-Out value computed for the given vector
     \eqn{\boldsymbol{\theta}}{\theta} of correlation ranges.
 }
 \description{
-Compute Leave-One-Out for an object with S3 class \code{"Kriging"}
-representing a kriging model.
+Compute Leave-One-Out (LOO) error for an object with S3 class
+\code{"Kriging"} representing a kriging model.
 }
 \details{
 The returned value is the sum of squares \eqn{\sum_{i=1}^n [y_i -

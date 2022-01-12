@@ -2,6 +2,10 @@ library(testthat)
 
 ## install.packages("../rlibkriging_0.1-10_R_x86_64-pc-linux-gnu.tar.gz",repos=NULL)
 ## library(rlibkriging)
+##
+## Changes by Yves remove the references to the packages as in 'rlibkriging::simulate',
+## because simulate is not exported as such from rlibkriging
+
 
 f <- function(x) {
     1 - 1 / 2 * (sin(12 * x) / (1 + x) + 2 * cos(7 * x) * x^5 + 0.7)
@@ -194,11 +198,11 @@ test_that("Consitency of 'DiceKriging' and 'rlibkriging' 'predict' methods",
 x <- matrix(X[2, ], ncol = d) + 0.001
 n <-  1000
 set.seed(123)
-sims_km2 <- DiceKriging::simulate(km2, nsim = n,newdata = x,
-                                checkNames = FALSE, cond = TRUE,
-                                nugget.sim=1e-10)
-sims_KM2 <- rlibkriging::simulate(KM2,nsim = n, newdata = x,
-                                 checkNames = FALSE , cond = TRUE)
+sims_km2 <- simulate(km2, nsim = n,newdata = x,
+                     checkNames = FALSE, cond = TRUE,
+                     nugget.sim=1e-10)
+sims_KM2 <- simulate(KM2, nsim = n, newdata = x,
+                     checkNames = FALSE , cond = TRUE)
 t <- t.test(sims_km2, sims_KM2, var.equal = FALSE)
 
 if (t$p.value < 0.05) {
@@ -206,13 +210,13 @@ if (t$p.value < 0.05) {
     points(X, y)
     xx <-  seq(from = 0, to = 1, length.out = 101)
     for (i in 1:100) {
-        lines(xx,DiceKriging::simulate(km2, nsim = 1, newdata = xx,
-                                       checkNames = FALSE, cond = TRUE,
-                                       nugget.sim = 1e-10),
+        lines(xx, simulate(km2, nsim = 1, newdata = xx,
+                           checkNames = FALSE, cond = TRUE,
+                           nugget.sim = 1e-10),
               col = rgb(0, 0, 1, 0.02))
-        lines(xx, rlibkriging::simulate(KM2, nsim = 1, newdata = xx,
-                                        checkNames = FALSE, cond=TRUE,
-                                        nugget.sim = 0),
+        lines(xx, simulate(KM2, nsim = 1, newdata = xx,
+                           checkNames = FALSE, cond=TRUE,
+                           nugget.sim = 0),
               col = rgb(1, 0, 0, 0.02))
     }
 }
@@ -241,17 +245,17 @@ test_args <-  function(formula, design, response ,covtype, estim.method ) {
                           covtype)))
     
     set.seed(123)
-  
+    
   parinit <- runif(ncol(design))
-    k <<- DiceKriging::km(formula = formula, design = design,
-                          response = response, covtype = covtype,
-                          estim.method = estim.method,
-                          parinit = parinit, control = list(trace = FALSE))
-    as_k <<- rlibkriging::KM(formula = formula, design = design,
-                             response = response, covtype = covtype,
-                             estim.method = estim.method,
-                             parinit = parinit)
-  
+    k <<- km(formula = formula, design = design,
+             response = response, covtype = covtype,
+             estim.method = estim.method,
+             parinit = parinit, control = list(trace = FALSE))
+    as_k <<- KM(formula = formula, design = design,
+                response = response, covtype = covtype,
+                estim.method = estim.method,
+                parinit = parinit)
+    
     ##print(k)
     ##print(as_k)
     ##if (e=="MLE") {
@@ -269,7 +273,7 @@ test_args <-  function(formula, design, response ,covtype, estim.method ) {
     ##}
     ##abline(v=as_k@covariance@range.val,col='red')
 
-  t <-runif(ncol(X))
+  t <- runif(ncol(X))
     test_that("DiceKriging::logLikFun == rlibkriging::logLikelihood",
               expect_equal(DiceKriging::logLikFun(t, km2)[1],
                            rlibkriging::logLikelihood(KM2@Kriging,t)$logLikelihood[1]))
@@ -286,11 +290,11 @@ test_args <-  function(formula, design, response ,covtype, estim.method ) {
     
     n <- 1000
     set.seed(123)
-    sims_km2 <<- DiceKriging::simulate(km2, nsim = n, newdata = x,
-                                     checkNames = FALSE, cond = TRUE,
-                                     nugget.sim = 1e-10)
-    sims_KM2 <<- rlibkriging::simulate(KM2, nsim = n,newdata = x,
-                                       checkNames = FALSE, cond = TRUE)
+    sims_km2 <<- simulate(km2, nsim = n, newdata = x,
+                          checkNames = FALSE, cond = TRUE,
+                          nugget.sim = 1e-10)
+    sims_KM2 <<- simulate(KM2, nsim = n,newdata = x,
+                          checkNames = FALSE, cond = TRUE)
     t = t.test(t(sims_km2), sims_KM2, var.equal = FALSE , paired = FALSE)
     print(t)
     ## issue #100 

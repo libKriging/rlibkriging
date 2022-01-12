@@ -24,7 +24,7 @@ Universal Kriging. Supports \code{~ 1}, ~. and \code{~ .^2}.}
 
 \item{design}{Data frame. The design of experiments.}
 
-\item{response}{Array of output values. XXXY ?}
+\item{response}{Vector of output values.}
 
 \item{covtype}{Covariance structure. Supports \code{"gauss"},
 \code{"exp"}, ... XXXY What values?}
@@ -56,7 +56,7 @@ A KM object. See \bold{Details}.
 }
 \description{
 Create an object of S4 class \code{"KM"} similar to a
-\code{"km"} object in the DiceKriging package.
+\code{km} object in the DiceKriging package.
 }
 \details{
 The class \code{"KM"} extends the \code{"km"} class of the
@@ -79,8 +79,8 @@ KM1 <- KM(design = design.fact, response = y, covtype = "gauss",
 
 }
 \seealso{
-\code{\link[DiceKriging]{km}} in the DiceKriginfg
-    package.
+\code{\link[DiceKriging]{km}} in the DiceKriging
+    package for more details on the slots.
 }
 \author{
 Yann Richet \email{yann.richet@irsn.fr}

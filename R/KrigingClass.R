@@ -1,12 +1,18 @@
+## ****************************************************************************
+## This file contains stuff related to the S3 class "Kriging".
+## As an S3 class, it has no formal definition. 
+## ****************************************************************************
 
+
+## ****************************************************************************
 ##' Create an object with S3 class \code{"Kriging"} using
-##' \bold{libKriging}.
+##' the libKriging library.
 ##'
 ##' The hyper-parameters (variance and vector of correlation ranges)
 ##' are estimated thanks to the optimization of a criterion given by
 ##' \code{objective}, using the method given in \code{optim}.
 ##'
-##' @title Create a \code{Kriging} Object using \bold{libKriging}
+##' @title Create a \code{Kriging} Object using libKriging
 ##' 
 ##' @author Yann Richet \email{yann.richet@irsn.fr}
 ##' 
@@ -87,8 +93,9 @@ Kriging <- function(y, X, kernel,
                       parameters = parameters)
     class(nk) <- "Kriging"
     nk
-} 
+}
 
+## ****************************************************************************
 ##' Coerce a \code{Kriging} Object into a List
 ##'
 ##' @author Yann Richet \email{yann.richet@irsn.fr}
@@ -122,6 +129,7 @@ as.list.Kriging <- function(x, ...) {
 
 ## setMethod("as.list", "Kriging", as.list.Kriging)
 
+## ****************************************************************************
 ##' Coerce a \code{Kriging} object into the \code{"km"} class of the
 ##' DiceKriging package.
 ##'
@@ -219,14 +227,14 @@ as.km.Kriging <- function(x, .call = NULL, ...) {
     return(model)
 }
 
-
-
-##' Print Kriging object content
+## ****************************************************************************
+##' Print the content of a \code{Kriging} object.
 ##'
+##' @title Print a \code{Kriging} object
 ##' @author Yann Richet \email{yann.richet@irsn.fr}
 ##'
-##' @param x S3 Kriging object
-##' @param ... Ignored
+##' @param x A (S3) \code{Kriging} Object.
+##' @param ... Ignored.
 ##'
 ##' @return NULL
 ##'
@@ -240,6 +248,8 @@ as.km.Kriging <- function(x, .call = NULL, ...) {
 ##' y <- f(X)
 ##' r <- Kriging(y, X, "gauss")
 ##' print(r)
+##' ## same thing
+##' r
 print.Kriging <- function(x, ...) {
     
     if (length(L <- list(...)) > 0) warnOnDots(L)
@@ -266,6 +276,8 @@ print.Kriging <- function(x, ...) {
 
 ## setMethod("print", "Kriging", print.Kriging)
 
+
+## ****************************************************************************
 ##' Predict Kriging Model at Given Points
 ##' 
 ##' @author Yann Richet \email{yann.richet@irsn.fr}
@@ -313,7 +325,7 @@ predict.Kriging <- function(object, x, stdev = TRUE, cov = FALSE, ...) {
 ## predict <- function (...) UseMethod("predict")
 ## setMethod("predict", "Kriging", predict.Kriging)
 
-
+## ****************************************************************************
 ##' Simulate (conditional) Kriging model at given points
 ##' 
 ##' @author Yann Richet \email{yann.richet@irsn.fr}
@@ -359,20 +371,25 @@ simulate.Kriging <- function(object, nsim = 1, seed = 123, x,  ...) {
 ## simulate <- function (...) UseMethod("simulate")
 ## setMethod("simulate", "Kriging", simulate.Kriging)
 
-##' Update \code{Kriging} model with new points
+
+## removed by Yves @aliases update,Kriging,Kriging-method
+## *****************************************************************************
+##' Update a \code{Kriging} model object with new points
 ##' 
+##' @title Update a \code{Kriging} Object with New Points
 ##' @author Yann Richet \email{yann.richet@irsn.fr}
+##'
 ##' 
-##' @param object S3 Kriging object
-##' @param newy new points in model output space.
-##' @param newX new points in model input space.
-##' @param normalize Logical. Normalize \code{X} and \code{y} in \eqn{[0,1]}.
-##' @param ... Ignored
+##' @param object S3 Kriging object.
+##' @param newy A numeric vector of new responses (output).
+##' @param newX A numeric matrix of new input points.
+##' @param normalize Logical. If \code{TRUE}, the input \code{X} and
+##'     the output \code{y} are normalized to lie in \eqn{[0, 1]}.
+##' @param ... Ignored.
 ##' 
 ##' @importFrom stats update
 ##' @method update Kriging
 ##' @export 
-##' @aliases update,Kriging,Kriging-method
 ##' 
 ##' @examples
 ##' f <- function(x) 1-1/2*(sin(12*x)/(1+x)+2*cos(7*x)*x^5+0.7)
@@ -415,7 +432,7 @@ update.Kriging <- function(object, newy, newX, normalize = FALSE, ...) {
 ## setMethod("update", "Kriging", update.Kriging)
 ## setGeneric(name = "update", def = function(...) standardGeneric("update"))
 
-
+## ****************************************************************************
 ##' Compute Log-Likelihood of Kriging Model
 ##' 
 ##' @author Yann Richet \email{yann.richet@irsn.fr}
@@ -446,38 +463,36 @@ update.Kriging <- function(object, newy, newX, normalize = FALSE, ...) {
 ##' plot(t, ll(t), type = 'l')
 ##' abline(v = as.list(r)$theta, col = "blue")
 ##' 
-logLikelihood.Kriging <- function(object, theta, grad = FALSE, hess = FALSE, ...) {
+logLikelihood.Kriging <- function(object, theta,
+                                  grad = FALSE, hess = FALSE, ...) {
   k <- kriging_model(object) 
   if (!is.matrix(theta)) theta <- matrix(theta, ncol = ncol(k$X))
   if (ncol(theta) != ncol(k$X))
       stop("Input theta must have ", ncol(k$X), " columns (instead of ",
            ncol(theta),")")
   out <- list(logLikelihood = matrix(NA, nrow = nrow(theta)),
-              logLikelihoodGrad = matrix(NA,nrow=nrow(theta), ncol = ncol(theta)),
-              logLikelihoodHess = array(NA,c(nrow(theta), ncol(theta), ncol(theta))))
+              logLikelihoodGrad = matrix(NA,nrow=nrow(theta),
+                                         ncol = ncol(theta)),
+              logLikelihoodHess = array(NA, dim = c(nrow(theta), ncol(theta),
+                                                    ncol(theta))))
   for (i in 1:nrow(theta)) {
       ll <- kriging_logLikelihood(object, theta[i, ],
                                   grad = isTRUE(grad), hess = isTRUE(hess))
       out$logLikelihood[i] <- ll$logLikelihood
       if (isTRUE(grad)) out$logLikelihoodGrad[i, ] <- ll$logLikelihoodGrad
-      if (isTRUE(hess)) out$logLikelihoodHess[i, , ] <-  ll$logLikelihoodHess
+      if (isTRUE(hess)) out$logLikelihoodHess[i, , ] <- ll$logLikelihoodHess
   }
   if (!isTRUE(grad)) out$logLikelihoodGrad <- NULL
   if (!isTRUE(hess)) out$logLikelihoodHess <- NULL
+
   return(out)
 }
 
-##' Compute Model log-Likelihood at Given Args
-##'
-##' @param ... args
-##'
-##' @return log-Likelihood
-##' @export
-logLikelihood <- function (...) UseMethod("logLikelihood")
 ## setMethod("logLikelihood", "Kriging", logLikelihood.Kriging)
 
-##' Compute Leave-One-Out for an object with S3 class \code{"Kriging"}
-##' representing a kriging model.
+## ****************************************************************************
+##' Compute Leave-One-Out (LOO) error for an object with S3 class
+##' \code{"Kriging"} representing a kriging model.
 ##'
 ##' The returned value is the sum of squares \eqn{\sum_{i=1}^n [y_i -
 ##' \hat{y}_{i,(-i)}]^2} where \eqn{\hat{y}_{i,(-i)}} is the
@@ -490,7 +505,7 @@ logLikelihood <- function (...) UseMethod("logLikelihood")
 ##' 
 ##' @param object A \code{Kriging} object.
 ##' @param theta A numeric vector of range parameters at which the LOO
-##'     will be evaluated
+##'     will be evaluated.
 ##' 
 ##' @param grad Logical. Should the gradient (w.r.t. \code{theta}) be
 ##'     returned?
@@ -525,7 +540,7 @@ leaveOneOut.Kriging <- function(object, theta, grad = FALSE, ...) {
                 leaveOneOutGrad = matrix(NA, nrow = nrow(theta),
                                          ncol = ncol(theta)))
     for (i in 1:nrow(theta)) {
-        loo <- kriging_leaveOneOut(object,theta[i,],isTRUE(grad))
+        loo <- kriging_leaveOneOut(object,theta[i,], isTRUE(grad))
         out$leaveOneOut[i] <- loo$leaveOneOut
         if (isTRUE(grad)) out$leaveOneOutGrad[i, ] <- loo$leaveOneOutGrad
     }    
@@ -533,6 +548,7 @@ leaveOneOut.Kriging <- function(object, theta, grad = FALSE, ...) {
     return(out)
 }
 
+## ****************************************************************************
 ##' Compute log-Marginal-Posterior of Kriging model
 ##' 
 ##' @author Yann Richet \email{yann.richet.irsn.fr}
@@ -551,7 +567,7 @@ leaveOneOut.Kriging <- function(object, theta, grad = FALSE, ...) {
 ##' @aliases logMargPost,Kriging,Kriging-method
 ##' 
 ##' @examples
-##' f = function(x) 1-1/2*(sin(12*x)/(1+x)+2*cos(7*x)*x^5+0.7)
+##' f <- function(x) 1 - 1 / 2 * (sin(12 * x) / (1 + x) + 2 * cos(7 * x) * x^5 + 0.7)
 ##' set.seed(123)
 ##' X <- as.matrix(runif(5))
 ##' y <- f(X)
@@ -577,14 +593,6 @@ logMargPost.Kriging <- function(object, theta, grad = FALSE, ...) {
     if (!isTRUE(grad)) out$logMargPostGrad <- NULL
     return(out)
 }
-
-##' Compute model log-Marginal-Posterior at given args
-##'
-##' @param ... args
-##'
-##' @return log-Marginal-Posterior
-##'  @export
-logMargPost <- function (...) UseMethod("logMargPost")
 
 ## setMethod("logMargPost", "Kriging", logMargPost.Kriging)
 

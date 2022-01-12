@@ -2,7 +2,7 @@
 % Please edit documentation in R/allGenerics.R
 \name{leaveOneOut}
 \alias{leaveOneOut}
-\title{Compute Leave-One-Out.}
+\title{Compute Leave-One-Out}
 \usage{
 leaveOneOut(object, ...)
 }
@@ -15,5 +15,6 @@ leaveOneOut(object, ...)
 The Leave-One-Out sum of squares.
 }
 \description{
-Compute model leave-One-Out error at given args
+Compute the leave-One-Out error of a model given in \code{object},
+possibly at a different value of the parameters.
 }

@@ -1,5 +1,7 @@
+## *****************************************************************************
 ## This file contains stuff related to the S4 class "KM" including its
 ## definition as a class extending "km" from the DiceKriging package.
+## ****************************************************************************
 
 if (!requireNamespace("DiceKriging", quietly = TRUE)) {
     stop("Package \"DiceKriging\" not found")
@@ -9,6 +11,7 @@ if (!requireNamespace("DiceKriging", quietly = TRUE)) {
 ## slot in a `KM` object
 setOldClass("Kriging")
 
+## *****************************************************************************
 ##' @title S4 class for Kriging Models Extending the \code{"km"} Class
 ##' 
 ##' @description This class is intended to be used either by using its
@@ -24,8 +27,32 @@ setOldClass("Kriging")
 ##' \eqn{\hat{\boldsymbol{\beta}}}{betaHat} of estimated (or fixed)
 ##' trend coefficients with length \eqn{p}.
 ##'
-##' @slot covariance A XXXY
+##' @slot covariance A S4 object with class \code{"covTensorProduct"}
+##' representing a covariance kernel.
+##' 
+##' @slot noise.flag,noise.var Logical flag and numer
+##' ic value for an
+##'     optional noise term.
 ##'
+##' @slot known.param A character code indicating what parameters are
+##'     known.
+##'
+##' @slot lower,upper Bounds on the correlation range parameters.
+##'
+##' @slot method,penalty,optim.method,control,gr,parinit Objects
+##'     defining the estimation criterion, the optimization.
+##' 
+##' @slot T,M,z Auxiliary variables (matrices and vectors) that can be
+##'     used in several computations.
+##'
+##' @slot case The possible concentration (a.k.a. profiling) of the
+##'     likelihood.
+##' 
+##' @slot param.estim Logical. Is an estimation is used.?
+##'
+##' @slot Kriging A copy of the \code{Kriging} object used to create
+##'     the current \code{KM} object.
+##' 
 ##' @author Yann Richet \email{yann.richet@irsn.fr}
 ##'
 ##' @rdname KM-class
@@ -33,11 +60,12 @@ setOldClass("Kriging")
 ##' @seealso \code{\link[DiceKriging]{km-class}} in the
 ##'     \bold{DiceKriging} package. The creator \code{\link{KM}}.
 ##' @export
+##' 
 setClass("KM", slots = c("Kriging" = "Kriging"), contains = "km")
 
-
+## *****************************************************************************
 ##' Create an object of S4 class \code{"KM"} similar to a
-##' \code{"km"} object in the DiceKriging package.
+##' \code{km} object in the DiceKriging package.
 ##' 
 ##' The class \code{"KM"} extends the \code{"km"} class of the
 ##' \bold{DiceKriging} package, hence has all slots of \code{"km"}. It
@@ -51,7 +79,7 @@ setClass("KM", slots = c("Kriging" = "Kriging"), contains = "km")
 ##' @param formula R formula object to setup the linear trend in
 ##'     Universal Kriging. Supports \code{~ 1}, ~. and \code{~ .^2}.
 ##' @param design Data frame. The design of experiments.
-##' @param response Array of output values. XXXY ?
+##' @param response Vector of output values.
 ##' @param covtype Covariance structure. Supports \code{"gauss"},
 ##'     \code{"exp"}, ... XXXY What values?
 ##' @param coef.cov Opitonal value for a fixed correlation range
@@ -72,8 +100,8 @@ setClass("KM", slots = c("Kriging" = "Kriging"), contains = "km")
 ##'
 ##' @return A KM object. See \bold{Details}.
 ##'
-##' @seealso \code{\link[DiceKriging]{km}} in the DiceKriginfg
-##'     package.
+##' @seealso \code{\link[DiceKriging]{km}} in the DiceKriging
+##'     package for more details on the slots.
 ##'
 ##' @export KM
 ##' @examples
@@ -138,11 +166,7 @@ KM <- function(formula = ~1, design, response, covtype = "matern5_2",
     
 }
 
-
-## setMethod("KM", "Kriging", KM.Kriging) setGeneric(name = "KM", def
-## = function(...) standardGeneric("KM")) '
-
-
+## *****************************************************************************
 ##' Compute predictions for the response at new given input
 ##' points. These conditional mean, the conditional standard deviation
 ##' and confidence limits at the 95\% level. Optionnally the
@@ -195,9 +219,9 @@ KM <- function(formula = ~1, design, response, covtype = "matern5_2",
 ##' y <- apply(design.fact, 1, DiceKriging::branin) 
 ##' 
 ##' ## library(DiceKriging)
-##' ## kriging model 1 : matern5_2 covariance structure, no trend, no nugget effect
+##' ## kriging model 1 : matern5_2 covariance structure, no trend, no nugget
 ##' ## m1 <- km(design = design.fact, response = y, covtype = "gauss",
-##' ##          parinit = c(.5, 1), control = list(trace=F))
+##' ##          parinit = c(.5, 1), control = list(trace = FALSE))
 ##' KM1 <- KM(design = design.fact, response = y, covtype = "gauss",
 ##'                parinit = c(.5, 1))
 ##' Pred <- predict(KM1, newdata = matrix(.5,ncol = 2), type = "UK",
@@ -244,9 +268,10 @@ predict.KM <- function(object, newdata, type = "UK",
     return(output.list)
 }
 
+## register the S4 method
 setMethod("predict", "KM", predict.KM)
 
-
+## *****************************************************************************
 ##' The \code{simulate} method is used to simulate paths from the
 ##' kriging model described in \code{object}.
 ##'
@@ -287,7 +312,7 @@ setMethod("predict", "KM", predict.KM)
 ##'     paths at the input points given in \code{newdata}.
 ##' 
 ##' @method simulate KM
-##' @export simulate
+##' @export
 ##' @aliases simulate,KM,KM-method
 ##'
 ##' @examples
@@ -315,9 +340,11 @@ simulate.KM <- function(object, nsim = 1, seed = NULL, newdata,
                           x = newdata,nsim = nsim, seed = seed))
 }
 
+## register the S4 method
 setMethod("simulate", "KM", simulate.KM)
 
-
+## removed by Yves (after the export) @aliases update,KM,update-method
+## *****************************************************************************
 ##' The \code{update} method is used when new observations are added
 ##' to a fitted kriging model. Rather than fitting the model from
 ##' scratch with the updated observations, the results of the fit as
@@ -330,7 +357,7 @@ setMethod("simulate", "KM", simulate.KM)
 ##' \code{km} object with \code{\link{as.km}} before calling
 ##' \code{update}.
 ##'
-##' @title \code{update} Method for \code{KM} Objects
+##' @title Update a \code{KM} Object with New Points
 ##'
 ##' @author Yann Richet \email{yann.richet@irsn.fr}
 ##' 
@@ -366,7 +393,6 @@ setMethod("simulate", "KM", simulate.KM)
 ##'
 ##' @method update KM
 ##' @export
-##' @aliases update,KM,KM-method
 ##' @examples
 ##' f <- function(x) 1 - 1 / 2 * (sin(12 * x) / (1 + x) + 2 * cos(7 * x) * x^5 + 0.7)
 ##' plot(f)
@@ -414,5 +440,6 @@ update.KM <- function(object,
     
 }
 
+## register the S4 method
 setMethod("update", "KM", update.KM)
 

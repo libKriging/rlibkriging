@@ -25,7 +25,7 @@ The value of the log-marginal posterior computed for the
 Compute log-Marginal-Posterior of Kriging model
 }
 \examples{
-f = function(x) 1-1/2*(sin(12*x)/(1+x)+2*cos(7*x)*x^5+0.7)
+f <- function(x) 1 - 1 / 2 * (sin(12 * x) / (1 + x) + 2 * cos(7 * x) * x^5 + 0.7)
 set.seed(123)
 X <- as.matrix(runif(5))
 y <- f(X)

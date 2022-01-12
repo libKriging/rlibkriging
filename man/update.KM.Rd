@@ -2,8 +2,7 @@
 % Please edit documentation in R/KMClass.R
 \name{update.KM}
 \alias{update.KM}
-\alias{update,KM,KM-method}
-\title{\code{update} Method for \code{KM} Objects}
+\title{Update a \code{KM} Object with New Points}
 \usage{
 \method{update}{KM}(
   object,

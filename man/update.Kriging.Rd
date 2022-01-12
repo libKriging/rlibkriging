@@ -2,24 +2,24 @@
 % Please edit documentation in R/KrigingClass.R
 \name{update.Kriging}
 \alias{update.Kriging}
-\alias{update,Kriging,Kriging-method}
-\title{Update \code{Kriging} model with new points}
+\title{Update a \code{Kriging} Object with New Points}
 \usage{
 \method{update}{Kriging}(object, newy, newX, normalize = FALSE, ...)
 }
 \arguments{
-\item{object}{S3 Kriging object}
+\item{object}{S3 Kriging object.}
 
-\item{newy}{new points in model output space.}
+\item{newy}{A numeric vector of new responses (output).}
 
-\item{newX}{new points in model input space.}
+\item{newX}{A numeric matrix of new input points.}
 
-\item{normalize}{Logical. Normalize \code{X} and \code{y} in \eqn{[0,1]}.}
+\item{normalize}{Logical. If \code{TRUE}, the input \code{X} and
+the output \code{y} are normalized to lie in \eqn{[0, 1]}.}
 
-\item{...}{Ignored}
+\item{...}{Ignored.}
 }
 \description{
-Update \code{Kriging} model with new points
+Update a \code{Kriging} model object with new points
 }
 \examples{
 f <- function(x) 1-1/2*(sin(12*x)/(1+x)+2*cos(7*x)*x^5+0.7)
