@@ -2,8 +2,7 @@
 % Please edit documentation in R/KrigingClass.R
 \name{simulate.Kriging}
 \alias{simulate.Kriging}
-\alias{simulate,Kriging,Kriging-method}
-\title{Simulate (conditional) Kriging model at given points}
+\title{Simulation from a \code{Kriging} Object}
 \usage{
 \method{simulate}{Kriging}(object, nsim = 1, seed = 123, x, ...)
 }
@@ -22,7 +21,12 @@
 length(x) x nsim matrix containing simulated path at x points
 }
 \description{
-Simulate (conditional) Kriging model at given points
+Simulation from a \code{Kriging} model object.
+}
+\details{
+This method draws paths of the stochastic process at new input
+points conditional on the values at the input points used in the
+fit.
 }
 \examples{
 f <- function(x) 1 - 1 / 2 * (sin(12 * x) / (1 + x) + 2 * cos(7 * x) * x^5 + 0.7)

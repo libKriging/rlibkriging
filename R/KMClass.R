@@ -30,8 +30,7 @@ setOldClass("Kriging")
 ##' @slot covariance A S4 object with class \code{"covTensorProduct"}
 ##' representing a covariance kernel.
 ##' 
-##' @slot noise.flag,noise.var Logical flag and numer
-##' ic value for an
+##' @slot noise.flag,noise.var Logical flag and numeric value for an
 ##'     optional noise term.
 ##'
 ##' @slot known.param A character code indicating what parameters are
@@ -48,7 +47,7 @@ setOldClass("Kriging")
 ##' @slot case The possible concentration (a.k.a. profiling) of the
 ##'     likelihood.
 ##' 
-##' @slot param.estim Logical. Is an estimation is used.?
+##' @slot param.estim Logical. Is an estimation used?
 ##'
 ##' @slot Kriging A copy of the \code{Kriging} object used to create
 ##'     the current \code{KM} object.
@@ -167,65 +166,9 @@ KM <- function(formula = ~1, design, response, covtype = "matern5_2",
 }
 
 ## *****************************************************************************
-##' Compute predictions for the response at new given input
-##' points. These conditional mean, the conditional standard deviation
-##' and confidence limits at the 95\% level. Optionnally the
-##' conditional covariance can be returned as well.
-##'
-##' Without a dedicated \code{predict} method for the class
-##' \code{"KM"}, this method would have been inherited from the
-##' \code{"km"} class. The dedicated method is expected to run faster.
-##' A comparison can be made by coercing a \code{KM} object to a
-##' \code{km} object with \code{\link{as.km}} before calling
-##' \code{predict}.
-##' 
-##' @title Prediction Method for \code{KM} Objects
-##' 
-##' @author Yann Richet \email{yann.richet@irsn.fr}
-##' 
-##' @param object An \code{KM} object.
-##' @param newdata Matrix of "new" input points where to perform
-##'     prediction.
-##' @param type Character giving the kriging type. For now only
-##'     \code{"UK"} is possible.
-##' @param se.compute Logical. Should the standard error be computed?
-##' @param cov.compute Logical. Should the covariance matrix between
-##'     newdata points be computed?
-##' @param light.return Logical. If \code{TRUE}, no auxiliary results
-##'     will be returned (such as the Cholesky root of the correlation
-##'     matrix).
-##' @param bias.correct Logical. If \code{TRUE} the UK variance and
-##'     covariance are .
-##' @param checkNames Check the consistency of the column names
-##'     between the design stored in \code{object@X} and the new one
-##'     given \code{newdata}.
-##' @param ... Ignored.
-##'
-##' @return A named list. The elements are the conditional mean and
-##'     standard deviation (\code{mean} and \code{sd}), the predicted
-##'     trend (\code{trend}) and the confidence limits (\code{lower95}
-##'     and \code{upper95}). Optionnally, the conditional covariance matrix
-##'     is returned in \code{cov}.
-##' 
-##' @importFrom stats qt
-##' @method predict KM
-##' @export 
-##' @aliases predict,KM,KM-method
-##'
-##' @examples
-##' ## a 16-points factorial design, and the corresponding response
-##' d <- 2; n <- 16
-##' design.fact <- expand.grid(x1 = seq(0, 1, length = 4), x2 = seq(0, 1, length = 4))
-##' y <- apply(design.fact, 1, DiceKriging::branin) 
-##' 
-##' ## library(DiceKriging)
-##' ## kriging model 1 : matern5_2 covariance structure, no trend, no nugget
-##' ## m1 <- km(design = design.fact, response = y, covtype = "gauss",
-##' ##          parinit = c(.5, 1), control = list(trace = FALSE))
-##' KM1 <- KM(design = design.fact, response = y, covtype = "gauss",
-##'                parinit = c(.5, 1))
-##' Pred <- predict(KM1, newdata = matrix(.5,ncol = 2), type = "UK",
-##'                 checkNames = FALSE, light.return = TRUE)
+## 'predict' S4 method We no longer export 'predict.KM'
+## *****************************************************************************
+
 predict.KM <- function(object, newdata, type = "UK",
                        se.compute = TRUE,
                        cov.compute = FALSE,
@@ -268,8 +211,85 @@ predict.KM <- function(object, newdata, type = "UK",
     return(output.list)
 }
 
-## register the S4 method
+## *****************************************************************************
+##' Compute predictions for the response at new given input
+##' points. These conditional mean, the conditional standard deviation
+##' and confidence limits at the 95\% level. Optionnally the
+##' conditional covariance can be returned as well.
+##'
+##' Without a dedicated \code{predict} method for the class
+##' \code{"KM"}, this method would have been inherited from the
+##' \code{"km"} class. The dedicated method is expected to run faster.
+##' A comparison can be made by coercing a \code{KM} object to a
+##' \code{km} object with \code{\link{as.km}} before calling
+##' \code{predict}.
+##' 
+##' @title Prediction Method for a \code{KM} Object
+##' 
+##' @author Yann Richet \email{yann.richet@irsn.fr}
+##' 
+##' @param object An \code{KM} object.
+##' @param newdata Matrix of "new" input points where to perform
+##'     prediction.
+##' @param type Character giving the kriging type. For now only
+##'     \code{"UK"} is possible.
+##' @param se.compute Logical. Should the standard error be computed?
+##' @param cov.compute Logical. Should the covariance matrix between
+##'     newdata points be computed?
+##' @param light.return Logical. If \code{TRUE}, no auxiliary results
+##'     will be returned (such as the Cholesky root of the correlation
+##'     matrix).
+##' @param bias.correct Logical. If \code{TRUE} the UK variance and
+##'     covariance are .
+##' @param checkNames Check the consistency of the column names
+##'     between the design stored in \code{object@X} and the new one
+##'     given \code{newdata}.
+##' @param ... Ignored.
+##'
+##' @return A named list. The elements are the conditional mean and
+##'     standard deviation (\code{mean} and \code{sd}), the predicted
+##'     trend (\code{trend}) and the confidence limits (\code{lower95}
+##'     and \code{upper95}). Optionnally, the conditional covariance matrix
+##'     is returned in \code{cov}.
+##' 
+##' @importFrom stats qt
+##' @method predict KM
+##' @exportMethod predict
+##' @aliases predict,KM-method
+##'
+##' @examples
+##' ## a 16-points factorial design, and the corresponding response
+##' d <- 2; n <- 16
+##' design.fact <- expand.grid(x1 = seq(0, 1, length = 4), x2 = seq(0, 1, length = 4))
+##' y <- apply(design.fact, 1, DiceKriging::branin) 
+##' 
+##' ## library(DiceKriging)
+##' ## kriging model 1 : matern5_2 covariance structure, no trend, no nugget
+##' ## m1 <- km(design = design.fact, response = y, covtype = "gauss",
+##' ##          parinit = c(.5, 1), control = list(trace = FALSE))
+##' KM1 <- KM(design = design.fact, response = y, covtype = "gauss",
+##'                parinit = c(.5, 1))
+##' Pred <- predict(KM1, newdata = matrix(.5,ncol = 2), type = "UK",
+##'                 checkNames = FALSE, light.return = TRUE)
+##' 
 setMethod("predict", "KM", predict.KM)
+
+
+## *****************************************************************************
+## 'simulate' S4 method We no longer export 'simulate.KM'
+## *****************************************************************************
+
+simulate.KM <- function(object, nsim = 1, seed = NULL, newdata,
+                           cond = TRUE, nugget.sim = 0,
+                           checkNames = FALSE, ...) {
+  if (length(L <- list(...)) > 0) warnOnDots(L)
+  if (isTRUE(checkNames)) stop("'checkNames = TRUE' unsupported.")
+  if (!isTRUE(cond)) stop("'cond = FALSE' unsupported.")
+  if (nugget.sim!=0) stop("'nugget.sim != 0' unsupported.")
+  
+  return(simulate.Kriging(object = object@Kriging,
+                          x = newdata,nsim = nsim, seed = seed))
+}
 
 ## *****************************************************************************
 ##' The \code{simulate} method is used to simulate paths from the
@@ -311,9 +331,10 @@ setMethod("predict", "KM", predict.KM)
 ##'     \code{nsim} columns containing as its columns the simulated
 ##'     paths at the input points given in \code{newdata}.
 ##' 
-##' @method simulate KM
+##' XXX method simulate KM
 ##' @export
-##' @aliases simulate,KM,KM-method
+##' @aliases simulate,KM-method
+##' @exportMethod simulate
 ##'
 ##' @examples
 ##' f <-  function(x) 1 - 1 / 2 * (sin(12 * x) / (1 + x) + 2 * cos(7 * x) * x^5 + 0.7)
@@ -328,22 +349,38 @@ setMethod("predict", "KM", predict.KM)
 ##' lines(x, s_x[ , 1], col = 'blue')
 ##' lines(x, s_x[ , 2], col = 'blue')
 ##' lines(x, s_x[ , 3], col = 'blue')
-simulate.KM <- function(object, nsim = 1, seed = NULL, newdata,
-                           cond = TRUE, nugget.sim = 0,
-                           checkNames = FALSE, ...) {
-  if (length(L <- list(...)) > 0) warnOnDots(L)
-  if (isTRUE(checkNames)) stop("'checkNames = TRUE' unsupported.")
-  if (!isTRUE(cond)) stop("'cond = FALSE' unsupported.")
-  if (nugget.sim!=0) stop("'nugget.sim != 0' unsupported.")
-  
-  return(simulate.Kriging(object = object@Kriging,
-                          x = newdata,nsim = nsim, seed = seed))
-}
-
-## register the S4 method
+##' 
 setMethod("simulate", "KM", simulate.KM)
 
-## removed by Yves (after the export) @aliases update,KM,update-method
+## *****************************************************************************
+## 'update' S4 method We no longer export 'update.KM'
+## *****************************************************************************
+
+update.KM <- function(object,
+                      newX,
+                      newy,
+                      newX.alreadyExist =  FALSE,
+                      cov.reestim = TRUE,trend.reestim = cov.reestim,
+                      nugget.reestim = FALSE,
+                      newnoise.var = NULL,
+                      kmcontrol = NULL, newF = NULL,
+                      ...) {
+    
+    if (length(list(...)) > 0) warnOnDots()
+    
+    if (isTRUE(newX.alreadyExist))
+        stop("'newX.alreadyExist = TRUE' unsupported.")
+    if (!is.null(newnoise.var))
+        stop("'newnoise.var != NULL' unsupported.")
+    if (!is.null(kmcontrol)) stop("'kmcontrol != NULL' unsupported.")
+    if (!is.null(newF)) stop("'newF != NULL' unsupported.")
+    
+    update.Kriging(object@Kriging,newy, newX)
+  
+    return(object)
+    
+}
+
 ## *****************************************************************************
 ##' The \code{update} method is used when new observations are added
 ##' to a fitted kriging model. Rather than fitting the model from
@@ -391,8 +428,10 @@ setMethod("simulate", "KM", simulate.KM)
 ##' @seealso \code{\link{as.km}} to coerce a \code{KM} object to the
 ##'     class \code{"km"}.
 ##'
-##' @method update KM
 ##' @export
+##' @exportMethod update
+##' @aliases update,KM-method
+##' 
 ##' @examples
 ##' f <- function(x) 1 - 1 / 2 * (sin(12 * x) / (1 + x) + 2 * cos(7 * x) * x^5 + 0.7)
 ##' plot(f)
@@ -415,31 +454,6 @@ setMethod("simulate", "KM", simulate.KM)
 ##' lines(x, p2_x$mean, col = "red")
 ##' lines(x, p2_x$lower95, col = "red")
 ##' lines(x, p2_x$upper95, col = "red")
-update.KM <- function(object,
-                      newX,
-                      newy,
-                      newX.alreadyExist =  FALSE,
-                      cov.reestim = TRUE,trend.reestim = cov.reestim,
-                      nugget.reestim = FALSE,
-                      newnoise.var = NULL,
-                      kmcontrol = NULL, newF = NULL,
-                      ...) {
-    
-    if (length(list(...)) > 0) warnOnDots()
-    
-    if (isTRUE(newX.alreadyExist))
-        stop("'newX.alreadyExist = TRUE' unsupported.")
-    if (!is.null(newnoise.var))
-        stop("'newnoise.var != NULL' unsupported.")
-    if (!is.null(kmcontrol)) stop("'kmcontrol != NULL' unsupported.")
-    if (!is.null(newF)) stop("'newF != NULL' unsupported.")
-    
-    update.Kriging(object@Kriging,newy, newX)
-  
-    return(object)
-    
-}
-
-## register the S4 method
+##' 
 setMethod("update", "KM", update.KM)
 

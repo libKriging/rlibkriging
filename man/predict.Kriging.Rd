@@ -2,8 +2,7 @@
 % Please edit documentation in R/KrigingClass.R
 \name{predict.Kriging}
 \alias{predict.Kriging}
-\alias{predict,Kriging,Kriging-method}
-\title{Predict Kriging Model at Given Points}
+\title{Prediction Method  for a \code{Kriging} Object}
 \usage{
 \method{predict}{Kriging}(object, x, stdev = TRUE, cov = FALSE, ...)
 }
@@ -22,7 +21,13 @@
 A list containing: \code{mean}, stdev, cov
 }
 \description{
-Predict Kriging Model at Given Points
+Predict from a \code{Kriging} object.
+}
+\details{
+Given "new" input points, the method compute the expectation,
+variance and (optionnally) the covariance of the corresponding
+stochastic process, conditional on the values at the input points
+used when fitting the model.
 }
 \examples{
 f <- function(x) 1 - 1 / 2 * (sin(12 * x) / (1 + x) + 2 * cos(7 * x) * x^5 + 0.7)

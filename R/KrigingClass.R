@@ -278,7 +278,14 @@ print.Kriging <- function(x, ...) {
 
 
 ## ****************************************************************************
-##' Predict Kriging Model at Given Points
+##' Predict from a \code{Kriging} object.
+##'
+##' Given "new" input points, the method compute the expectation,
+##' variance and (optionnally) the covariance of the corresponding
+##' stochastic process, conditional on the values at the input points
+##' used when fitting the model.
+##'
+##' @title Prediction Method  for a \code{Kriging} Object
 ##' 
 ##' @author Yann Richet \email{yann.richet@irsn.fr}
 ##' 
@@ -297,7 +304,6 @@ print.Kriging <- function(x, ...) {
 ##' @importFrom stats predict
 ##' @method predict Kriging
 ##' @export 
-##' @aliases predict,Kriging,Kriging-method
 ##' 
 ##' @examples
 ##' f <- function(x) 1 - 1 / 2 * (sin(12 * x) / (1 + x) + 2 * cos(7 * x) * x^5 + 0.7)
@@ -326,7 +332,13 @@ predict.Kriging <- function(object, x, stdev = TRUE, cov = FALSE, ...) {
 ## setMethod("predict", "Kriging", predict.Kriging)
 
 ## ****************************************************************************
-##' Simulate (conditional) Kriging model at given points
+##' Simulation from a \code{Kriging} model object.
+##'
+##' This method draws paths of the stochastic process at new input
+##' points conditional on the values at the input points used in the
+##' fit.
+##'
+##' @title Simulation from a \code{Kriging} Object
 ##' 
 ##' @author Yann Richet \email{yann.richet@irsn.fr}
 ##' 
@@ -340,8 +352,7 @@ predict.Kriging <- function(object, x, stdev = TRUE, cov = FALSE, ...) {
 ##'
 ##' @importFrom stats simulate runif
 ##' @method simulate Kriging
-##' @export 
-##' @aliases simulate,Kriging,Kriging-method
+##' @export
 ##' 
 ##' @examples
 ##' f <- function(x) 1 - 1 / 2 * (sin(12 * x) / (1 + x) + 2 * cos(7 * x) * x^5 + 0.7)
@@ -548,15 +559,19 @@ leaveOneOut.Kriging <- function(object, theta, grad = FALSE, ...) {
     return(out)
 }
 
-## ****************************************************************************
-##' Compute log-Marginal-Posterior of Kriging model
+##****************************************************************************
+##' Compute the log-marginal posterior of a kriging model, using the
+##' prior XXXY.
+##'
+##' @title Compute Log-Marginal-Posterior of Kriging Model
 ##' 
 ##' @author Yann Richet \email{yann.richet.irsn.fr}
 ##' 
 ##' @param object S3 Kriging object.
 ##' @param theta Numeric vector of coorelation range parameters at
 ##'     which the function is to be evaluated.
-##' @param grad Logical. Should the function  return the gradient (w.r.t theta)?
+##' @param grad Logical. Should the function return the gradient
+##'     (w.r.t theta)?
 ##' @param ... Not used.
 ##' 
 ##' @return The value of the log-marginal posterior computed for the
@@ -565,6 +580,11 @@ leaveOneOut.Kriging <- function(object, theta, grad = FALSE, ...) {
 ##' @method logMargPost Kriging
 ##' @export 
 ##' @aliases logMargPost,Kriging,Kriging-method
+##'
+##' @references
+##' XXXY A reference describing the model (prior, ...)
+##'
+##' @seealso \code{\link[RobustGaSP]{rgasp}} in the RobustGaSP package.
 ##' 
 ##' @examples
 ##' f <- function(x) 1 - 1 / 2 * (sin(12 * x) / (1 + x) + 2 * cos(7 * x) * x^5 + 0.7)
@@ -573,18 +593,19 @@ leaveOneOut.Kriging <- function(object, theta, grad = FALSE, ...) {
 ##' y <- f(X)
 ##' r <- Kriging(y, X, "gauss")
 ##' print(r)
-##' lmp <- function(theta) logMargPost(r,theta)$logMargPost
+##' lmp <- function(theta) logMargPost(r, theta)$logMargPost
 ##' t <- seq(from = 0.0001, to = 2, length.out = 101)
-##' plot(t, lmp(t), type = 'l')
+##' plot(t, lmp(t), type = "l")
 ##' abline(v = as.list(r)$theta, col = "blue")
 logMargPost.Kriging <- function(object, theta, grad = FALSE, ...) {
     k <- kriging_model(object) 
-  if (!is.matrix(theta)) theta=matrix(theta,ncol=ncol(k$X))
-    if (ncol(theta)!=ncol(k$X))
+    if (!is.matrix(theta)) theta <- matrix(theta,ncol=ncol(k$X))
+    if (ncol(theta) != ncol(k$X))
         stop("Input theta must have ", ncol(k$X), " columns (instead of ",
-             ncol(theta),")")
+             ncol(theta), ")")
     out <- list(logMargPost = matrix(NA, nrow = nrow(theta)),
-                logMargPostGrad = matrix(NA, nrow = nrow(theta), ncol = ncol(theta)))
+                logMargPostGrad = matrix(NA, nrow = nrow(theta),
+                                         ncol = ncol(theta)))
     for (i in 1:nrow(theta)) {
         lmp <- kriging_logMargPost(object, theta[i, ], grad = isTRUE(grad))
         out$logMargPost[i] <- lmp$logMargPost

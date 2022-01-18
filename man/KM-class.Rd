@@ -23,9 +23,8 @@ trend coefficients with length \eqn{p}.}
 \item{\code{covariance}}{A S4 object with class \code{"covTensorProduct"}
 representing a covariance kernel.}
 
-\item{\code{noise.flag,noise.var}}{Logical flag and numer
-ic value for an
-    optional noise term.}
+\item{\code{noise.flag,noise.var}}{Logical flag and numeric value for an
+optional noise term.}
 
 \item{\code{known.param}}{A character code indicating what parameters are
 known.}
@@ -41,7 +40,7 @@ used in several computations.}
 \item{\code{case}}{The possible concentration (a.k.a. profiling) of the
 likelihood.}
 
-\item{\code{param.estim}}{Logical. Is an estimation is used.?}
+\item{\code{param.estim}}{Logical. Is an estimation used?}
 
 \item{\code{Kriging}}{A copy of the \code{Kriging} object used to create
 the current \code{KM} object.}
