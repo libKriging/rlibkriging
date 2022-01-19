@@ -48,7 +48,7 @@ the current \code{KM} object.}
 
 \seealso{
 \code{\link[DiceKriging]{km-class}} in the
-    \bold{DiceKriging} package. The creator \code{\link{KM}}.
+    \pkg{DiceKriging} package. The creator \code{\link{KM}}.
 }
 \author{
 Yann Richet \email{yann.richet@irsn.fr}

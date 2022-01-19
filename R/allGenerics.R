@@ -20,15 +20,15 @@ setGeneric(name = "leaveOneOut",
 
 ## *****************************************************************************
 ##' Coerce an object into an object with S4 class \code{"km"} from the
-##' DiceKriging package.
+##' \pkg{DiceKriging} package.
 ##'
 ##' Such a coercion is typically used to compare the performance of
-##' the methods implemented in the current rlibkriging package to
-##' those which are available in the DiceKriging package.
+##' the methods implemented in the current \pkg{rlibkriging} package to
+##' those which are available in the \pkg{DiceKriging} package.
 ##'
 ##' @title Coerce an Object into a \code{km} Object
 ##'
-##' @param x An object to be coerced.
+##' @param x Object to be coerced.
 ##' @param ... Further arguments for methods.
 ##' @return An object with S4 class \code{"km"}.
 ##' 

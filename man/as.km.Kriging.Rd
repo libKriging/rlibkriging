@@ -16,12 +16,12 @@ returned \code{km} object.}
 }
 \value{
 An object of having the S4 class \code{"KM"} which extends
-    the \code{"km"} class of the \code{DiceKriging} package and
+    the \code{"km"} class of the \pkg{DiceKriging} package and
     contains an extra \code{Kriging} slot.
 }
 \description{
 Coerce a \code{Kriging} object into the \code{"km"} class of the
-DiceKriging package.
+\pkg{DiceKriging} package.
 }
 \examples{
 f <- function(x) 1 - 1 / 2 * (sin(12 * x) / (1 + x) + 2 * cos(7 * x) * x^5 + 0.7)

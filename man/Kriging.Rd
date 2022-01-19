@@ -2,7 +2,7 @@
 % Please edit documentation in R/KrigingClass.R
 \name{Kriging}
 \alias{Kriging}
-\title{Create a \code{Kriging} Object using libKriging}
+\title{Create a \code{Kriging} Object using \pkg{libKriging}}
 \usage{
 Kriging(
   y,
@@ -56,7 +56,7 @@ An object with S3 class \code{"Kriging"}. Should be used
 }
 \description{
 Create an object with S3 class \code{"Kriging"} using
-the libKriging library.
+the \pkg{libKriging} library.
 }
 \details{
 The hyper-parameters (variance and vector of correlation ranges)

@@ -6,13 +6,13 @@
 
 ## ****************************************************************************
 ##' Create an object with S3 class \code{"Kriging"} using
-##' the libKriging library.
+##' the \pkg{libKriging} library.
 ##'
 ##' The hyper-parameters (variance and vector of correlation ranges)
 ##' are estimated thanks to the optimization of a criterion given by
 ##' \code{objective}, using the method given in \code{optim}.
 ##'
-##' @title Create a \code{Kriging} Object using libKriging
+##' @title Create a \code{Kriging} Object using \pkg{libKriging}
 ##' 
 ##' @author Yann Richet \email{yann.richet@irsn.fr}
 ##' 
@@ -131,7 +131,7 @@ as.list.Kriging <- function(x, ...) {
 
 ## ****************************************************************************
 ##' Coerce a \code{Kriging} object into the \code{"km"} class of the
-##' DiceKriging package.
+##' \pkg{DiceKriging} package.
 ##'
 ##' @title Coerce a \code{Kriging} Object into the Class \code{"km"}
 ##' 
@@ -145,7 +145,7 @@ as.list.Kriging <- function(x, ...) {
 ##' @param ... Not used.
 ##' 
 ##' @return An object of having the S4 class \code{"KM"} which extends
-##'     the \code{"km"} class of the \code{DiceKriging} package and
+##'     the \code{"km"} class of the \pkg{DiceKriging} package and
 ##'     contains an extra \code{Kriging} slot.
 ##'
 ##' @importFrom methods new
@@ -289,18 +289,28 @@ print.Kriging <- function(x, ...) {
 ##' 
 ##' @author Yann Richet \email{yann.richet@irsn.fr}
 ##' 
-##' @param object S3 Kriging object
+##' @param object S3 Kriging object.
 ##' 
-##' @param x points in model input space where to predict
+##' @param x Input points where the prediction must be computed.
 ##'
-##' @param stdev return also standard deviation (default TRUE)
+##' @param stdev \code{Logical}. If \code{TRUE} the standard deviation
+##'     is returned.
 ##'
-##' @param cov return covariance matrix between x points (default FALSE)
+##' @param cov \code{Logical}. If \code{TRUE} the covariance matrix of
+##'     the predictions is returned.
 ##'
-##' @param ... Ignored
+##' @param ... Ignored.
 ##'
-##' @return A list containing: \code{mean}, stdev, cov
+##' @return A list containing the element \code{mean} and possibly
+##'     \code{stdev} and  \code{cov}.
 ##'
+##' @note The names of the formal arguments differ from those of the
+##'     \code{predict} methods for the S4 classes \code{"km"} and
+##'     \code{"KM"}. The formal \code{x} corresponds to
+##'     \code{newdata}, \code{stdev} corresponds to \code{se.compute}
+##'     and \code{cov} to \code{cov.compute}. These names are chosen
+##'     \pkg{Python} and \pkg{Octave} interfaces to \pkg{libKriging}.
+##' 
 ##' @importFrom stats predict
 ##' @method predict Kriging
 ##' @export 
@@ -342,14 +352,23 @@ predict.Kriging <- function(object, x, stdev = TRUE, cov = FALSE, ...) {
 ##' 
 ##' @author Yann Richet \email{yann.richet@irsn.fr}
 ##' 
-##' @param object S3 Kriging object
-##' @param nsim number of simulations to perform
-##' @param seed random seed used
-##' @param x points in model input space where to simulate
-##' @param ... Ignored
+##' @param object S3 Kriging object.
+##' @param nsim Number of simulations to perform.
+##' @param seed Random seed used.
+##' @param x Points in model input space where to simulate.
+##' @param ... Ignored.
 ##'
-##' @return length(x) x nsim matrix containing simulated path at x points
+##' @return a matrix with \code{length(x)} rows and \code{nsim}
+##'     columns containing the simulated paths at the inputs points
+##'     given in \code{x}.
 ##'
+##' @note The names of the formal arguments differ from those of the
+##'     \code{simulate} methods for the S4 classes \code{"km"} and
+##'     \code{"KM"}. The formal \code{x} corresponds to
+##'     \code{newdata}. These names are chosen \pkg{Python} and
+##'     \pkg{Octave} interfaces to \pkg{libKriging}.
+##' 
+##' 
 ##' @importFrom stats simulate runif
 ##' @method simulate Kriging
 ##' @export
@@ -392,8 +411,8 @@ simulate.Kriging <- function(object, nsim = 1, seed = 123, x,  ...) {
 ##'
 ##' 
 ##' @param object S3 Kriging object.
-##' @param newy A numeric vector of new responses (output).
-##' @param newX A numeric matrix of new input points.
+##' @param newy Numeric vector of new responses (output).
+##' @param newX Numeric matrix of new input points.
 ##' @param normalize Logical. If \code{TRUE}, the input \code{X} and
 ##'     the output \code{y} are normalized to lie in \eqn{[0, 1]}.
 ##' @param ... Ignored.

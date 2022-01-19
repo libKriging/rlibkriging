@@ -7,7 +7,7 @@
 as.km(x, ...)
 }
 \arguments{
-\item{x}{An object to be coerced.}
+\item{x}{Object to be coerced.}
 
 \item{...}{Further arguments for methods.}
 }
@@ -16,10 +16,10 @@ An object with S4 class \code{"km"}.
 }
 \description{
 Coerce an object into an object with S4 class \code{"km"} from the
-DiceKriging package.
+\pkg{DiceKriging} package.
 }
 \details{
 Such a coercion is typically used to compare the performance of
-the methods implemented in the current rlibkriging package to
-those which are available in the DiceKriging package.
+the methods implemented in the current \pkg{rlibkriging} package to
+those which are available in the \pkg{DiceKriging} package.
 }

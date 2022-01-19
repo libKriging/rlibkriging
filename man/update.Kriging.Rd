@@ -9,9 +9,9 @@
 \arguments{
 \item{object}{S3 Kriging object.}
 
-\item{newy}{A numeric vector of new responses (output).}
+\item{newy}{Numeric vector of new responses (output).}
 
-\item{newX}{A numeric matrix of new input points.}
+\item{newX}{Numeric matrix of new input points.}
 
 \item{normalize}{Logical. If \code{TRUE}, the input \code{X} and
 the output \code{y} are normalized to lie in \eqn{[0, 1]}.}

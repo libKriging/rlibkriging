@@ -29,7 +29,7 @@ Universal Kriging. Supports \code{~ 1}, ~. and \code{~ .^2}.}
 \item{covtype}{Covariance structure. Supports \code{"gauss"},
 \code{"exp"}, ... XXXY What values?}
 
-\item{coef.cov}{Opitonal value for a fixed correlation range
+\item{coef.cov}{Optional value for a fixed correlation range
 value. If given, no optimization is done.}
 
 \item{coef.var}{Optional value for a fixed variance. If given, no
@@ -56,18 +56,19 @@ A KM object. See \bold{Details}.
 }
 \description{
 Create an object of S4 class \code{"KM"} similar to a
-\code{km} object in the DiceKriging package.
+\code{km} object in the \pkg{DiceKriging} package.
 }
 \details{
 The class \code{"KM"} extends the \code{"km"} class of the
-\bold{DiceKriging} package, hence has all slots of \code{"km"}. It
+\pkg{DiceKriging} package, hence has all slots of \code{"km"}. It
 also has an extra slot \code{"Kriging"} slot which contains a copy
 of the original object.
 }
 \examples{
 # a 16-points factorial design, and the corresponding response
 d <- 2; n <- 16
-design.fact <- expand.grid(x1 = seq(0, 1, length = 4), x2 = seq(0, 1, length = 4))
+design.fact <- as.matrix(expand.grid(x1 = seq(0, 1, length = 4),
+                                     x2 = seq(0, 1, length = 4)))
 y <- apply(design.fact, 1, DiceKriging::branin) 
 
 # Using `km` from DiceKriging and a similar `KM` object 
@@ -79,7 +80,7 @@ KM1 <- KM(design = design.fact, response = y, covtype = "gauss",
 
 }
 \seealso{
-\code{\link[DiceKriging]{km}} in the DiceKriging
+\code{\link[DiceKriging]{km}} in the \pkg{DiceKriging}
     package for more details on the slots.
 }
 \author{

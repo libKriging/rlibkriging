@@ -7,18 +7,20 @@
 \method{simulate}{Kriging}(object, nsim = 1, seed = 123, x, ...)
 }
 \arguments{
-\item{object}{S3 Kriging object}
+\item{object}{S3 Kriging object.}
 
-\item{nsim}{number of simulations to perform}
+\item{nsim}{Number of simulations to perform.}
 
-\item{seed}{random seed used}
+\item{seed}{Random seed used.}
 
-\item{x}{points in model input space where to simulate}
+\item{x}{Points in model input space where to simulate.}
 
-\item{...}{Ignored}
+\item{...}{Ignored.}
 }
 \value{
-length(x) x nsim matrix containing simulated path at x points
+a matrix with \code{length(x)} rows and \code{nsim}
+    columns containing the simulated paths at the inputs points
+    given in \code{x}.
 }
 \description{
 Simulation from a \code{Kriging} model object.
@@ -27,6 +29,13 @@ Simulation from a \code{Kriging} model object.
 This method draws paths of the stochastic process at new input
 points conditional on the values at the input points used in the
 fit.
+}
+\note{
+The names of the formal arguments differ from those of the
+    \code{simulate} methods for the S4 classes \code{"km"} and
+    \code{"KM"}. The formal \code{x} corresponds to
+    \code{newdata}. These names are chosen \pkg{Python} and
+    \pkg{Octave} interfaces to \pkg{libKriging}.
 }
 \examples{
 f <- function(x) 1 - 1 / 2 * (sin(12 * x) / (1 + x) + 2 * cos(7 * x) * x^5 + 0.7)

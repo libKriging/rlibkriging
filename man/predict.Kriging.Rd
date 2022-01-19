@@ -7,18 +7,21 @@
 \method{predict}{Kriging}(object, x, stdev = TRUE, cov = FALSE, ...)
 }
 \arguments{
-\item{object}{S3 Kriging object}
+\item{object}{S3 Kriging object.}
 
-\item{x}{points in model input space where to predict}
+\item{x}{Input points where the prediction must be computed.}
 
-\item{stdev}{return also standard deviation (default TRUE)}
+\item{stdev}{\code{Logical}. If \code{TRUE} the standard deviation
+is returned.}
 
-\item{cov}{return covariance matrix between x points (default FALSE)}
+\item{cov}{\code{Logical}. If \code{TRUE} the covariance matrix of
+the predictions is returned.}
 
-\item{...}{Ignored}
+\item{...}{Ignored.}
 }
 \value{
-A list containing: \code{mean}, stdev, cov
+A list containing the element \code{mean} and possibly
+    \code{stdev} and  \code{cov}.
 }
 \description{
 Predict from a \code{Kriging} object.
@@ -28,6 +31,14 @@ Given "new" input points, the method compute the expectation,
 variance and (optionnally) the covariance of the corresponding
 stochastic process, conditional on the values at the input points
 used when fitting the model.
+}
+\note{
+The names of the formal arguments differ from those of the
+    \code{predict} methods for the S4 classes \code{"km"} and
+    \code{"KM"}. The formal \code{x} corresponds to
+    \code{newdata}, \code{stdev} corresponds to \code{se.compute}
+    and \code{cov} to \code{cov.compute}. These names are chosen
+    \pkg{Python} and \pkg{Octave} interfaces to \pkg{libKriging}.
 }
 \examples{
 f <- function(x) 1 - 1 / 2 * (sin(12 * x) / (1 + x) + 2 * cos(7 * x) * x^5 + 0.7)

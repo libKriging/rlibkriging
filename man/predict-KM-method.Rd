@@ -17,12 +17,12 @@
 )
 }
 \arguments{
-\item{object}{An \code{KM} object.}
+\item{object}{\code{KM} object.}
 
 \item{newdata}{Matrix of "new" input points where to perform
 prediction.}
 
-\item{type}{Character giving the kriging type. For now only
+\item{type}{character giving the kriging type. For now only
 \code{"UK"} is possible.}
 
 \item{se.compute}{Logical. Should the standard error be computed?}
@@ -37,9 +37,9 @@ matrix).}
 \item{bias.correct}{Logical. If \code{TRUE} the UK variance and
 covariance are .}
 
-\item{checkNames}{Check the consistency of the column names
-between the design stored in \code{object@X} and the new one
-given \code{newdata}.}
+\item{checkNames}{Logical to check the consistency of the column
+names between the design stored in \code{object@X} and the new
+one given \code{newdata}.}
 
 \item{...}{Ignored.}
 }
