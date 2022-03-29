@@ -3,13 +3,18 @@ library(testthat)
 # install.packages("../rlib0.1-10_R_x86_64-pc-linux-gnu.tar.gz",repos=NULL)
 library(rlibkriging)
 
+## Notes YD
+## added 'matrix' to use a vector of inputs for a Kriging model
+## with d > 1 inputs
+
+
 # f <- function(X) apply(X, 1, function(x) prod(sin((x-.5)^2)))
 f <- function(X) apply(X, 1, function(x)
   prod(sin(2*pi*( x * (seq(0,1,l=1+length(x))[-1])^2 )))
 )
 n <- 20
 set.seed(123)
-X <- cbind(runif(n),runif(n))
+X <- cbind(runif(n), runif(n))
 y <- f(X)
 d = ncol(X)
 
@@ -82,13 +87,17 @@ test_that("leaveOneOutGrad dim",
 
 
 context("predict")
-
+nms <- names(predict(r, x = matrix(runif(d), nrow = 1)))
 test_that("predict mean stdev returned",
-          expect_equal(names(predict(r,runif(d))),c("mean","stdev")))
+          expect_equal(nms, c("mean","stdev")))
+
+nms <- names(predict(r, x = matrix(runif(d), nrow = 1), stdev = FALSE))
 test_that("predict mean returned",
-          expect_equal(names(predict(r,runif(d),stdev=F)),c("mean")))
+          expect_equal(nms, c("mean")))
+
+nms <- names(predict(r, x = matrix(runif(d), nrow = 1), cov = TRUE))
 test_that("predict mean stdev cov returned",
-          expect_equal(names(predict(r,runif(d),cov=T)),c("mean","stdev","cov")))
+          expect_equal(nms, c("mean", "stdev", "cov")))
 
 test_that("predict mean dim",
           expect_equal(dim(predict(r,rbind(runif(d),runif(d)))$mean),c(2,1)))
@@ -101,16 +110,18 @@ test_that("predict cov dim",
 context("simulate")
 
 test_that("simulate dim",
-          expect_equal(dim(simulate(r,x=rbind(runif(d),runif(d)))),c(2,1)))
+          expect_equal(dim(simulate(r, x = rbind(runif(d), runif(d)))), c(2, 1)))
 test_that("simulate nsim dim",
           expect_equal(dim(simulate(r,x=rbind(runif(d),runif(d)),nsim=10)),c(2,10)))
 
 test_that("simulate mean X",
           expect_equal(mean(simulate(r,nsim = 100, x=X[1,]+0.00005)),y[1],tolerance = 0.01))
 set.seed(12345)
-x = runif(d)
+x <- matrix(runif(d), nrow = 1)
 test_that("simulate mean",
-          expect_equal(mean(simulate(r,nsim = 100, x=x)),predict(r,x)$mean[1],tolerance = 0.01))
+          expect_equal(mean(simulate(r,nsim = 100, x = x)),
+                       predict(r, x =x)$mean[1],
+                       tolerance = 0.01))
 test_that("simulate sd",
           expect_equal(sd(simulate(r,nsim = 100, x=x)),predict(r,x)$stdev[1],tolerance = 0.01))
 

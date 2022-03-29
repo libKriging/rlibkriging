@@ -168,6 +168,7 @@ km2 <<- DiceKriging::km(formula = formula,design = design,
                         ##coef.cov = 0.5, coef.var=0.5, coef.trend = 0.5, 
                         control = list(trace=F))
 
+## XXXY Here a warning is thrown
 KM2 <<- rlibkriging::KM(formula = formula,design = design,
                         response = response, covtype = covtype,
                         coef.cov = km2@covariance@range.val,

@@ -330,8 +330,9 @@ print.Kriging <- function(x, ...) {
 ##' lines(x, p_x$mean + 2 * p_x$stdev, col = "blue")
 predict.Kriging <- function(object, x, stdev = TRUE, cov = FALSE, ...) {
     if (length(L <- list(...)) > 0) warnOnDots(L)
-    k <- kriging_model(object) 
-    if (!is.matrix(x)) x <- matrix(x, ncol = ncol(k$X))
+    k <- kriging_model(object)
+    ## manage the data frame case. Ideally we should then warn
+    x <- as.matrix(x)
     if (ncol(x) != ncol(k$X))
         stop("Input x must have ", ncol(k$X), " columns (instead of ",
              ncol(x), ")")

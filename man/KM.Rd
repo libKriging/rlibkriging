@@ -8,13 +8,26 @@ KM(
   formula = ~1,
   design,
   response,
-  covtype = "matern5_2",
+  covtype = c("matern5_2", "gauss", "matern3_2", "exp"),
+  coef.trend = NULL,
   coef.cov = NULL,
   coef.var = NULL,
-  coef.trend = NULL,
+  nugget = NULL,
+  nugget.estim = FALSE,
+  nugget.var = NULL,
   estim.method = c("MLE", "LOO"),
+  penalty = NULL,
   optim.method = "BFGS",
+  lower = NULL,
+  upper = NULL,
   parinit = NULL,
+  multistart = 1,
+  control = NULL,
+  gr = TRUE,
+  iso = FALSE,
+  scaling = FALSE,
+  knots = NULL,
+  kernel = NULL,
   ...
 )
 }
@@ -26,8 +39,11 @@ Universal Kriging. Supports \code{~ 1}, ~. and \code{~ .^2}.}
 
 \item{response}{Vector of output values.}
 
-\item{covtype}{Covariance structure. Supports \code{"gauss"},
-\code{"exp"}, ... XXXY What values?}
+\item{covtype}{Covariance structure. For now all the kernels are
+tensor product kernels.}
+
+\item{coef.trend}{Optional value for a fixed vector of trend
+coefficients.  If given, no optimization is done.}
 
 \item{coef.cov}{Optional value for a fixed correlation range
 value. If given, no optimization is done.}
@@ -35,19 +51,26 @@ value. If given, no optimization is done.}
 \item{coef.var}{Optional value for a fixed variance. If given, no
 optimization is done.}
 
-\item{coef.trend}{Optional value for a fixed vector of trend
-coefficients.  If given, no optimization is done.}
+\item{nugget, nugget.estim, nugget.var}{Not implemented yet.}
 
 \item{estim.method}{Estimation criterion. \code{"MLE"} for
 Maximum-Likelihood or \code{"LOO"} for Leave-One-Out
 cross-validation.}
 
+\item{penalty}{Not implemented yet.}
+
 \item{optim.method}{Optimization algorithm used in the
 optimization of the objective given in
 \code{estim.method}. Supports \code{"BFGS"}.}
 
+\item{lower, upper}{Not implemented yet.}
+
 \item{parinit}{Initial values for the correlation ranges which
 will be optimized using \code{optim.method}.}
+
+\item{multistart, control, gr, iso}{Not implemented yet.}
+
+\item{scaling, knots, kernel, }{Not implemented yet.}
 
 \item{...}{Ignored.}
 }
