@@ -16,7 +16,7 @@ def find_dir():
     found = False
     # while (! is.null(path) and !found):
     while not found:
-        testpath = path / ".git" / ".." / "tests" / "references"
+        testpath = path / ".git" / ".." / "inst" / "libKriging" / "tests" / "references"
         if testpath.exists():
             return testpath
         else:

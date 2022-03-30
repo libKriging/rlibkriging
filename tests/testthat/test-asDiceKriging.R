@@ -169,11 +169,11 @@ km2 <<- DiceKriging::km(formula = formula,design = design,
                         control = list(trace=F))
 
 ## XXXY Here a warning is thrown
-KM2 <<- rlibkriging::KM(formula = formula,design = design,
-                        response = response, covtype = covtype,
-                        coef.cov = km2@covariance@range.val,
-                        coef.var= km2@covariance@sd2,
-                        coef.trend = km2@trend.coef)
+suppressWarnings(KM2 <<- rlibkriging::KM(formula = formula,design = design,
+                                         response = response, covtype = covtype,
+                                         coef.cov = km2@covariance@range.val,
+                                         coef.var= km2@covariance@sd2,
+                                         coef.trend = km2@trend.coef))
 
 ## plot(Vectorize(function(.t) DiceKriging::logLikFun(.t,k)[1]),
 ##      xlim = c(0.000001, 1))

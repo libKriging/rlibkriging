@@ -17,20 +17,19 @@ relative_error <- function(x, y) {
     }
 }
 
-find_dir <- function() {
-    path <- getwd()
+find_dir = function() {
+    path = getwd()
     found <- FALSE
     while (!is.null(path) && !found) {
-        testpath <- file.path(path, ".git", "..", "tests", "references")
+        testpath <- file.path(path, ".git", "..", "inst", "libKriging", "tests", "references")
         if (dir.exists(testpath)) {
             return(testpath)
         } else {
-            parent <- dirname(path)
+            parent = dirname(path)
             if (parent == path || is.null(parent)) {
                 stop("Cannot find reference test directory")
-            }
-            path <- parent
-            print(path)
+      }
+            path = parent
         }
     }
 }
