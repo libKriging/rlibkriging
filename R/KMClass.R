@@ -212,10 +212,10 @@ KM <- function(formula = ~1, design, response,
     if (length(parameters) == 0) parameters <- NULL
     
     r <- rlibkriging::Kriging(y = response, X = design, kernel = covtype,
-                             regmodel = formula,
-                             normalize = FALSE, 
-                             objective = estim.method, optim = optim.method,
-                             parameters = parameters)
+                              regmodel = formula,
+                              normalize = FALSE, 
+                              objective = estim.method, optim = optim.method,
+                              parameters = parameters)
     
     return(as.km.Kriging(r, .call = match.call()))
     
@@ -431,7 +431,7 @@ update.KM <- function(object,
     if (!is.null(kmcontrol)) stop("'kmcontrol != NULL' unsupported.")
     if (!is.null(newF)) stop("'newF != NULL' unsupported.")
     
-    update.Kriging(object@Kriging,newy, newX)
+    object <- update.Kriging(object@Kriging, newy, newX)
   
     return(object)
     

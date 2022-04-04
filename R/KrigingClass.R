@@ -456,7 +456,7 @@ update.Kriging <- function(object, newy, newX, normalize = FALSE, ...) {
            ncol(newX), ")")
   if (nrow(newy) != nrow(newX))
       stop("Objects 'newX' and 'newy' must have the same number of rows.")
-  kriging_update(object, newy, newX, normalize = normalize)
+  object <- kriging_update(object, newy, newX, normalize = normalize)
 }
 
 ## update <- function(...) UseMethod("update")
