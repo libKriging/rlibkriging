@@ -21,25 +21,36 @@ the output \code{y} are normalized to lie in \eqn{[0, 1]}.}
 \description{
 Update a \code{Kriging} model object with new points
 }
+\section{Caution}{
+ The method \emph{does not return the updated
+    object}, but instead changes the content of
+    \code{object}. This behaviour is quite unusual in R and
+    differs from the behaviour of the methods
+    \code{\link[DiceKriging]{update.km}} in \pkg{DiceKriging} and
+    \code{\link{update,KM-method}}.
+}
+
 \examples{
-f <- function(x) 1-1/2*(sin(12*x)/(1+x)+2*cos(7*x)*x^5+0.7)
+f <- function(x) 1- 1 / 2 * (sin(12 * x) / (1 + x) + 2 * cos(7 * x)*x^5 + 0.7)
 plot(f)
 set.seed(123)
 X <- as.matrix(runif(5))
 y <- f(X)
 points(X, y, col = "blue")
-r <- Kriging(y, X, "gauss")
+KrigObj <- Kriging(y, X, "gauss")
 x <- seq(from = 0, to = 1, length.out = 101)
-p_x <- predict(r, x)
+p_x <- predict(KrigObj, x)
 lines(x, p_x$mean, col = "blue")
 lines(x, p_x$mean - 2 * p_x$stdev, col = "blue")
 lines(x, p_x$mean + 2 * p_x$stdev, col = "blue")
 newX <- as.matrix(runif(3))
 newy <- f(newX)
 points(newX, newy, col = "red")
-update(r, newy, newX)
+
+## change the content of the object 'KrigObj'
+update(KrigObj, newy, newX)
 x <- seq(from = 0, to = 1, length.out = 101)
-p2_x <- predict(r, x)
+p2_x <- predict(KrigObj, x)
 lines(x, p2_x$mean, col = "red")
 lines(x, p2_x$mean - 2 * p2_x$stdev, col = "red")
 lines(x, p2_x$mean + 2 * p2_x$stdev, col = "red")

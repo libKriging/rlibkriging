@@ -56,11 +56,14 @@ yet.}
 
 \item{...}{Ignored.}
 }
+\value{
+The updated \code{KM} object.
+}
 \description{
 The \code{update} method is used when new observations are added
 to a fitted kriging model. Rather than fitting the model from
-scratch with the updated observations, the results of the fit as
-stored in \code{object} are used to achieve some savings.
+scratch with the updated observations added, the results of the
+fit as stored in \code{object} are used to achieve some savings.
 }
 \details{
 Without a dedicated \code{update} method for the class
@@ -77,18 +80,21 @@ set.seed(123)
 X <- as.matrix(runif(5))
 y <- f(X)
 points(X, y, col = "blue")
-k <- KM(design=X, response=y,covtype = "gauss")
+KMobj <- KM(design = X, response = y,covtype = "gauss")
 x <-  seq(from = 0, to = 1, length.out = 101)
-p_x <- predict(k, x)
+p_x <- predict(KMobj, x)
 lines(x, p_x$mean, col = "blue")
 lines(x, p_x$lower95, col = "blue")
 lines(x, p_x$upper95, col = "blue")
 newX <- as.matrix(runif(3))
 newy <- f(newX)
 points(newX, newy, col = "red")
-update(k, newy, newX)
+
+## replace the object by its udated version
+KMobj <- update(KMobj, newy, newX)
+
 x <- seq(from = 0, to = 1, length.out = 101)
-p2_x <- predict(k, x)
+p2_x <- predict(KMobj, x)
 lines(x, p2_x$mean, col = "red")
 lines(x, p2_x$lower95, col = "red")
 lines(x, p2_x$upper95, col = "red")

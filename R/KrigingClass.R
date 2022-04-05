@@ -412,51 +412,69 @@ simulate.Kriging <- function(object, nsim = 1, seed = 123, x,  ...) {
 ##'
 ##' 
 ##' @param object S3 Kriging object.
+##'
 ##' @param newy Numeric vector of new responses (output).
+##'
 ##' @param newX Numeric matrix of new input points.
+##' 
 ##' @param normalize Logical. If \code{TRUE}, the input \code{X} and
 ##'     the output \code{y} are normalized to lie in \eqn{[0, 1]}.
+##'
 ##' @param ... Ignored.
 ##' 
+##' @section Caution: The method \emph{does not return the updated
+##'     object}, but instead changes the content of
+##'     \code{object}. This behaviour is quite unusual in R and
+##'     differs from the behaviour of the methods
+##'     \code{\link[DiceKriging]{update.km}} in \pkg{DiceKriging} and
+##'     \code{\link{update,KM-method}}.
+##'  
 ##' @importFrom stats update
 ##' @method update Kriging
 ##' @export 
 ##' 
 ##' @examples
-##' f <- function(x) 1-1/2*(sin(12*x)/(1+x)+2*cos(7*x)*x^5+0.7)
+##' f <- function(x) 1- 1 / 2 * (sin(12 * x) / (1 + x) + 2 * cos(7 * x)*x^5 + 0.7)
 ##' plot(f)
 ##' set.seed(123)
 ##' X <- as.matrix(runif(5))
 ##' y <- f(X)
 ##' points(X, y, col = "blue")
-##' r <- Kriging(y, X, "gauss")
+##' KrigObj <- Kriging(y, X, "gauss")
 ##' x <- seq(from = 0, to = 1, length.out = 101)
-##' p_x <- predict(r, x)
+##' p_x <- predict(KrigObj, x)
 ##' lines(x, p_x$mean, col = "blue")
 ##' lines(x, p_x$mean - 2 * p_x$stdev, col = "blue")
 ##' lines(x, p_x$mean + 2 * p_x$stdev, col = "blue")
 ##' newX <- as.matrix(runif(3))
 ##' newy <- f(newX)
 ##' points(newX, newy, col = "red")
-##' update(r, newy, newX)
+##' 
+##' ## change the content of the object 'KrigObj'
+##' update(KrigObj, newy, newX)
 ##' x <- seq(from = 0, to = 1, length.out = 101)
-##' p2_x <- predict(r, x)
+##' p2_x <- predict(KrigObj, x)
 ##' lines(x, p2_x$mean, col = "red")
 ##' lines(x, p2_x$mean - 2 * p2_x$stdev, col = "red")
 ##' lines(x, p2_x$mean + 2 * p2_x$stdev, col = "red")
 ##' 
 update.Kriging <- function(object, newy, newX, normalize = FALSE, ...) {
     
-  if (length(L <- list(...)) > 0) warnOnDots(L)
-  k <- kriging_model(object) 
-  if (!is.matrix(newX)) newX <- matrix(newX, ncol = ncol(k$X))
-  if (!is.matrix(newy)) newy <- matrix(newy, ncol = ncol(k$y))
-  if (ncol(newX) != ncol(k$X))
-      stop("Object 'newX' must have ", ncol(k$X), " columns (instead of ",
-           ncol(newX), ")")
-  if (nrow(newy) != nrow(newX))
-      stop("Objects 'newX' and 'newy' must have the same number of rows.")
-  kriging_update(object, newy, newX, normalize = normalize)
+    if (length(L <- list(...)) > 0) warnOnDots(L)
+    k <- kriging_model(object) 
+    if (!is.matrix(newX)) newX <- matrix(newX, ncol = ncol(k$X))
+    if (!is.matrix(newy)) newy <- matrix(newy, ncol = ncol(k$y))
+    if (ncol(newX) != ncol(k$X))
+        stop("Object 'newX' must have ", ncol(k$X), " columns (instead of ",
+             ncol(newX), ")")
+    if (nrow(newy) != nrow(newX))
+        stop("Objects 'newX' and 'newy' must have the same number of rows.")
+
+    ## Modify 'object' in the parent environment
+    kriging_update(object, newy, newX, normalize = normalize)
+    
+    invisible(NULL)
+    
 }
 
 ## update <- function(...) UseMethod("update")
