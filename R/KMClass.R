@@ -430,10 +430,13 @@ update.KM <- function(object,
         stop("'newnoise.var != NULL' unsupported.")
     if (!is.null(kmcontrol)) stop("'kmcontrol != NULL' unsupported.")
     if (!is.null(newF)) stop("'newF != NULL' unsupported.")
+
+    ## duplicate to avoid changing 'object' in an inconsistent
+    ## way (
+    obK <- object@Kriging
+    update.Kriging(obK, newy, newX)
     
-    object <- update.Kriging(object@Kriging, newy, newX)
-  
-    return(object)
+    return(as.km(obK))
     
 }
 

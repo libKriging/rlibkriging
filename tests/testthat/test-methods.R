@@ -129,12 +129,12 @@ test_that("simulate sd",
 context("update")
 
 set.seed(1234)
-X2 = matrix(runif(d*10),ncol=d)
-y2 = f(X2)
-x=seq(0,1,,51)
-contour(x,x,matrix(f(as.matrix(expand.grid(x,x))),nrow=length(x)),nlevels = 30)
+X2 <- matrix(runif(d * 10), ncol = d)
+y2 <- f(X2)
+x <- seq(0,1,,51)
+contour(x, x, matrix(f(as.matrix(expand.grid(x, x))), nrow = length(x)), nlevels = 30)
 points(X)
-points(X2,col='red')
+points(X2, col='red')
 
 #r20 <- Kriging(c(y,y2), rbind(X,X2),"gauss")
 #ll = function(X) {
@@ -153,20 +153,22 @@ points(X2,col='red')
 #}
 
 
+r2 <- Kriging(c(y, y2), rbind(X, X2),"gauss",
+              parameters = list(theta = matrix(as.list(r)$theta, ncol = 2)))
 
-r2 <- Kriging(c(y,y2), rbind(X,X2),"gauss", parameters = list(theta=matrix(as.list(r)$theta,ncol=2)))
-ll2 = function(Theta){apply(Theta,1,function(theta) logLikelihood(r2,theta)$logLikelihood)}
-t=seq(0.01,2,,51)
-contour(t,t,matrix(ll(as.matrix(expand.grid(t,t))),nrow=length(t)),nlevels = 30)
+ll2 <- function(Theta){ apply(Theta, 1, function(theta)  logLikelihood(r2, theta)$logLikelihood) }
+t <- seq(0.01, 2,, 51)
+contour(t, t, matrix(ll(as.matrix(expand.grid(t, t))), nrow = length(t)),
+        nlevels = 30)
 points(as.list(r)$theta[1],as.list(r)$theta[2])
 contour(t,t,matrix(ll2(as.matrix(expand.grid(t,t))),nrow=length(t)),nlevels = 30,add=T,col='red')
 points(as.list(r2)$theta[1],as.list(r2)$theta[2],col='red')
 
-p2 = capture.output(print(r2))
+p2 <- capture.output(print(r2))
 
-update(object=r,y2,X2)
+update(object = r, y2, X2)
 
-pu = capture.output(print(r))
+pu <-  capture.output(print(r))
 
 test_that("update",
           expect_false(all(p == pu)))
