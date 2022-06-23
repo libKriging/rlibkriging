@@ -40,4 +40,6 @@ PKG_CPPFLAGS=-I${LIBKRIGING_PATH}/include -include "libKriging/utils/lkalloc.hpp
 PKG_LIBS=-L${LIBKRIGING_PATH}/lib -lKriging -larmadillo -llbfgsb $(EXTRA_PKG_LIBS) $(EXTERNAL_LIBS) $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
 MAKEFLAGS=-j$(nproc)
 
-#$(SHLIB): ${LIBKRIGING_PATH}/lib/libKriging.$(LIB_SUFFIX) ${LIBKRIGING_PATH}/lib/libarmadillo.$(LIB_SUFFIX)
+#$(SHLIB): .check ${LIBKRIGING_PATH}/lib/libKriging.$(LIB_SUFFIX) ${LIBKRIGING_PATH}/lib/libarmadillo.$(LIB_SUFFIX)
+
+#include ../../check.mk

@@ -1,7 +1,5 @@
 #! /bin/sh
 
-export MAKE_SHARED_LIBS=OFF
-export LIBKRIGING_PATH=int/libKriging/build/installed
 export ENABLE_OCTAVE_BINDING=OFF
 export ENABLE_MATLAB_BINDING=OFF
 export ENABLE_PYTHON_BINDING=OFF
