@@ -6,6 +6,10 @@ CC=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CC`
 echo set CC=$CC
 export CC
 
+FC=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config FC`
+echo set FC=$FC
+export FC
+
 CPPFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CPPFLAGS`
 CFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CFLAGS`
 CPICFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CPICFLAGS`
