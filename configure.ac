@@ -62,7 +62,7 @@ fi
 if test x"${need_to_build}" != x"no"; then
     AC_PATH_PROG(have_cmake, cmake, no)
     if test x"${have_cmake}" == x"no"; then
-       . inst/scripts/cmake_config.sh
+       . tools/cmake_config.sh
        if test -z "${CMAKE_BIN}"; then
           ## also error to end configure here
           AC_MSG_ERROR([Could not find 'cmake'.])
@@ -71,7 +71,7 @@ if test x"${need_to_build}" != x"no"; then
     ## 'uname -m' on M1 give x86_64 which is ... not helping
     machine=`"${R_HOME}/bin/Rscript" -e 'cat(Sys.info()[["machine"]])'`
     AC_MSG_RESULT([using libKriging via local cmake build on ${machine} ])
-    inst/scripts/build.sh
+    tools/build.sh
     ## build.sh installs into libkriging/lib, headers are copied
     libkriging_include="-include "libKriging/utils/lkalloc.hpp" -DARMA_ALIEN_MEM_ALLOC_FUNCTION=lkalloc::malloc -DARMA_ALIEN_MEM_FREE_FUNCTION=lkalloc::free"
     libkriging_libs="-lKriging -larmadillo -llbfgsb"
