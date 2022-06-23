@@ -5,11 +5,6 @@ if [[ "$DEBUG_CI" == "true" ]]; then
   set -x
 fi
 
-if [ "$MODE" != "Release" ]; then
-  echo  "Release mode is required for packaging"
-  exit 1
-fi
-
 # windows environment requires to load special tools
 loadenv_sh=".travis-ci/${BUILD_NAME}/loadenv.sh"
 if [ -e "$loadenv_sh" ]; then
