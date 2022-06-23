@@ -2820,7 +2820,7 @@ fi
 
 
     if test x"${have_cmake}" == x"no"; then
-       . inst/scripts/cmake_config.sh
+       . tools/cmake_config.sh
        if test -z "${CMAKE_BIN}"; then
           ## also error to end configure here
           as_fn_error $? "Could not find 'cmake'." "$LINENO" 5
@@ -2830,7 +2830,7 @@ fi
     machine=`"${R_HOME}/bin/Rscript" -e 'cat(Sys.info()["machine"])'`
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: using libKriging via local cmake build on ${machine} " >&5
 $as_echo "using libKriging via local cmake build on ${machine} " >&6; }
-    inst/scripts/build.sh
+    tools/build.sh
     ## build.sh installs into libkriging/lib, headers are copied
     libkriging_include="-include "libKriging/utils/lkalloc.hpp" -DARMA_ALIEN_MEM_ALLOC_FUNCTION=lkalloc::malloc -DARMA_ALIEN_MEM_FREE_FUNCTION=lkalloc::free"
     libkriging_libs="-lKriging -larmadillo -llbfgsb"
