@@ -23,6 +23,8 @@ jobs:
       with:
         r-version: ${{ matrix.R }}
 
+    - uses: r-lib/actions/setup-r-dependencies@v2
+    
     - run: |
         echo `ls -la`
         cd ..; R CMD INSTALL --build rlibkriging 
