@@ -40,6 +40,8 @@ cd ../..
 
 cp -r inst/libKriging/bindings/R/rlibkriging/man .
 cp -r inst/libKriging/bindings/R/rlibkriging/R .
+# Overwrite libKriging/src with ./src
+cp src/* inst/libKriging/bindings/R/rlibkriging/src/. 
 cp -r inst/libKriging/bindings/R/rlibkriging/src .
 cp -r inst/libKriging/bindings/R/rlibkriging/tests .
 cp -r inst/libKriging/bindings/R/rlibkriging/NAMESPACE .
