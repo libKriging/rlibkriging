@@ -46,3 +46,4 @@ cp -r inst/libKriging/bindings/R/rlibkriging/src .
 cp -r inst/libKriging/bindings/R/rlibkriging/tests .
 cp -r inst/libKriging/bindings/R/rlibkriging/NAMESPACE .
 
+rm -rf inst/libKriging
