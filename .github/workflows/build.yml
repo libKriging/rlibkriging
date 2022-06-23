@@ -30,7 +30,7 @@ jobs:
         echo `ls -la`
         cd ..; R CMD INSTALL --build rlibkriging 
         mkdir rlibkriging/R-${{ matrix.R }}
-        mv rlibkriging_*.* rlibkrigingR-${{ matrix.R }}/.
+        mv rlibkriging_*.* rlibkriging/R-${{ matrix.R }}/.
       shell: bash
 
     - uses: actions/upload-artifact@v2
