@@ -24,19 +24,22 @@ export ENABLE_PYTHON_BINDING=OFF
 cd inst/libKriging
 case $ARCH in
   Linux)
-    .travis-ci/r-linux-macos/build.sh
+    BUILD_NAME="r-linux-macos"
     ;;
   Darwin)
-    .travis-ci/r-linux-macos/build.sh
+    BUILD_NAME="r-linux-macos"
     ;;
   MSYS_NT*|MINGW64_NT*) # Windows
-    .travis-ci/r-windows/build.sh
+    BUILD_NAME="r-windows"
     ;;
   *)
     echo "Unknown OS [$ARCH]"
     exit 1
     ;;
 esac
+.travis-ci/${BUILD_NAME}/install.sh
+.travis-ci/common/before_script.sh
+.travis-ci/${BUILD_NAME}/build.sh
 cd ../..
 
 cp -r inst/libKriging/bindings/R/rlibkriging/man .
