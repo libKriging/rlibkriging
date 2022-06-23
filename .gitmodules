@@ -10,3 +10,6 @@
 	path = inst/libKriging/dependencies/pybind11
 	url = https://github.com/pybind/pybind11.git
 	branch = v2.4
+[submodule "inst/libKriging"]
+	path = inst/libKriging
+	url = https://github.com/libKriging/libKriging
