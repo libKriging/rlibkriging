@@ -28,7 +28,7 @@ jobs:
 
     - run: |
         echo `ls -la`
-        cd ..; R CMD INSTALL --build rlibkriging 
+        cd ..; R CMD INSTALL --build --binary rlibkriging 
         mkdir rlibkriging/R-${{ matrix.R }}
         mv rlibkriging_*.* rlibkriging/R-${{ matrix.R }}/.
       shell: bash
