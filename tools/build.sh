@@ -1,18 +1,8 @@
 #!/usr/bin/env bash
 set -eo pipefail
 
-if [[ "$DEBUG_CI" == "true" ]]; then
-  set -x
-fi
-
-# windows environment requires to load special tools
-loadenv_sh=".travis-ci/${BUILD_NAME}/loadenv.sh"
-if [ -e "$loadenv_sh" ]; then
-  . "$loadenv_sh"
-fi
-
 ARCH=$(uname -s)
-echo "Ready to build for $ARCH"
+echo "Ready to build for $ARCH in $PWD"
 
 # Setup used/unused bindings
 export ENABLE_R_BINDING=ON
@@ -20,8 +10,7 @@ export ENABLE_OCTAVE_BINDING=OFF
 export ENABLE_MATLAB_BINDING=OFF
 export ENABLE_PYTHON_BINDING=OFF
 
-# Use CI task to build
-cd inst/libKriging
+# Use CI tasks to build
 case $ARCH in
   Linux)
     BUILD_NAME="r-linux-macos"
@@ -37,6 +26,13 @@ case $ARCH in
     exit 1
     ;;
 esac
+
+cd inst/libKriging
+# windows environment requires to load special tools
+loadenv_sh=".travis-ci/${BUILD_NAME}/loadenv.sh"
+if [ -e "$loadenv_sh" ]; then
+  . "$loadenv_sh"
+fi
 .travis-ci/${BUILD_NAME}/install.sh
 .travis-ci/common/before_script.sh
 .travis-ci/${BUILD_NAME}/build.sh
