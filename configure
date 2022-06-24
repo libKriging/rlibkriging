@@ -8,4 +8,6 @@ fi
 
 tools/r_config.sh
 
+echo `$CMAKE_Fortran_COMPILER --help`
+
 tools/build.sh
