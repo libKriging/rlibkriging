@@ -9,6 +9,7 @@ export CC
 FC=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config FC`
 echo set FC=$FC
 export FC
+export CMAKE_Fortran_COMPILER=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config FC`
 
 CPPFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CPPFLAGS`
 CFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CFLAGS`
@@ -46,3 +47,4 @@ if [ $? -eq 0 ]; then
  	RANLIB=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config RANLIB`
  	RANLIB=`which $RANLIB`
 fi
+
