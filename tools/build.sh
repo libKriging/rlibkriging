@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
-set -x
-export DEBUG_CI=true
 set -eo pipefail
+export DEBUG_CI=true
+
+if [[ "$DEBUG_CI" == "true" ]]; then
+  set -x
+fi
 
 ARCH=$(uname -s)
 echo "Ready to build for $ARCH in $PWD"

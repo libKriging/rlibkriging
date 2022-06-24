@@ -34,6 +34,7 @@ jobs:
         mkdir rlibkriging/R-${{ matrix.R }}
         mv rlibkriging_*.* rlibkriging/R-${{ matrix.R }}/.
       shell: bash
+      name: R CMD INSTALL
 
     - uses: actions/upload-artifact@v2
       with:
