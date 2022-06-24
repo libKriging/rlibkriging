@@ -16,7 +16,8 @@ jobs:
         R: [3.6, 4.1, 4.2]
 
     runs-on: ${{ matrix.os }}
-       
+
+    steps:
     - uses: r-lib/actions/setup-r@v2
       with:
         r-version: ${{ matrix.R }}
