@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+set -x
+export DEBUG_CI=true
 set -eo pipefail
 
 ARCH=$(uname -s)
@@ -34,7 +36,7 @@ if [ -e "$loadenv_sh" ]; then
   . "$loadenv_sh"
 fi
 #.travis-ci/${BUILD_NAME}/install.sh
-DEBUG_CI=true .travis-ci/common/before_script.sh
+.travis-ci/common/before_script.sh
 .travis-ci/${BUILD_NAME}/build.sh
 cd ../..
 
