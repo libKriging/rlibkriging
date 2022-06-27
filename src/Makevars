@@ -9,9 +9,6 @@
 ## MacOS: $ otool -l ./Rlibs/rlibkriging/libs/rlibkriging.so | grep LC_RPATH -A2 # get LC_RPATH to remove (and more)
 ##        $ install_name_tool -delete_rpath ${__OLD_LC_RPATH__} ./Rlibs/rlibkriging/libs/rlibkriging.so
 
-MAKE_SHARED_LIBS=on
-LIBKRIGING_PATH=$(PWD)/../inst/libKriging/build/installed/
-
 ifneq ("${MAKE_SHARED_LIBS}","off")
 	EXTRA_PKG_LIBS= -Wl,-rpath,${LIBKRIGING_PATH}/lib
 

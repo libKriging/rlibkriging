@@ -1,9 +1,6 @@
 ## See Section 1.2.1 "Using 'Makevars'" of Writing R Extensions
 ## https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Using-Makevars
 
-MAKE_SHARED_LIBS=on
-LIBKRIGING_PATH=$(PWD)/../inst/libKriging/build/installed/
-
 ifneq ("${MAKE_SHARED_LIBS}","off")
 	LIB_SUFFIX=dll
 else
