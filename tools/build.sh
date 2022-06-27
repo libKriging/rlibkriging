@@ -25,6 +25,24 @@ echo "!!! Failed checking configuration !!!"
 
 export MAKE_SHARED_LIBS=off
 
+# arch dependant options
+ARCH=$(uname -s)
+echo "Ready to build for $ARCH in $PWD"
+case $ARCH in
+  Linux)
+    ;;
+  Darwin)
+    ;;
+  MSYS_NT*|MINGW64_NT*) # Windows
+      # OpenBLAS installation
+      export EXTRA_SYSTEM_LIBRARY_PATH=${HOME}/Miniconda3/Library/lib
+    ;;
+  *)
+    echo "Unknown OS [$ARCH]"
+    exit 1
+    ;;
+esac
+
 MODE=${MODE:-Release}
 
 BUILD_TEST=false \
@@ -32,7 +50,7 @@ BUILD_TEST=false \
     CC=$(R CMD config CC) \
     CXX=$(R CMD config CXX) \
     FC=$(R CMD config FC) \
-    EXTRA_CMAKE_OPTIONS="-DBUILD_SHARED_LIBS=${MAKE_SHARED_LIBS} ${EXTRA_CMAKE_OPTIONS}" \
+    EXTRA_CMAKE_OPTIONS="-DBUILD_SHARED_LIBS=${MAKE_SHARED_LIBS} ${EXTRA_CMAKE_OPTIONS} -DEXTRA_SYSTEM_LIBRARY_PATH=${EXTRA_SYSTEM_LIBRARY_PATH}"\
     ${PWD}/.travis-ci/linux-macos/build.sh
 
 cd ../..
