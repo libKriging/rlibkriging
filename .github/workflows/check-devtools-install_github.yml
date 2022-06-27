@@ -22,7 +22,7 @@ jobs:
       with:
         r-version: ${{ matrix.R }}
 
-    - run: Rscript -e "install.packages('devtools')"
+    - run: Rscript -e "install.packages('devtools',repos = 'https://cloud.r-project.org')"
       shell: bash
 
     - run: Rscript -e "devtools::install_github('libKriging/rlibkriging')"
