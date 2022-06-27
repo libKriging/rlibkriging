@@ -26,7 +26,6 @@ fi
 export MAKE_SHARED_LIBS=on
 
 MODE=${MODE:-Release}
-CIDIR="${PWD}/inst/libKriging/.travis-ci/"
 
 BUILD_TEST=false \
     MODE=${MODE} \
@@ -34,7 +33,7 @@ BUILD_TEST=false \
     CXX=$(R CMD config CXX) \
     FC=$(R CMD config FC) \
     EXTRA_CMAKE_OPTIONS="-DBUILD_SHARED_LIBS=${MAKE_SHARED_LIBS} ${EXTRA_CMAKE_OPTIONS}" \
-    "${CIDIR}"/linux-macos/build.sh
+    ${PWD}/.travis-ci/linux-macos/build.sh
 cd ../..
 
 
