@@ -33,6 +33,8 @@ jobs:
       with:
         miniconda-version: latest
       if: matrix.os == 'windows-latest'
+    - run: /C/Miniconda3/condabin/conda.bat install -y --quiet -n base -c conda-forge openblas liblapack
+      if: matrix.os == 'windows-latest' 
 
     - run: |
         echo `ls -la`
