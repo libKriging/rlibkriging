@@ -16,12 +16,12 @@ export ENABLE_PYTHON_BINDING=OFF
 
 # General build
 cd inst/libKriging
-# windows environment requires to load special tools
-loadenv_sh=".travis-ci/${BUILD_NAME}/loadenv.sh"
-if [ -e "$loadenv_sh" ]; then
-  . "$loadenv_sh"
-fi
+
+{
 .travis-ci/common/before_script.sh
+} || {
+echo "!!! Failed checking configuration !!!"
+}
 
 export MAKE_SHARED_LIBS=off
 
@@ -34,6 +34,7 @@ BUILD_TEST=false \
     FC=$(R CMD config FC) \
     EXTRA_CMAKE_OPTIONS="-DBUILD_SHARED_LIBS=${MAKE_SHARED_LIBS} ${EXTRA_CMAKE_OPTIONS}" \
     ${PWD}/.travis-ci/linux-macos/build.sh
+
 cd ../..
 
 
