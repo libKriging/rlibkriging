@@ -43,8 +43,6 @@ jobs:
           rtools-version: '42'
 
       - uses: jwlawson/actions-setup-cmake@v1.12
-        with:
-          cmake-version: '3.22.x'
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
