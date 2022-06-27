@@ -23,7 +23,7 @@ if [ -e "$loadenv_sh" ]; then
 fi
 .travis-ci/common/before_script.sh
 
-export MAKE_SHARED_LIBS=on
+export MAKE_SHARED_LIBS=off
 
 MODE=${MODE:-Release}
 
