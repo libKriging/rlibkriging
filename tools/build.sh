@@ -25,6 +25,12 @@ echo "!!! Failed checking configuration !!!"
 
 export MAKE_SHARED_LIBS=off
 
+NPROC=1
+if ( command -v nproc >/dev/null 2>&1 ); then
+  NPROC=$(nproc)
+fi
+export MAKEFLAGS=-j${NPROC}
+
 # arch dependant options
 ARCH=$(uname -s)
 echo "Ready to build for $ARCH in $PWD"
@@ -37,6 +43,7 @@ case $ARCH in
       # OpenBLAS installation
       #export EXTRA_SYSTEM_LIBRARY_PATH=/C/Miniconda3/Library/lib
       export MAKE_SHARED_LIBS=on
+      unset MAKEFLAGS
     ;;
   *)
     echo "Unknown OS [$ARCH]"
@@ -61,15 +68,9 @@ cd ../..
 export LIBKRIGING_PATH=${PWD}/inst/libKriging/${BUILD_DIR:-build}/installed
 export PATH=${LIBKRIGING_PATH}/bin:${PATH}
 
-NPROC=1
-if ( command -v nproc >/dev/null 2>&1 ); then
-  NPROC=$(nproc)
-fi
-
 cd inst/libKriging/bindings/R
 make uninstall || true
 make clean
-MAKEFLAGS=-j${NPROC}
 MAKE_SHARED_LIBS=${MAKE_SHARED_LIBS} make
 cd ../../../..
 
