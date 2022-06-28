@@ -33,11 +33,11 @@ jobs:
         rtools-version: '35'
       if: matrix.R == '3.6'
     - run: C:/rtools35/mingw64/bin/gfortran --version
-      if: matrix.os == 'windows-latest' & matrix.R == 3.6
+      if: matrix.os == 'windows-latest' && matrix.R == 3.6
     - run: C:/rtools40/mingw64/bin/gfortran --version
-      if: matrix.os == 'windows-latest' & matrix.R == 4.1
+      if: matrix.os == 'windows-latest' && matrix.R == 4.1
     - run: C:/rtools42/mingw64/bin/gfortran --version
-      if: matrix.os == 'windows-latest' & matrix.R == 4.2
+      if: matrix.os == 'windows-latest' && matrix.R == 4.2
 
     - uses: r-lib/actions/setup-r-dependencies@v2
 
