@@ -36,6 +36,7 @@ case $ARCH in
   MSYS_NT*|MINGW64_NT*) # Windows
       # OpenBLAS installation
       export EXTRA_SYSTEM_LIBRARY_PATH=/C/Miniconda3/Library/lib
+      export MAKE_SHARED_LIBS=on
     ;;
   *)
     echo "Unknown OS [$ARCH]"
