@@ -29,7 +29,7 @@ NPROC=1
 if ( command -v nproc >/dev/null 2>&1 ); then
   NPROC=$(nproc)
 fi
-export MAKEFLAGS=-j${NPROC}
+MAKEFLAGS=-j${NPROC}
 
 # arch dependant options
 ARCH=$(uname -s)
