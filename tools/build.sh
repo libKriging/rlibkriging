@@ -43,7 +43,7 @@ case $ARCH in
       # OpenBLAS installation
       export EXTRA_SYSTEM_LIBRARY_PATH=""
       #/C/Miniconda3/Library/lib
-      export EXTRA_CMAKE_OPTIONS="-fopenmp"
+      export EXTRA_CMAKE_OPTIONS="-DCMAKE_CXX_FLAGS=-fopenmp"
       export MAKE_SHARED_LIBS=on
       unset MAKEFLAGS
     ;;
