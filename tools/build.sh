@@ -41,7 +41,7 @@ case $ARCH in
     ;;
   MSYS_NT*|MINGW64_NT*) # Windows
       # OpenBLAS installation
-      export EXTRA_SYSTEM_LIBRARY_PATH="/C/rtools42/x86_64-w64-mingw32.static.posix/lib"
+      export EXTRA_SYSTEM_LIBRARY_PATH="/C/rtools42/x86_64-w64-mingw32.static.posix/lib:/C/rtools42/x86_64-w64-mingw32.static.posix/lib/gcc/x86_64-w64-mingw32.static.posix/10.3.0"
       #/C/Miniconda3/Library/lib
       export EXTRA_CMAKE_OPTIONS="'-DCMAKE_CXX_FLAGS=-fopenmp'"
       export MAKE_SHARED_LIBS=on
