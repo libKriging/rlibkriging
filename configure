@@ -6,8 +6,6 @@ if test -z "${CMAKE_BIN}"; then
    as_fn_error $? "Could not find 'cmake'." "$LINENO" 5
 fi
 
-. tools/r_config.sh
+tools/r_config.sh
 
-echo `$CMAKE_Fortran_COMPILER --help`
-
-. tools/build.sh
+tools/build.sh
