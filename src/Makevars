@@ -9,6 +9,9 @@
 ## MacOS: $ otool -l ./Rlibs/rlibkriging/libs/rlibkriging.so | grep LC_RPATH -A2 # get LC_RPATH to remove (and more)
 ##        $ install_name_tool -delete_rpath ${__OLD_LC_RPATH__} ./Rlibs/rlibkriging/libs/rlibkriging.so
 
+MAKE_SHARED_LIBS=off
+LIBKRIGING_PATH=../inst/libKriging/build/installed
+
 ifneq ("${MAKE_SHARED_LIBS}","off")
 	EXTRA_PKG_LIBS= -Wl,-rpath,${LIBKRIGING_PATH}/lib
 
@@ -37,6 +40,6 @@ PKG_CPPFLAGS=-I${LIBKRIGING_PATH}/include -include "libKriging/utils/lkalloc.hpp
 PKG_LIBS=-L${LIBKRIGING_PATH}/lib -lKriging -larmadillo -llbfgsb $(EXTRA_PKG_LIBS) $(EXTERNAL_LIBS) $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
 MAKEFLAGS=-j$(nproc)
 
-#$(SHLIB): .check ${LIBKRIGING_PATH}/lib/libKriging.$(LIB_SUFFIX) ${LIBKRIGING_PATH}/lib/libarmadillo.$(LIB_SUFFIX)
+$(SHLIB): .check ${LIBKRIGING_PATH}/lib/libKriging.$(LIB_SUFFIX) ${LIBKRIGING_PATH}/lib/libarmadillo.$(LIB_SUFFIX)
 
-#include ../../check.mk
+include  ${LIBKRIGING_PATH}/../../bindings/R/check.mk
