@@ -56,4 +56,4 @@ cp -r $RLIBKRIGING_PATH/NAMESPACE .
 
 # sync Version number
 VERSION=`grep "Version:" $RLIBKRIGING_PATH/DESCRIPTION | cut -d: -f2`
-sed -i'' "s/0\.0-0/$VERSION/g" DESCRIPTION
+sed -i"" "s/0\.0-0/$VERSION/g" DESCRIPTION
