@@ -2,7 +2,7 @@
 ## https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Using-Makevars
 
 MAKE_SHARED_LIBS=off
-LIBKRIGING_PATH=../inst/libKriging/build/installed
+LIBKRIGING_PATH=../libKriging/build/installed
 EXTRA_SYSTEM_LIBRARY_PATH="."
 
 ifneq ("${MAKE_SHARED_LIBS}","off")

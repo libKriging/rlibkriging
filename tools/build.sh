@@ -17,7 +17,7 @@ export MAKE_SHARED_LIBS=off
 
 
 # Static libKriging build (using libKriging/.ci)
-cd inst/libKriging
+cd libKriging
 
 {
 .travis-ci/common/before_script.sh
@@ -33,11 +33,11 @@ FC=$(R CMD config FC) \
 EXTRA_CMAKE_OPTIONS="-DBUILD_SHARED_LIBS=${MAKE_SHARED_LIBS} -DEXTRA_SYSTEM_LIBRARY_PATH=${EXTRA_SYSTEM_LIBRARY_PATH}" \
 ${PWD}/.travis-ci/linux-macos/build.sh
 
-cd ../..
+cd ..
 
 
 # Prepare rlibkriging build (that will follow just after this script)
-RLIBKRIGING_PATH="inst/libKriging/bindings/R/rlibkriging"
+RLIBKRIGING_PATH="libKriging/bindings/R/rlibkriging"
 
 # update doc
 #Rscript -e "roxygen2::roxygenise(package.dir = '$RLIBKRIGING_PATH')" # No: it will loop on install, because roxygen2 requires loading package...
