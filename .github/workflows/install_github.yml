@@ -1,0 +1,39 @@
+name: devtools-install_github
+
+on:
+  push:
+    branches: [ master ]
+    tags: [ '*.*' ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  install_github:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+        R: ['4.2']
+
+    runs-on: ${{ matrix.os }}
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+    - uses: r-lib/actions/setup-r@v2
+      with:
+        r-version: ${{ matrix.R }}
+        rtools-version: '42'
+
+    - run: sudo apt install -y cmake gfortran libcurl4-openssl-dev 
+      if: matrix.os == 'ubuntu-latest'
+
+    - run: brew install cmake gfortran
+      if: matrix.os == 'macOS-latest'
+
+    - run: Rscript -e "install.packages('devtools', repos='https://cloud.r-project.org')"
+      shell: bash
+
+    - run: Rscript -e "library(devtools); install_github('libKriging/rlibkriging')"
+      shell: bash
