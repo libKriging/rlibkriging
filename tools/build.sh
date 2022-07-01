@@ -61,12 +61,12 @@ cp -r $RLIBKRIGING_PATH/man .
 cp -r $RLIBKRIGING_PATH/NAMESPACE .
 
 # sync Version number
-VERSION=`grep "Version:" $RLIBKRIGING_PATH/DESCRIPTION | cut -d: -f2`
+VERSION=`grep "Version:" $RLIBKRIGING_PATH/DESCRIPTION`
 case "$(uname -s)" in
  Darwin)
-   sed -i"''" "s/0\.0-0/$VERSION/g" DESCRIPTION
+   sed -i"''" "s/Version:.*/$VERSION/g" DESCRIPTION
    ;;
  *)
-   sed -i "s/0\.0-0/$VERSION/g" DESCRIPTION
+   sed -i "s/Version:.*/$VERSION/g" DESCRIPTION
    ;;
 esac
