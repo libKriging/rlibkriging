@@ -2,7 +2,7 @@
 ## https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Using-Makevars
 
 MAKE_SHARED_LIBS=off
-LIBKRIGING_PATH=../libKriging/build/installed
+LIBKRIGING_PATH=${PWD}/../inst/
 EXTRA_SYSTEM_LIBRARY_PATH="."
 
 ifneq ("${MAKE_SHARED_LIBS}","off")
@@ -21,6 +21,6 @@ PKG_CXXFLAGS=-std=c++11 $(SHLIB_OPENMP_CXXFLAGS)
 # https://stackoverflow.com/questions/49154506/understanding-makevars-for-linking-to-external-c-library-in-r-package
 PKG_LIBS=-L${LIBKRIGING_PATH}/lib -lKriging -larmadillo -llbfgsb -lopenblas $(EXTRA_PKG_LIBS) $(SHLIB_OPENMP_CXXFLAGS) $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS) 
 
-$(SHLIB): .check ${LIBKRIGING_PATH}/lib/libKriging.$(LIB_SUFFIX) ${LIBKRIGING_PATH}/lib/libarmadillo.$(LIB_SUFFIX)
+$(SHLIB): .check ${LIBKRIGING_PATH}/lib/libKriging.$(LIB_SUFFIX) ${LIBKRIGING_PATH}/lib/libarmadillo.$(LIB_SUFFIX) ${LIBKRIGING_PATH}/lib/liblbfgsb.$(LIB_SUFFIX)
 
-include ${LIBKRIGING_PATH}/../../bindings/R/check.mk
+include ../libKriging/bindings/R/check.mk

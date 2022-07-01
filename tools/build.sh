@@ -33,6 +33,12 @@ FC=$(R CMD config FC) \
 EXTRA_CMAKE_OPTIONS="-DBUILD_SHARED_LIBS=${MAKE_SHARED_LIBS} -DEXTRA_SYSTEM_LIBRARY_PATH=${EXTRA_SYSTEM_LIBRARY_PATH}" \
 ${PWD}/.travis-ci/linux-macos/build.sh
 
+mkdir -p ../inst
+cp -r build/installed/lib ../inst/.
+cp -r build/installed/share ../inst/.
+cp -r build/installed/include ../inst/.
+echo "inst/: "`ls ../inst`
+
 cd ..
 
 
@@ -45,7 +51,7 @@ RLIBKRIGING_PATH="libKriging/bindings/R/rlibkriging"
 Rscript -e "Rcpp::compileAttributes(pkgdir = '$RLIBKRIGING_PATH', verbose = TRUE)"
 
 # overwrite libKriging/src/Makevars* with ./src/Makevars*
-cp src/* $RLIBKRIGING_PATH/src/. 
+cp src/Makevars* $RLIBKRIGING_PATH/src/. 
 
 # copy resources from libKriging/binding/R
 cp -r $RLIBKRIGING_PATH/R .
@@ -56,4 +62,11 @@ cp -r $RLIBKRIGING_PATH/NAMESPACE .
 
 # sync Version number
 VERSION=`grep "Version:" $RLIBKRIGING_PATH/DESCRIPTION | cut -d: -f2`
-sed -i"''" "s/0\.0-0/$VERSION/g" DESCRIPTION
+case "$(uname -s)" in
+ Darwin)
+   sed -i"''" "s/0\.0-0/$VERSION/g" DESCRIPTION
+   ;;
+ *)
+   sed -i "s/0\.0-0/$VERSION/g" DESCRIPTION
+   ;;
+esac
