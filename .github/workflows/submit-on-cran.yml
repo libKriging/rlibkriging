@@ -1,4 +1,4 @@
-name: R-CMD-INSTALL
+name: submit-CRAN
 
 on:
   push:
