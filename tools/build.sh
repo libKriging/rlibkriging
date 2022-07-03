@@ -55,7 +55,7 @@ RLIBKRIGING_PATH="libKriging/bindings/R/rlibkriging"
 # update doc
 #Rscript -e "roxygen2::roxygenise(package.dir = '$RLIBKRIGING_PATH')" # No: it will loop on install, because roxygen2 requires loading package...
 # update Rccp links
-Rscript -e "Rcpp::compileAttributes(pkgdir = '$RLIBKRIGING_PATH', verbose = TRUE)"
+${R_HOME}/bin/Rscript -e "Rcpp::compileAttributes(pkgdir = '$RLIBKRIGING_PATH', verbose = TRUE)"
 
 # overwrite libKriging/src/Makevars* with ./src/Makevars*
 cp src/Makevars* $RLIBKRIGING_PATH/src/. 
