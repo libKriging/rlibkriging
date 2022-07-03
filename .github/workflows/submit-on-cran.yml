@@ -28,7 +28,7 @@ jobs:
 
     - uses: r-lib/actions/setup-r-dependencies@v2
 
-    - run: ./tools/setup-cran.sh
+    - run: ./tools/setup-for-cran.sh
       shell: bash
       name: setup for CRAN
 
