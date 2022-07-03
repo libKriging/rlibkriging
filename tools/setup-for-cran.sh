@@ -24,12 +24,12 @@ rm -f libKriging/bindings/R/rlibkriging/src/linear_regression*
 
 # Move required on upper path to avoid path length issues
 mv libKriging/dependencies/lbfgsb_cpp libKriging/.
-mkdir -p libKriging/armadillo-code
-mv libKriging/dependencies/armadillo-code/include libKriging/armadillo-code/.
-mv libKriging/dependencies/armadillo-code/src libKriging/armadillo-code/.
-mv libKriging/dependencies/armadillo-code/misc libKriging/armadillo-code/.
-mv libKriging/dependencies/armadillo-code/cmake_aux libKriging/armadillo-code/.
-mv libKriging/dependencies/armadillo-code/CMakeLists.txt libKriging/armadillo-code/.
+mkdir -p libKriging/armadillo
+mv libKriging/dependencies/armadillo-code/include libKriging/armadillo/.
+mv libKriging/dependencies/armadillo-code/src libKriging/armadillo/.
+mv libKriging/dependencies/armadillo-code/misc libKriging/armadillo/.
+mv libKriging/dependencies/armadillo-code/cmake_aux libKriging/armadillo/.
+mv libKriging/dependencies/armadillo-code/CMakeLists.txt libKriging/armadillo/.
 rm -rf libKriging/dependencies/armadillo-code
 
 # Use custom CMakeList to hold these changes

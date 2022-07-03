@@ -15,6 +15,10 @@ export ENABLE_PYTHON_BINDING=OFF
 
 export MAKE_SHARED_LIBS=off
 
+: ${R_HOME=$(R RHOME)}
+if test -z "${R_HOME}"; then
+   as_fn_error $? "Could not determine R_HOME." "$LINENO" 5
+fi
 
 # Static libKriging build (using libKriging/.ci)
 cd libKriging
@@ -25,11 +29,14 @@ cd libKriging
 echo "!!! Failed checking configuration !!!"
 }
 
+export CC=`${R_HOME}/bin/R CMD config CC`
+export CXX=`${R_HOME}/bin/R CMD config CXX`
+export FC=`${R_HOME}/bin/R CMD config FC`
+export CMAKE_Fortran_COMPILER=$FC
+export Fortran_LINK_FLAGS=`${R_HOME}/bin/R CMD config FLIBS`
+
 BUILD_TEST=false \
 MODE=Release \
-CC=$(R CMD config CC) \
-CXX=$(R CMD config CXX) \
-FC=$(R CMD config FC) \
 EXTRA_CMAKE_OPTIONS="-DBUILD_SHARED_LIBS=${MAKE_SHARED_LIBS} -DEXTRA_SYSTEM_LIBRARY_PATH=${EXTRA_SYSTEM_LIBRARY_PATH}" \
 ${PWD}/.travis-ci/linux-macos/build.sh
 

@@ -3,3 +3,8 @@
 ^EXPLAIN.md$
 ^install$
 ^\.github$
+^\.git$
+^.*\.git.*
+^.*\.clang.*
+^.*\.valgrind.*
+^.*\.docker.*
