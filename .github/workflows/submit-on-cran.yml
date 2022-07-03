@@ -1,0 +1,58 @@
+name: R-CMD-INSTALL
+
+on:
+  push:
+    branches: [ master ]
+    tags: [ '*.*' ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  release:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: recursive
+        
+    - uses: r-lib/actions/setup-r@v2
+      with:
+        r-version: 'release'
+        rtools-version: '42'
+
+    - uses: r-lib/actions/setup-r-dependencies@v2
+
+    - run: ./tools/setup-cran.sh
+      shell: bash
+      name: setup for CRAN
+
+    - run: |
+        echo `ls -la`
+        cd ..; R CMD build rlibkriging 
+        mkdir rlibkriging/CRAN-${{ matrix.os }}
+        mv rlibkriging_*.* rlibkriging/CRAN-${{ matrix.os }}/.
+      shell: bash
+      name: R CMD build
+
+    - run: |
+        echo `ls -la`
+        R CMD check --as-cran --no-manual CRAN-${{ matrix.os }}/rlibkriging*
+      shell: bash
+      name: R CMD check
+
+    - uses: actions/upload-artifact@v2
+      with:
+        path: ./CRAN-*
+
+    - uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        files: ./CRAN-*
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
