@@ -35,5 +35,5 @@ jobs:
     - run: Rscript -e "install.packages('devtools', repos='https://cloud.r-project.org')"
       shell: bash
 
-    - run: Rscript -e "library(devtools); install_github('libKriging/rlibkriging')"
+    - run: Rscript -e "library(devtools); install_github('libKriging/rlibkriging'); if (!library('rlibkriging', character.only=TRUE, logical.return=TRUE)) quit(status=1, save='no')"
       shell: bash
