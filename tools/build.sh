@@ -32,9 +32,15 @@ echo "!!! Failed checking configuration !!!"
 export CC=`${R_HOME}/bin/R CMD config CC`
 export CXX=`${R_HOME}/bin/R CMD config CXX`
 export FC=`${R_HOME}/bin/R CMD config FC`
+case "$(uname -s)" in
+ Linux)
 gf=`echo "$FC" | cut -d' ' -f1`
 export CMAKE_Fortran_COMPILER="`which $gf` `echo "$FC" | cut -d' ' -s -f2-`"
 export Fortran_LINK_FLAGS=`${R_HOME}/bin/R CMD config FLIBS`
+   ;;
+ *)
+   ;;
+esac
 
 BUILD_TEST=false \
 MODE=Release \
@@ -66,14 +72,3 @@ cp -r $RLIBKRIGING_PATH/src .
 cp -r $RLIBKRIGING_PATH/tests .
 cp -r $RLIBKRIGING_PATH/man .
 cp -r $RLIBKRIGING_PATH/NAMESPACE .
-
-# sync Version number
-VERSION=`grep "Version:" $RLIBKRIGING_PATH/DESCRIPTION`
-case "$(uname -s)" in
- Darwin)
-   sed -i"''" "s/Version:.*/$VERSION/g" DESCRIPTION
-   ;;
- *)
-   sed -i "s/Version:.*/$VERSION/g" DESCRIPTION
-   ;;
-esac
