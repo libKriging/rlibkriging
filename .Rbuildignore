@@ -8,3 +8,4 @@
 ^.*\.clang.*
 ^.*\.valgrind.*
 ^.*\.docker.*
+^libKriging$
