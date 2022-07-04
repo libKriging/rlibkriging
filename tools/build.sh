@@ -32,7 +32,8 @@ echo "!!! Failed checking configuration !!!"
 export CC=`${R_HOME}/bin/R CMD config CC`
 export CXX=`${R_HOME}/bin/R CMD config CXX`
 export FC=`${R_HOME}/bin/R CMD config FC`
-export CMAKE_Fortran_COMPILER=$FC
+gf=`echo "$FC" | cut -d' ' -f1`
+export CMAKE_Fortran_COMPILER="`which $gf` `echo "$FC" | cut -d' ' -s -f2-`"
 export Fortran_LINK_FLAGS=`${R_HOME}/bin/R CMD config FLIBS`
 
 BUILD_TEST=false \
