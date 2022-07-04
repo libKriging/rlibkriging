@@ -42,10 +42,9 @@ EXTRA_CMAKE_OPTIONS="-DBUILD_SHARED_LIBS=${MAKE_SHARED_LIBS} -DEXTRA_SYSTEM_LIBR
 ${PWD}/.travis-ci/linux-macos/build.sh
 
 mkdir -p ../inst
-cp -r build/installed/lib ../inst/.
-cp -r build/installed/share ../inst/.
-cp -r build/installed/include ../inst/.
-echo "inst/: "`ls ../inst`
+mv build/installed/lib ../inst/.
+mv build/installed/share ../inst/.
+mv build/installed/include ../inst/.
 
 cd ..
 

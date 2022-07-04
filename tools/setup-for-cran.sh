@@ -22,17 +22,21 @@ case "$(uname -s)" in
 esac
 rm -f libKriging/bindings/R/rlibkriging/src/linear_regression*
  # & unsuitable tests
-rm libKriging/bindings/R/rlibkriging/tests/testthat/test-binding-consistency.R
+rm -f libKriging/bindings/R/rlibkriging/tests/testthat/test-binding-consistency.R
 
 # Move required on upper path to avoid path length issues
-mv libKriging/dependencies/lbfgsb_cpp libKriging/.
-mkdir -p libKriging/armadillo
-mv libKriging/dependencies/armadillo-code/include libKriging/armadillo/.
-mv libKriging/dependencies/armadillo-code/src libKriging/armadillo/.
-mv libKriging/dependencies/armadillo-code/misc libKriging/armadillo/.
-mv libKriging/dependencies/armadillo-code/cmake_aux libKriging/armadillo/.
-mv libKriging/dependencies/armadillo-code/CMakeLists.txt libKriging/armadillo/.
-rm -rf libKriging/dependencies/armadillo-code
+if [ ! -d libKriging/lbfgsb_cpp ]; then
+  mv libKriging/dependencies/lbfgsb_cpp libKriging/.
+fi
+if [ ! -d libKriging/armadillo ]; then
+  mkdir -p libKriging/armadillo
+  mv libKriging/dependencies/armadillo-code/include libKriging/armadillo/.
+  mv libKriging/dependencies/armadillo-code/src libKriging/armadillo/.
+  mv libKriging/dependencies/armadillo-code/misc libKriging/armadillo/.
+  mv libKriging/dependencies/armadillo-code/cmake_aux libKriging/armadillo/.
+  mv libKriging/dependencies/armadillo-code/CMakeLists.txt libKriging/armadillo/.
+  rm -rf libKriging/dependencies/armadillo-code
+fi
 
 # Use custom CMakeList to hold these changes
 cp tools/libKriging_CMakeLists.txt libKriging/CMakeLists.txt
