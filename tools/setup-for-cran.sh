@@ -21,6 +21,8 @@ case "$(uname -s)" in
    ;;
 esac
 rm -f libKriging/bindings/R/rlibkriging/src/linear_regression*
+ # & not applicable tests
+rm libKriging/bindings/R/tests/testthat/test-binding-consistency.R
 
 # Move required on upper path to avoid path length issues
 mv libKriging/dependencies/lbfgsb_cpp libKriging/.
@@ -34,5 +36,4 @@ rm -rf libKriging/dependencies/armadillo-code
 
 # Use custom CMakeList to hold these changes
 cp tools/libKriging_CMakeLists.txt libKriging/CMakeLists.txt
-
 
