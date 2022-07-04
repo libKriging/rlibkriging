@@ -22,7 +22,7 @@ case "$(uname -s)" in
 esac
 rm -f libKriging/bindings/R/rlibkriging/src/linear_regression*
  # & unsuitable tests
-rm libKriging/bindings/R/tests/testthat/test-binding-consistency.R
+rm libKriging/bindings/R/rlibkriging/tests/testthat/test-binding-consistency.R
 
 # Move required on upper path to avoid path length issues
 mv libKriging/dependencies/lbfgsb_cpp libKriging/.
