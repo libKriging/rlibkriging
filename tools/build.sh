@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 set -eo pipefail
-export DEBUG_CI=true
 
 if [[ "$DEBUG_CI" == "true" ]]; then
   set -x
