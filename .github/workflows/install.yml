@@ -30,7 +30,6 @@ jobs:
     - uses: r-lib/actions/setup-r-dependencies@v2
 
     - run: |
-        echo `ls -la`
         cd ..; R CMD INSTALL --build rlibkriging 
         mkdir rlibkriging/R-${{ matrix.R }}
         mv rlibkriging_*.* rlibkriging/R-${{ matrix.R }}/.
