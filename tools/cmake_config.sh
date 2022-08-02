@@ -2,17 +2,15 @@
 
 if test -z "$CMAKE_BIN"; then
   # Look for a cmake3 binary in the current path
-  CMAKE_BIN=`which cmake3 2>/dev/null`
-fi
-
-if test -z "$CMAKE_BIN"; then
+  if ( command -v cmake3 >/dev/null 2>&1 ); then
+    CMAKE_BIN=$(command -v cmake3)
   # Look for a cmake binary in the current path
-  CMAKE_BIN=`which cmake 2>/dev/null`
-fi
-
-if test -z "$CMAKE_BIN"; then
+  elif ( command -v cmake >/dev/null 2>&1 ); then
+    CMAKE_BIN=$(command -v cmake)
   # Check for a MacOS specific path
-  CMAKE_BIN=`which /Applications/CMake.app/Contents/bin/cmake 2>/dev/null`
+  elif ( command -v /Applications/CMake.app/Contents/bin/cmake ); then
+    CMAKE_BIN=/Applications/CMake.app/Contents/bin/cmake
+  fi
 fi
 
 if test -z "$CMAKE_BIN"; then

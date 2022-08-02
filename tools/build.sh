@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 set -eo pipefail
-export DEBUG_CI=true
 
 if [[ "$DEBUG_CI" == "true" ]]; then
   set -x
@@ -32,20 +31,16 @@ echo "!!! Failed checking configuration !!!"
 export CC=`${R_HOME}/bin/R CMD config CC`
 export CXX=`${R_HOME}/bin/R CMD config CXX`
 export FC=`${R_HOME}/bin/R CMD config FC`
-case "$(uname -s)" in
- Linux)
-gf=`echo "$FC" | cut -d' ' -f1`
-export CMAKE_Fortran_COMPILER="`which $gf` `echo "$FC" | cut -d' ' -s -f2-`"
-export Fortran_LINK_FLAGS=`${R_HOME}/bin/R CMD config FLIBS`
-   ;;
- *)
-   ;;
-esac
+
+# R workflow requires to use R cmd with full path.
+# These declarations help to skip declaration without full path in libKriging build scripts.
+export CMAKE_Fortran_COMPILER="$(${R_HOME}/bin/R CMD config FC | awk '{ print $1 }')"
+export Fortran_LINK_FLAGS="$(${R_HOME}/bin/R CMD config FLIBS)"
 
 BUILD_TEST=false \
 MODE=Release \
 EXTRA_CMAKE_OPTIONS="-DBUILD_SHARED_LIBS=${MAKE_SHARED_LIBS} -DEXTRA_SYSTEM_LIBRARY_PATH=${EXTRA_SYSTEM_LIBRARY_PATH}" \
-${PWD}/.travis-ci/linux-macos/build.sh
+${PWD}/.travis-ci/linux-macos/build.sh 
 
 mkdir -p ../inst
 mv build/installed/lib ../inst/.

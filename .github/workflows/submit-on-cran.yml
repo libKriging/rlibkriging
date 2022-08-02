@@ -7,6 +7,9 @@ on:
   pull_request:
     branches: [ master ]
 
+env:
+  DEBUG_CI: true
+
 jobs:
   release:
     strategy:
@@ -33,7 +36,6 @@ jobs:
       name: setup for CRAN
 
     - run: |
-        echo `ls -la`
         cd ..; R CMD build rlibkriging 
         mkdir rlibkriging/CRAN-${{ matrix.os }}
         mv rlibkriging_*.* rlibkriging/CRAN-${{ matrix.os }}/.
@@ -41,8 +43,10 @@ jobs:
       name: R CMD build
 
     - run: |
-        echo `ls -la`
-        R CMD check --as-cran --no-manual CRAN-${{ matrix.os }}/rlibkriging*
+        R CMD check --as-cran --no-manual CRAN-${{ matrix.os }}/rlibkriging* || (
+          test -f rlibkriging.Rcheck/00install.out && cat rlibkriging.Rcheck/00install.out | sed -e 's/^/00install.out| /';
+          exit 1
+        )
       shell: bash
       name: R CMD check
 
