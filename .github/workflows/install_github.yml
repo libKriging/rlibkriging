@@ -38,6 +38,10 @@ jobs:
     - run: brew install cmake gfortran
       if: matrix.os == 'macOS-latest'
 
+    - name: additional packages to compile devtools
+      run: sudo apt install -y libharfbuzz-dev libfribidi-dev
+      if: matrix.os == 'ubuntu-latest'
+
     - name: Install devtools
       run: |
         curl -LO https://raw.githubusercontent.com/libKriging/rlibkriging/${{ env.BRANCH_NAME }}/tools/install_packages.R
