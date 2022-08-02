@@ -19,7 +19,8 @@ jobs:
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-
+      BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+    
     steps:
     - uses: r-lib/actions/setup-r@v2
       with:
@@ -32,7 +33,10 @@ jobs:
     - run: brew install cmake gfortran
       if: matrix.os == 'macOS-latest'
 
-    - run: Rscript -e "install.packages('devtools', repos='https://cloud.r-project.org')"
+    - name: Install devtools
+      run: |
+        curl -LO https://raw.githubusercontent.com/libKriging/rlibkriging/${{ env.BRANCH_NAME }}/tools/install_packages.R
+        Rscript --no-save ./install_packages.R devtools
       shell: bash
 
     - run: Rscript -e "library(devtools); install_github('libKriging/rlibkriging'); if (!library('rlibkriging', character.only=TRUE, logical.return=TRUE)) quit(status=1, save='no')"
