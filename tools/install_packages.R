@@ -4,7 +4,7 @@ packages = commandArgs(trailingOnly=TRUE)
 
 for (lib in packages) {
 
-    install.packages(lib, dependencies=TRUE, repos='https://cloud.r-project.org');
+    install.packages(lib, repos='https://cloud.r-project.org');
 
     if ( ! library(lib, character.only=TRUE, logical.return=TRUE) ) {
         cat(paste("\n#########################\nCannot install", lib, "\n#########################\n\n"))
