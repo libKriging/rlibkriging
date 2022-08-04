@@ -8,7 +8,7 @@
 ^.*\.clang.*
 ^.*\.valgrind.*
 ^.*\.docker.*
-
+# skip sub-build artifacts
 ^.*\.idea$
 ^libKriging/build.*$
 ^libKriging/bindings/R/Rlibs$
