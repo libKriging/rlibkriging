@@ -31,25 +31,31 @@ jobs:
 
     - uses: r-lib/actions/setup-r-dependencies@v2
 
-    - run: ./tools/setup-for-cran.sh
+    - name: setup for CRAN
       shell: bash
-      name: setup for CRAN
-
-    - run: |
-        cd ..; R CMD build rlibkriging 
-        mkdir rlibkriging/CRAN-${{ matrix.os }}
-        mv rlibkriging_*.* rlibkriging/CRAN-${{ matrix.os }}/.
+      run: ./tools/setup-for-cran.sh
+      
+    - name: R CMD build
       shell: bash
-      name: R CMD build
+      env: # this alias helps to reuse following line as script
+        OS: ${{ matrix.os }}
+      run: |
+        pushd ..
+        R CMD build rlibkriging 
+        mkdir rlibkriging/CRAN-$OS
+        mv rlibkriging_*.* rlibkriging/CRAN-$OS/.
+        popd
 
-    - run: |
-        R CMD check --as-cran --no-manual CRAN-${{ matrix.os }}/rlibkriging* || (
-          test -f rlibkriging.Rcheck/00install.out && cat rlibkriging.Rcheck/00install.out | sed -e 's/^/00install.out| /';
+    - name: R CMD check
+      shell: bash
+      env:
+        OS: ${{ matrix.os }}      
+      run: |
+        R CMD check --as-cran --no-manual CRAN-$OS/rlibkriging* || (
+          test -f rlibkriging.Rcheck/00install.out && cat rlibkriging.Rcheck/00install.out | sed -e 's/^/00install.out| /' && echo "[The error may be shown before 00install.out| listing"; 
           exit 1
         )
-      shell: bash
-      name: R CMD check
-
+      
     - uses: actions/upload-artifact@v2
       with:
         path: ./CRAN-*
