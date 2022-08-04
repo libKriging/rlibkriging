@@ -32,24 +32,30 @@ jobs:
         r-version: ${{ matrix.R }}
         rtools-version: '42'
 
-    - run: sudo apt install -y cmake gfortran libcurl4-openssl-dev 
+    - name: Install tools for Linux
+      run: sudo apt install -y cmake gfortran libcurl4-openssl-dev
+      shell: bash
       if: matrix.os == 'ubuntu-latest'
 
-    - run: brew install cmake gfortran
+    - name: Install tools for macOS
+      run: brew install cmake gfortran
+      shell: bash
       if: matrix.os == 'macOS-latest'
 
       # Should be temporary since it was ok without additional system packages one month ago
     - name: Install additional packages to compile devtools
+      shell: bash
       run: sudo apt install -y libharfbuzz-dev libfribidi-dev
       if: matrix.os == 'ubuntu-latest'
 
     - name: Install devtools
+      shell: bash
       run: |
         # Add --insecure to workaround missing certificates on Windows
         # --header is not required by an useful example if the repo becomes private 
         curl --insecure --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' -LO https://raw.githubusercontent.com/libKriging/rlibkriging/${{ env.BRANCH_NAME }}/tools/install_packages.R
         Rscript --no-save ./install_packages.R devtools
-      shell: bash
 
-    - run: Rscript -e "library(devtools); install_github('libKriging/rlibkriging'); if (!library('rlibkriging', character.only=TRUE, logical.return=TRUE)) quit(status=1, save='no')"
+    - name: install_github from ${{ env.BRANCH_NAME }}
       shell: bash
+      run: Rscript -e "library(devtools); install_github('libKriging/rlibkriging', ref='${{ env.BRANCH_NAME }}'); if (!library('rlibkriging', character.only=TRUE, logical.return=TRUE)) quit(status=1, save='no')"
