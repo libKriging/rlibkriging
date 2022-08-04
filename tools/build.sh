@@ -19,7 +19,7 @@ if test -z "${R_HOME}"; then
    as_fn_error $? "Could not determine R_HOME." "$LINENO" 5
 fi
 
-# Static libKriging build (using libKriging/.ci)
+# Static libKriging build (using libKriging/.ci)
 cd libKriging
 
 {

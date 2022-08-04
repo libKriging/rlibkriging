@@ -5,11 +5,5 @@ rm -fr src/*.o src/*.so autom4te.cache config.log config.status
 # sync Version number
 RLIBKRIGING_PATH="libKriging/bindings/R/rlibkriging"
 VERSION=`grep "Version:" $RLIBKRIGING_PATH/DESCRIPTION`
-case "$(uname -s)" in
- Darwin)
-   sed -i"''" "s/Version:.*/$VERSION/g" DESCRIPTION
-   ;;
- *)
-   sed -i "s/Version:.*/$VERSION/g" DESCRIPTION
-   ;;
-esac
+sed -i.bak "s/Version:.*/$VERSION/g" DESCRIPTION
+rm -f DESCRIPTION.bak
