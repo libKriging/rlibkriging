@@ -8,3 +8,10 @@
 ^.*\.clang.*
 ^.*\.valgrind.*
 ^.*\.docker.*
+# skip sub-build artifacts
+^.*\.idea$
+^libKriging/build.*$
+^libKriging/bindings/R/Rlibs$
+^libKriging/bindings/R/rlibkriging/src/.*\.o$
+^libKriging/bindings/R/rlibkriging/src/.*\.a$
+^libKriging/bindings/R/rlibkriging/src/.*\.dll$
