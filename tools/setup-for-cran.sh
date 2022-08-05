@@ -10,6 +10,7 @@ rm -rf libKriging/dependencies/Catch2
 rm -rf libKriging/dependencies/carma
 rm -rf libKriging/dependencies/pybind*
 rm -rf libKriging/dependencies/optim
+rm -rf libKriging/docs
  # then remove LinearRegressionOptim example
 case "$(uname -s)" in
  Darwin)
