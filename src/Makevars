@@ -30,7 +30,7 @@ else
 	LIB_SUFFIX=a
 endif
 
-EXTERNAL_LIBS=$(shell LIBKRIGING_PATH=${LIBKRIGING_PATH} ../libKriging/bindings/R/tools/ExternalLibsExtractor.sh)
+EXTERNAL_LIBS=$(shell LIBKRIGING_PATH=${LIBKRIGING_PATH} ../src/libK/bindings/R/tools/ExternalLibsExtractor.sh)
 
 CXX_STD = CXX11
 
@@ -42,4 +42,4 @@ MAKEFLAGS=-j$(nproc)
 
 $(SHLIB): .check ${LIBKRIGING_PATH}/lib/libKriging.$(LIB_SUFFIX) ${LIBKRIGING_PATH}/lib/libarmadillo.$(LIB_SUFFIX) ${LIBKRIGING_PATH}/lib/liblbfgsb.$(LIB_SUFFIX)
 
-include ../libKriging/bindings/R/check.mk
+include ../src/libK/bindings/R/check.mk

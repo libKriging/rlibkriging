@@ -19,8 +19,8 @@ if test -z "${R_HOME}"; then
    as_fn_error $? "Could not determine R_HOME." "$LINENO" 5
 fi
 
-# Static libKriging build (using libKriging/.ci)
-cd libKriging
+# Static libKriging build (using libK/.ci)
+cd src/libK
 
 {
 .travis-ci/common/before_script.sh
@@ -39,29 +39,29 @@ export Fortran_LINK_FLAGS="$(${R_HOME}/bin/R CMD config FLIBS)"
 
 BUILD_TEST=false \
 MODE=Release \
-EXTRA_CMAKE_OPTIONS="-DBUILD_SHARED_LIBS=${MAKE_SHARED_LIBS} -DEXTRA_SYSTEM_LIBRARY_PATH=${EXTRA_SYSTEM_LIBRARY_PATH}" \
-${PWD}/.travis-ci/linux-macos/build.sh 
+EXTRA_CMAKE_OPTIONS="-DNO_CMAKE_PACKAGE_REGISTRY=true -DBUILD_SHARED_LIBS=${MAKE_SHARED_LIBS} -DEXTRA_SYSTEM_LIBRARY_PATH=${EXTRA_SYSTEM_LIBRARY_PATH}" \
+${PWD}/*travis-ci/linux-macos/build.sh " should support '.travis-ci' or 'travis-ci'"
 
-mkdir -p ../inst
-mv build/installed/lib ../inst/.
-mv build/installed/share ../inst/.
-mv build/installed/include ../inst/.
+mkdir -p ../../inst
+mv build/installed/lib ../../inst/.
+mv build/installed/share ../../inst/.
+mv build/installed/include ../../inst/.
 
-cd ..
+cd ../..
 
 
 # Prepare rlibkriging build (that will follow just after this script)
-RLIBKRIGING_PATH="libKriging/bindings/R/rlibkriging"
+RLIBKRIGING_PATH="src/libK/bindings/R/rlibkriging"
 
 # update doc
 #Rscript -e "roxygen2::roxygenise(package.dir = '$RLIBKRIGING_PATH')" # No: it will loop on install, because roxygen2 requires loading package...
 # update Rccp links
 ${R_HOME}/bin/Rscript -e "Rcpp::compileAttributes(pkgdir = '$RLIBKRIGING_PATH', verbose = TRUE)"
 
-# overwrite libKriging/src/Makevars* with ./src/Makevars*
+# overwrite libK/src/Makevars* with ./src/Makevars*
 cp src/Makevars* $RLIBKRIGING_PATH/src/. 
 
-# copy resources from libKriging/binding/R
+# copy resources from libK/binding/R
 cp -r $RLIBKRIGING_PATH/R .
 cp -r $RLIBKRIGING_PATH/src .
 cp -r $RLIBKRIGING_PATH/tests .
