@@ -21,9 +21,11 @@ fi
 
 # Static libKriging build (using libK/.ci)
 cd src/libK
+CI=$PWD/`ls -la "*travis-ci"`
+echo $CI
 
 {
-.travis-ci/common/before_script.sh
+$CI/common/before_script.sh
 } || {
 echo "!!! Failed checking configuration !!!"
 }
@@ -36,7 +38,7 @@ export FC=`${R_HOME}/bin/R CMD config FC`
 # These declarations help to skip declaration without full path in libKriging build scripts.
 export CMAKE_Fortran_COMPILER="$(${R_HOME}/bin/R CMD config FC | awk '{ print $1 }')"
 export Fortran_LINK_FLAGS="$(${R_HOME}/bin/R CMD config FLIBS)"
-CI=`ls -la "${PWD}/*travis-ci"`
+
 BUILD_TEST=false \
 MODE=Release \
 EXTRA_CMAKE_OPTIONS="-DNO_CMAKE_PACKAGE_REGISTRY=true -DBUILD_SHARED_LIBS=${MAKE_SHARED_LIBS} -DEXTRA_SYSTEM_LIBRARY_PATH=${EXTRA_SYSTEM_LIBRARY_PATH}" \
