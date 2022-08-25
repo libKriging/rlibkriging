@@ -40,7 +40,7 @@ export Fortran_LINK_FLAGS="$(${R_HOME}/bin/R CMD config FLIBS)"
 BUILD_TEST=false \
 MODE=Release \
 EXTRA_CMAKE_OPTIONS="-DNO_CMAKE_PACKAGE_REGISTRY=true -DBUILD_SHARED_LIBS=${MAKE_SHARED_LIBS} -DEXTRA_SYSTEM_LIBRARY_PATH=${EXTRA_SYSTEM_LIBRARY_PATH}" \
-${PWD}/*travis-ci/linux-macos/build.sh " should support '.travis-ci' or 'travis-ci'"
+`ls ${PWD}/*travis-ci`/linux-macos/build.sh " should support '.travis-ci' or 'travis-ci'"
 
 mkdir -p ../../inst
 mv build/installed/lib ../../inst/.
