@@ -51,4 +51,4 @@ cp tools/libKriging_CMakeLists.txt $LIBKRIGING_SRC_PATH/CMakeLists.txt
 
 # .travis-ci -> travis-ci (hidden files not allowed in CRAN)
 mv $LIBKRIGING_SRC_PATH/.travis-ci $LIBKRIGING_SRC_PATH/travis-ci
-find $LIBKRIGING_SRC_PATH -type f -exec sed -i 's/.travis-ci/travis-ci/g' {} +
+find $LIBKRIGING_SRC_PATH -type f -exec sed -i'' "s/.travis-ci/travis-ci/g" {} +
