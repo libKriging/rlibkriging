@@ -21,7 +21,7 @@ fi
 
 # Static libKriging build (using libK/.ci)
 cd src/libK
-CI=$PWD/`ls -la "*travis-ci"`
+CI=`ls -a | grep travis-ci`
 echo $CI
 
 {
