@@ -10,7 +10,7 @@
 ##        $ install_name_tool -delete_rpath ${__OLD_LC_RPATH__} ./Rlibs/rlibkriging/libs/rlibkriging.so
 
 MAKE_SHARED_LIBS=off
-export LIBKRIGING_PATH=${PWD}/../src/
+export LIBKRIGING_PATH=${PWD}/../inst/
 
 ifneq ("${MAKE_SHARED_LIBS}","off")
 	EXTRA_PKG_LIBS= -Wl,-rpath,${LIBKRIGING_PATH}/lib
