@@ -192,6 +192,9 @@ endif ()
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+##
+set(NO_CMAKE_PACKAGE_REGISTRY ON)
+
 #------------------------------------------------------
 
 # Change RelWithDebInfo to compile assertions
