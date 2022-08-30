@@ -33,7 +33,7 @@ jobs:
 
     - name: setup for CRAN
       shell: bash
-      run: ./tools/setup-for-cran.sh
+      run: ./tools/setup.sh
       
     - name: R CMD build
       shell: bash
