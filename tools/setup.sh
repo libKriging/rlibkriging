@@ -53,7 +53,9 @@ cp tools/libKriging_CMakeLists.txt $LIBKRIGING_SRC_PATH/CMakeLists.txt
 if [ -d $LIBKRIGING_SRC_PATH/.travis-ci ]; then
   mv $LIBKRIGING_SRC_PATH/.travis-ci $LIBKRIGING_SRC_PATH/travis-ci
 fi
+# rename .travis-ci in travis-ci everywhere. Use temp .bak for sed OSX compliance
 find $LIBKRIGING_SRC_PATH -type f -exec sed -i.bak "s/\.travis-ci/travis-ci/g" {} +
+find $LIBKRIGING_SRC_PATH -type f -name *.bak -exec rm -f {} +;
 
 
 RLIBKRIGING_PATH=$LIBKRIGING_SRC_PATH"/bindings/R/rlibkriging/"
