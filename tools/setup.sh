@@ -50,5 +50,20 @@ rm -fr $LIBKRIGING_SRC_PATH/dependencies
 cp tools/libKriging_CMakeLists.txt $LIBKRIGING_SRC_PATH/CMakeLists.txt
 
 # .travis-ci -> travis-ci (hidden files not allowed in CRAN)
-mv $LIBKRIGING_SRC_PATH/.travis-ci $LIBKRIGING_SRC_PATH/travis-ci
-find $LIBKRIGING_SRC_PATH -type f -exec sed -i.bak "s/.travis-ci/travis-ci/g" {} +
+if [ -d $LIBKRIGING_SRC_PATH/.travis-ci ]; then
+  mv $LIBKRIGING_SRC_PATH/.travis-ci $LIBKRIGING_SRC_PATH/travis-ci
+fi
+find $LIBKRIGING_SRC_PATH -type f -exec sed -i.bak "s/\.travis-ci/travis-ci/g" {} +
+
+
+RLIBKRIGING_PATH=$LIBKRIGING_SRC_PATH"/bindings/R/rlibkriging/"
+
+# overwrite libK/src/Makevars* with ./src/Makevars*
+cp src/Makevars* $RLIBKRIGING_PATH/src/. 
+
+# copy resources from libK/binding/R
+cp -r $RLIBKRIGING_PATH/R .
+cp -r $RLIBKRIGING_PATH/src .
+cp -r $RLIBKRIGING_PATH/tests .
+cp -r $RLIBKRIGING_PATH/man .
+cp -r $RLIBKRIGING_PATH/NAMESPACE .

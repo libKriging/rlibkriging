@@ -51,21 +51,7 @@ mv build/installed/include ../../inst/.
 
 cd ../..
 
-
-# Prepare rlibkriging build (that will follow just after this script)
-RLIBKRIGING_PATH="src/libK/bindings/R/rlibkriging"
-
 # update doc
-#Rscript -e "roxygen2::roxygenise(package.dir = '$RLIBKRIGING_PATH')" # No: it will loop on install, because roxygen2 requires loading package...
+#Rscript -e "roxygen2::roxygenise(package.dir = '.')" # No: it will loop on install, because roxygen2 requires loading package...
 # update Rccp links
-${R_HOME}/bin/Rscript -e "Rcpp::compileAttributes(pkgdir = '$RLIBKRIGING_PATH', verbose = TRUE)"
-
-# overwrite libK/src/Makevars* with ./src/Makevars*
-cp src/Makevars* $RLIBKRIGING_PATH/src/. 
-
-# copy resources from libK/binding/R
-cp -r $RLIBKRIGING_PATH/R .
-cp -r $RLIBKRIGING_PATH/src .
-cp -r $RLIBKRIGING_PATH/tests .
-cp -r $RLIBKRIGING_PATH/man .
-cp -r $RLIBKRIGING_PATH/NAMESPACE .
+${R_HOME}/bin/Rscript -e "Rcpp::compileAttributes(pkgdir = '.', verbose = TRUE)"

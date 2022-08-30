@@ -54,3 +54,11 @@ CMakeFiles
 # armadillo 'in source' generated Makefile
 dependencies/armadillo-code/examples/Makefile
 .Rproj.user
+
+# Do not store these files, which should come from src/libK/bindings/R/rlibkriging
+src/*.cpp
+src/*.hpp
+tests
+man
+R
+NAMESPACE

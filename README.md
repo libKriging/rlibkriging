@@ -7,7 +7,9 @@ install.packages('devtools')
 devtools::install_github("libKriging/rlibkriging")
 ```
 
-Requirements are `c++`, `cmake` and `gfortran`, which should be installed using:
+## Requirements
+
+`c++`, `cmake` and `gfortran`, should be installed using:
 
 * Linux: `apt/yum/... install cpp cmake gfortran`
 
@@ -24,3 +26,6 @@ Requirements are `c++`, `cmake` and `gfortran`, which should be installed using:
 Note: this repository mainly contains modified Makefiles, inspired by https://github.com/astamm/nloptr wrapper for
 NLOpt.
 
+## CRAN
+
+When submitting to CRAN, `./tools/setup.sh` should be run before `R CMD build rlibkriging` to suite CRAN policy.
