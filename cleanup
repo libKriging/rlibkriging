@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-rm -fr src/*.o src/*.so autom4te.cache config.log config.status
+rm -fr src/*.o src/*.so autom4te.cache config.log config.status inst
 
 RLIBKRIGING_PATH="src/libK/bindings/R/rlibkriging"
 
