@@ -11,3 +11,4 @@
 # skip sub-build artifacts
 ^.*\.idea$
 ^inst$
+^.*\.readthedocs.yaml$
