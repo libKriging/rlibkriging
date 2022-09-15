@@ -3,10 +3,23 @@ Type: Package
 Title: Kriging Models using the 'libKriging' Library
 Version: 0.6-0
 Date: 2022-08-31
-Author: Pascal Havé <hpwxf@haveneer.com>, Yann Richet <yann.richet@irsn.fr>, Yves Deville <deville.yves@alpestat.com>
+Authors@R: 
+    c(person(given = "Pascal",
+             family = "Havé",
+             role = c("aut","cre"),
+             email = "hpwxf@haveneer.com"),
+      person(given = "Yann",
+             family = "Richet",
+             role = c("aut","cre"),
+             email = "yann.richet@irsn.fr",
+             comment = c(ORCID = "0000-0002-5677-8458")),
+      person(given = "Yves",
+             family = "Deville",
+             role = c("aut"),
+             email = "deville.yves@alpestat.com"))
 Maintainer: Yann Richet <yann.richet@irsn.fr>
-Description: An R interface to C++ 'libKriging' library that should
-    provide most standard Kriging / Gaussian process regression features 
+Description: Interface to 'libKriging' 'C++' library <https://github.com/libKriging> that should
+    provide most standard Kriging / Gaussian process regression features
     (like in 'DiceKriging', 'kergp' or 'RobustGaSP' packages).
 License: Apache License (>= 2)
 Encoding: UTF-8
