@@ -17,16 +17,13 @@ Authors@R:
              family = "Deville",
              role = c("aut"),
              email = "deville.yves@alpestat.com"),
-             
       person(given = "Conrad",
              family = "Sanderson",
              role = c("ctb"),
              email = "conradsand.uq@gmail.com"),
-             
       person(given = "Colin",
              family = "Fang",
              role = c("ctb")),    
-
       person(given = "Ciyou",
              family = "Zhu",
              role = c("ctb")),
