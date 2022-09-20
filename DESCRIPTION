@@ -16,11 +16,37 @@ Authors@R:
       person(given = "Yves",
              family = "Deville",
              role = c("aut"),
-             email = "deville.yves@alpestat.com"))
+             email = "deville.yves@alpestat.com"),
+             
+      person(given = "Conrad",
+             family = "Sanderson",
+             role = c("ctb"),
+             email = "conradsand.uq@gmail.com"),
+             
+      person(given = "Colin",
+             family = "Fang",
+             role = c("ctb")),    
+
+      person(given = "Ciyou",
+             family = "Zhu",
+             role = c("ctb")),
+      person(given = "Richard",
+             family = "Byrd",
+             role = c("ctb")),
+      person(given = "Jorge",
+             family = "Nocedal",
+             role = c("ctb")),
+      person(given = "Jose Luis",
+             family = "Morales",
+             role = c("ctb"))
+      )
 Maintainer: Yann Richet <yann.richet@irsn.fr>
 Description: Interface to 'libKriging' 'C++' library <https://github.com/libKriging> that should
     provide most standard Kriging / Gaussian process regression features
     (like in 'DiceKriging', 'kergp' or 'RobustGaSP' packages).
+    'libKriging' relies on Armadillo linear algebra library (Apache 2 license) by Conrad Sanderson, 
+    and 'lbfgsb_cpp' is a 'C++' wrapper by Colin Fang around 'lbfgsb' library (BSD-3 license) by 
+    Ciyou Zhu, Richard Byrd, Jorge Nocedal and Jose Luis Morales used for hyperparameters optimization.
 License: Apache License (>= 2)
 Encoding: UTF-8
 LinkingTo: Rcpp, RcppArmadillo
