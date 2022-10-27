@@ -2,6 +2,8 @@
 
 packages = commandArgs(trailingOnly=TRUE)
 
+options(pkgType = "win.binary") # Prefer windows binary if available (even if not latest version)
+
 for (lib in packages) {
 
     install.packages(lib, repos='https://cloud.r-project.org');
