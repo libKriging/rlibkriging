@@ -11,7 +11,7 @@ env:
   DEBUG_CI: true
 
 jobs:
-  release:
+  rhub-local_check:
     strategy:
       fail-fast: false
       matrix:
@@ -42,8 +42,10 @@ jobs:
         env: # this alias helps to reuse following line as script
           RHUBOS: ${{ matrix.rhubos }}
         run: |
-          rhub::local_check_linux(".",image=paste0("rhub/",Sys.getenv("RHUBOS")))
-      
+          pushd ..
+          Rscript -e "install.packages('rhub'); rhub::local_check_linux('./rlibkriging',image=paste0('rhub/',Sys.getenv('RHUBOS')))"
+          popd
+
 #      - name: R CMD build
 #        shell: bash
 #        env: # this alias helps to reuse following line as script
