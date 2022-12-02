@@ -19,7 +19,9 @@ jobs:
         rhubos: [ 'debian-clang-devel','debian-gcc-devel','debian-gcc-devel-nold','debian-gcc-patched','debian-gcc-release','fedora-clang-devel','fedora-gcc-devel','rocker-gcc-san','ubuntu-gcc-devel','ubuntu-gcc-release','ubuntu-rchk' ]
 
     runs-on: ubuntu-latest
-    container: rhub/${{ matrix.rhubos }}
+    container:
+      image: rhub/${{ matrix.rhubos }}
+      options: --user root
 
     steps:
       - name: Checkout
