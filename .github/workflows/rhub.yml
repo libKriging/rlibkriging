@@ -27,7 +27,7 @@ jobs:
       - name: Add dependencies
         shell: bash
         run: |
-          if [ `lsb_release -a | grep Distributor | cut -d: -f2 | tr -d '\t'` = "Ubuntu" ]; then apt install git cmake gfortran; else yum install git cmake gfortran; fi
+          if [ `lsb_release -a | grep Distributor | cut -d: -f2 | tr -d '\t'` = "Ubuntu" ]; then apt install -y git cmake gfortran; else yum install -y git cmake gfortran; fi
 
       - uses: actions/checkout@v3.0.2
       #  with:
