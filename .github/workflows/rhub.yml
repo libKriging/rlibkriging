@@ -23,11 +23,19 @@ jobs:
       image: rhub/${{ matrix.rhubos }}
       options: --user root
 
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+
     steps:
       - name: Add dependencies
         shell: bash
         run: |
-          if [ `cat /etc/*-release | grep ID | cut -d: -f2 | head -1 | tr -d '\t'` = "fedora" ]; then yum install -y git cmake gfortran R; else apt install -y git cmake gfortran r-base; fi
+          echo "`cat /etc/*-release | grep ID | cut -d: -f2 | head -1 | tr -d '\t'`"; \
+            if [ `cat /etc/*-release | grep ID | cut -d: -f2 | head -1 | tr -d '\t'` = "Fedora" ]; \
+            then yum install -y git cmake gfortran R; \
+            else apt install -y git cmake gfortran r-base libcurl4-openssl-dev libharfbuzz-dev libfribidi-dev; \
+            fi
 
       - uses: actions/checkout@v3.0.2
       #  with:
@@ -38,45 +46,15 @@ jobs:
           git config --global --add safe.directory /__w/rlibkriging/rlibkriging
           git submodule update --init --recursive
 
-      #- uses: r-lib/actions/setup-r@v2
-      #  with:
-      #    r-version: 'release'
-      #    rtools-version: '42'
-
-      - uses: r-lib/actions/setup-r-dependencies@v2
-
-      - name: setup for CRAN
+      - name: Install devtools
         shell: bash
-        run: ./tools/setup.sh
-
-      - name: R CMD build
-        shell: bash
-        env: # this alias helps to reuse following line as script
-          OS: ${{ matrix.os }}
         run: |
-          pushd ..
-          R CMD build rlibkriging 
-          mkdir rlibkriging/CRAN-$OS
-          mv rlibkriging_*.* rlibkriging/CRAN-$OS/.
-          popd
+          # Add --insecure to workaround missing certificates on Windows
+          # --header is not required by an useful example if the repo becomes private 
+          curl --insecure --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' -LO https://raw.githubusercontent.com/libKriging/rlibkriging/${{ env.BRANCH_NAME }}/tools/install_packages.R
+          Rscript --no-save ./install_packages.R devtools
 
-      - name: R CMD check
+      - name: install_github from ${{ env.BRANCH_NAME }}
         shell: bash
-        env:
-          OS: ${{ matrix.os }}
-        run: |
-          R CMD check --as-cran --no-manual CRAN-$OS/rlibkriging* || (
-            test -f rlibkriging.Rcheck/00install.out && cat rlibkriging.Rcheck/00install.out | sed -e 's/^/00install.out| /' && echo "[The error may be shown before 00install.out| listing"; 
-            exit 1
-          )
+        run: Rscript -e "library(devtools); install_github('libKriging/rlibkriging', ref='${{ env.BRANCH_NAME }}'); if (!library('rlibkriging', character.only=TRUE, logical.return=TRUE)) quit(status=1, save='no')"
 
-      - uses: actions/upload-artifact@v2
-        with:
-          path: ./CRAN-*
-
-      - uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          files: ./CRAN-*
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
