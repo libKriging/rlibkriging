@@ -36,6 +36,7 @@ jobs:
             then dnf install -y git cmake gfortran libcurl-devel libxml2-devel openssl-devel fontconfig-devel; \
             else apt-get install -y git cmake gfortran libcurl4-openssl-dev libharfbuzz-dev libfribidi-dev libxml2-dev libssl-dev libfontconfig1-dev; \
             fi
+            export PATH=$PATH:/opt/R-devel/bin/:/opt/R/bin/
 
       - uses: actions/checkout@v3.0.2
       #  with:
@@ -52,7 +53,7 @@ jobs:
           # Add --insecure to workaround missing certificates on Windows
           # --header is not required by an useful example if the repo becomes private 
           curl --insecure --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' -LO https://raw.githubusercontent.com/libKriging/rlibkriging/${{ env.BRANCH_NAME }}/tools/install_packages.R
-          Rscript --no-save ./install_packages.R devtools
+          /opt/R/Rscript --no-save ./install_packages.R devtools
 
       - name: install_github from ${{ env.BRANCH_NAME }}
         shell: bash
