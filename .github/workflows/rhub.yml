@@ -24,10 +24,10 @@ jobs:
       options: --user root
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
         with:
           submodules: recursiveshell: bash
+      #- name: Checkout
         #shell: bash
         #run: |
         #  pushd ..
