@@ -31,10 +31,10 @@ jobs:
       - name: Add dependencies
         shell: bash
         run: |
-          echo "`cat /etc/*-release | grep ID | cut -d: -f2 | head -1 | tr -d '\t'`"; \
-            if [ `cat /etc/*-release | grep ID | cut -d: -f2 | head -1 | tr -d '\t'` = "Fedora" ]; \
-            then yum install -y git cmake gfortran R; \
-            else apt install -y git cmake gfortran r-base libcurl4-openssl-dev libharfbuzz-dev libfribidi-dev; \
+          echo "`cat /etc/*-release | grep ID | cut -d= -f2 | head -1 | tr -d '\t'`"; \
+            if [ `cat /etc/*-release | grep ID | cut -d= -f2 | head -1 | tr -d '\t'` = "fedora" ]; \
+            then yum install -y git cmake gfortran R libcurl-devel libxml2-devel openssl-devel; \
+            else apt-get install -y git cmake gfortran r-base libcurl4-openssl-dev libharfbuzz-dev libfribidi-dev libxml2-dev libssl-dev; \
             fi
 
       - uses: actions/checkout@v3.0.2
