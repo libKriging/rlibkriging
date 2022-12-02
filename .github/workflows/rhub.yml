@@ -29,7 +29,7 @@ jobs:
         run: |
           INSTALL="yum install -y"
           if [ `cat /etc/*-release | grep ID | cut -d: -f2 | head -1 | tr -d '\t'` = "Ubuntu" ]; then INSTALL="apt install -y"; fi
-          if [ `cat /etc/*-release | grep ID | cut -d: -f2 | head -1 | tr -d '\t'` = "Debian" ]; then INSTALL="apt-get install -y" fi;
+          if [ `cat /etc/*-release | grep ID | cut -d: -f2 | head -1 | tr -d '\t'` = "Debian" ]; then INSTALL="apt-get install -y"; fi
           $INSTALL git cmake gfortran
 
       - uses: actions/checkout@v3.0.2
