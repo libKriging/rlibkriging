@@ -27,7 +27,10 @@ jobs:
       - name: Add dependencies
         shell: bash
         run: |
-          if [ `lsb_release -a | grep Distributor | cut -d: -f2 | tr -d '\t'` = "Ubuntu" ]; then apt install -y git cmake gfortran; else yum install -y git cmake gfortran; fi
+          INSTALL="yum install -y"
+          if [ `cat /etc/*-release | grep ID | cut -d: -f2 | head -1 | tr -d '\t'` = "Ubuntu" ]; then INSTALL="apt install -y"; fi
+          if [ `cat /etc/*-release | grep ID | cut -d: -f2 | head -1 | tr -d '\t'` = "Debian" ]; then INSTALL="apt-get install -y" fi;
+          $INSTALL git cmake gfortran
 
       - uses: actions/checkout@v3.0.2
       #  with:
@@ -37,16 +40,11 @@ jobs:
         run: |
           git config --global --add safe.directory /__w/rlibkriging/rlibkriging
           git submodule update --init --recursive
-        #shell: bash
-        #run: |
-        #  pushd ..
-        #  git clone --recurse-submodules https://github.com/libKriging/rlibkriging
-        #  popd
 
-      - uses: r-lib/actions/setup-r@v2
-        with:
-          r-version: 'release'
-          rtools-version: '42'
+      #- uses: r-lib/actions/setup-r@v2
+      #  with:
+      #    r-version: 'release'
+      #    rtools-version: '42'
 
       - uses: r-lib/actions/setup-r-dependencies@v2
 
