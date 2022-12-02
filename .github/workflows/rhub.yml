@@ -35,6 +35,7 @@ jobs:
       - name: Checkout submodules
         shell: bash
         run: |
+          git config --global --add safe.directory /__w/rlibkriging/rlibkriging
           git submodule update --init --recursive
         #shell: bash
         #run: |
