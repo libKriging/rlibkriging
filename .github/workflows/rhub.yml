@@ -53,7 +53,7 @@ jobs:
           # Add --insecure to workaround missing certificates on Windows
           # --header is not required by an useful example if the repo becomes private 
           curl --insecure --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' -LO https://raw.githubusercontent.com/libKriging/rlibkriging/${{ env.BRANCH_NAME }}/tools/install_packages.R
-          /opt/R/Rscript --no-save ./install_packages.R devtools
+          Rscript --no-save ./install_packages.R devtools
 
       - name: install_github from ${{ env.BRANCH_NAME }}
         shell: bash
