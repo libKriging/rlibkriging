@@ -19,7 +19,7 @@ jobs:
         rhubos: [ 'debian-clang-devel','debian-gcc-devel','debian-gcc-devel-nold','debian-gcc-patched','debian-gcc-release','fedora-clang-devel','fedora-gcc-devel','rocker-gcc-san','ubuntu-gcc-devel','ubuntu-gcc-release','ubuntu-rchk' ]
 
     runs-on: ubuntu-latest
-    #container: rhub/${{ matrix.rhubos }}
+    container: rhub/${{ matrix.rhubos }}
 
     steps:
       - uses: actions/checkout@v2
@@ -33,48 +33,38 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
 
-#      - name: setup for CRAN
-#        shell: bash
-#        run: ./tools/setup.sh
+      - name: setup for CRAN
+        shell: bash
+        run: ./tools/setup.sh
 
-      - name: rhub local_check
+      - name: R CMD build
         shell: bash
         env: # this alias helps to reuse following line as script
-          RHUBOS: ${{ matrix.rhubos }}
+          OS: ${{ matrix.os }}
         run: |
-          curl ifconfig.me/all
           pushd ..
-          Rscript -e "install.packages('rhub'); rhub::local_check_linux('./rlibkriging',image=paste0('rhub/',Sys.getenv('RHUBOS')))"
+          R CMD build rlibkriging 
+          mkdir rlibkriging/CRAN-$OS
+          mv rlibkriging_*.* rlibkriging/CRAN-$OS/.
           popd
 
-#      - name: R CMD build
-#        shell: bash
-#        env: # this alias helps to reuse following line as script
-#          OS: ${{ matrix.os }}
-#        run: |
-#          pushd ..
-#          R CMD build rlibkriging 
-#          mkdir rlibkriging/CRAN-$OS
-#          mv rlibkriging_*.* rlibkriging/CRAN-$OS/.
-#          popd
-#
-#      - name: R CMD check
-#        shell: bash
-#        env:
-#          OS: ${{ matrix.os }}
-#        run: |
-#          R CMD check --as-cran --no-manual CRAN-$OS/rlibkriging* || (
-#            test -f rlibkriging.Rcheck/00install.out && cat rlibkriging.Rcheck/00install.out | sed -e 's/^/00install.out| /' && echo "[The error may be shown before 00install.out| listing"; 
-#            exit 1
-#          )
-#
-#      - uses: actions/upload-artifact@v2
-#        with:
-#          path: ./CRAN-*
-#
-#      - uses: softprops/action-gh-release@v1
-#        if: startsWith(github.ref, 'refs/tags/')
-#        with:
-#          files: ./CRAN-*
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: R CMD check
+        shell: bash
+        env:
+          OS: ${{ matrix.os }}
+        run: |
+          R CMD check --as-cran --no-manual CRAN-$OS/rlibkriging* || (
+            test -f rlibkriging.Rcheck/00install.out && cat rlibkriging.Rcheck/00install.out | sed -e 's/^/00install.out| /' && echo "[The error may be shown before 00install.out| listing"; 
+            exit 1
+          )
+
+      - uses: actions/upload-artifact@v2
+        with:
+          path: ./CRAN-*
+
+      - uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: ./CRAN-*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
