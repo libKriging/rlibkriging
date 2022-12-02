@@ -33,15 +33,16 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
 
-      - name: setup for CRAN
-        shell: bash
-        run: ./tools/setup.sh
+#      - name: setup for CRAN
+#        shell: bash
+#        run: ./tools/setup.sh
 
       - name: rhub local_check
         shell: bash
         env: # this alias helps to reuse following line as script
           RHUBOS: ${{ matrix.rhubos }}
         run: |
+          bash ./tools/setup.sh
           pushd ..
           Rscript -e "install.packages('rhub'); rhub::local_check_linux('./rlibkriging',image=paste0('rhub/',Sys.getenv('RHUBOS')))"
           popd
