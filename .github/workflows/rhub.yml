@@ -42,8 +42,6 @@ jobs:
         env: # this alias helps to reuse following line as script
           RHUBOS: ${{ matrix.rhubos }}
         run: |
-          ls
-          bash ./tools/setup.sh
           pushd ..
           Rscript -e "install.packages('rhub'); rhub::local_check_linux('./rlibkriging',image=paste0('rhub/',Sys.getenv('RHUBOS')))"
           popd
