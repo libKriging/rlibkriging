@@ -46,18 +46,44 @@ jobs:
           git config --global --add safe.directory /__w/rlibkriging/rlibkriging
           git submodule update --init --recursive
 
-      - name: Install devtools
-        shell: bash
-        run: |
-          # Add --insecure to workaround missing certificates on Windows
-          # --header is not required by an useful example if the repo becomes private 
-          curl --insecure --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' -LO https://raw.githubusercontent.com/libKriging/rlibkriging/${{ env.BRANCH_NAME }}/tools/install_packages.R
-          export PATH=$PATH:/opt/R-devel/bin/:/opt/R-patched/bin/:/opt/R/bin
-          Rscript --no-save ./install_packages.R devtools
+#      - name: Install devtools
+#        shell: bash
+#        run: |
+#          # Add --insecure to workaround missing certificates on Windows
+#          # --header is not required by an useful example if the repo becomes private 
+#          curl --insecure --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' -LO https://raw.githubusercontent.com/libKriging/rlibkriging/${{ env.BRANCH_NAME }}/tools/install_packages.R
+#          export PATH=$PATH:/opt/R-devel/bin/:/opt/R-patched/bin/:/opt/R/bin
+#          Rscript --no-save ./install_packages.R devtools
+#
+#      - name: install_github from ${{ env.BRANCH_NAME }}
+#        shell: bash
+#        run: |
+#          export PATH=$PATH:/opt/R-devel/bin/:/opt/R-patched/bin/:/opt/R/bin
+#          Rscript -e "library(devtools); install_github('libKriging/rlibkriging', ref='${{ env.BRANCH_NAME }}'); if (!library('rlibkriging', character.only=TRUE, logical.return=TRUE)) quit(status=1, save='no')"
 
-      - name: install_github from ${{ env.BRANCH_NAME }}
+      - name: setup for CRAN
         shell: bash
+        run: ./tools/setup.sh
+
+      - name: R CMD build
+        shell: bash
+        env: # this alias helps to reuse following line as script
+          OS: ${{ matrix.rhubos }}
         run: |
           export PATH=$PATH:/opt/R-devel/bin/:/opt/R-patched/bin/:/opt/R/bin
-          Rscript -e "library(devtools); install_github('libKriging/rlibkriging', ref='${{ env.BRANCH_NAME }}'); if (!library('rlibkriging', character.only=TRUE, logical.return=TRUE)) quit(status=1, save='no')"
+          pushd ..
+          R CMD build rlibkriging 
+          mkdir rlibkriging/CRAN-$OS
+          mv rlibkriging_*.* rlibkriging/CRAN-$OS/.
+          popd
 
+      - name: R CMD check
+        shell: bash
+        env:
+          OS: ${{ matrix.rhubos }}
+        run: |
+          export PATH=$PATH:/opt/R-devel/bin/:/opt/R-patched/bin/:/opt/R/bin
+          R CMD check --as-cran --no-manual CRAN-$OS/rlibkriging* || (
+            test -f rlibkriging.Rcheck/00install.out && cat rlibkriging.Rcheck/00install.out | sed -e 's/^/00install.out| /' && echo "[The error may be shown before 00install.out| listing"; 
+            exit 1
+          )
