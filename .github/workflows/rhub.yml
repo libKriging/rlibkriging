@@ -16,7 +16,8 @@ jobs:
       fail-fast: false
       matrix:
         #rhub::local_check_linux_images()
-        rhubos: [ 'debian-clang-devel','debian-gcc-devel','debian-gcc-devel-nold','debian-gcc-patched','debian-gcc-release','fedora-clang-devel','fedora-gcc-devel','rocker-gcc-san','ubuntu-gcc-devel','ubuntu-gcc-release','ubuntu-rchk' ]
+        rhubos: [ 'debian-clang-devel','debian-gcc-devel','debian-gcc-devel-nold','debian-gcc-patched','debian-gcc-release','fedora-clang-devel','fedora-gcc-devel','rocker-gcc-san','ubuntu-gcc-devel','ubuntu-gcc-release' ]
+        # not suitable for compile: ,'ubuntu-rchk' ]
 
     runs-on: ubuntu-latest
     container:
@@ -59,7 +60,7 @@ jobs:
         shell: bash
         run: |
           export PATH=$PATH:/opt/R-devel/bin/:/opt/R-patched/bin/:/opt/R/bin
-          Rscript -e "library(devtools); install_deps('libKriging/rlibkriging')"
+          Rscript -e "library(devtools); install_deps('.')"
 
 #      - name: devtools install_github from ${{ env.BRANCH_NAME }}
 #        shell: bash
