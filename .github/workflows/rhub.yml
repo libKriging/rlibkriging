@@ -70,7 +70,11 @@ jobs:
 
       - name: setup for CRAN
         shell: bash
-        run: ./tools/setup.sh
+        run: |
+          export PATH=$PATH:/opt/R-devel/bin/:/opt/R-patched/bin/:/opt/R/bin
+          Rscript --no-save ./install_packages.R roxygen2
+          ./tools/setup.sh
+          Rscript -e "remove.packages('roxygen2')"
 
       - name: R CMD build
         shell: bash

@@ -40,7 +40,10 @@ jobs:
 
       - name: setup for CRAN
         shell: bash
-        run: ./tools/setup.sh
+        run: |
+          Rscript -e "install.packages('roxygen2')"
+          ./tools/setup.sh
+          Rscript -e "remove.packages('roxygen2')"
 
       - name: R CMD build
         shell: bash
