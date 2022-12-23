@@ -44,6 +44,7 @@ MODE=Release \
 EXTRA_CMAKE_OPTIONS="-DCMAKE_INSTALL_LIBDIR=lib -DBUILD_SHARED_LIBS=${MAKE_SHARED_LIBS} -DEXTRA_SYSTEM_LIBRARY_PATH=${EXTRA_SYSTEM_LIBRARY_PATH}" \
 $CI/linux-macos/build.sh # should support '.travis-ci' or 'travis-ci'"
 
+rm -rf ../../inst
 mkdir -p ../../inst
 mv build/installed/lib ../../inst/.
 mv build/installed/share ../../inst/.
