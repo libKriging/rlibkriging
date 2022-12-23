@@ -44,7 +44,10 @@ jobs:
           use-public-rspm: true
           rtools-version: '42'
 
-      - uses: jwlawson/actions-setup-cmake@v1.12
+      - name: Setup cmake
+        uses: jwlawson/actions-setup-cmake@v1.13
+        with:
+          cmake-version: '3.24.x'
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
