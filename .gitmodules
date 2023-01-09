@@ -1,3 +1,6 @@
 [submodule "src/libK"]
 	path = src/libK
 	url = https://github.com/libKriging/libKriging
+[submodule "src/slapack"]
+	path = src/slapack
+	url = https://github.com/libKriging/slapack.git
