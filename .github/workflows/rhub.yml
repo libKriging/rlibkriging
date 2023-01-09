@@ -47,6 +47,14 @@ jobs:
           git config --global --add safe.directory /__w/rlibkriging/rlibkriging
           git submodule update --init --recursive
 
+      - name: Remove tmp requirements
+        shell: bash
+        run: |
+          if [ `cat /etc/*-release | grep ID | cut -d= -f2 | head -1 | tr -d '\t'` = "fedora" ]; \
+            then dnf remove -y git; \
+            else apt-get remove -y git; \
+            fi
+
       - name: Install devtools
         shell: bash
         run: |
