@@ -53,20 +53,12 @@ sed -i.bak -e "s|dependencies/lbfgsb_cpp|lbfgsb_cpp|g" \
   $LIBKRIGING_SRC_PATH/CMakeLists.txt
 sed -i.bak -e "s|configure_file(\${DOXYGEN_IN}|##configure_file(\${DOXYGEN_IN}|g" \
   $LIBKRIGING_SRC_PATH/CMakeLists.txt  
-sed -i.bak -e "s|^*CATCH_MODULE_PATH|##&|g" \
+sed -i.bak -e "s|^.*CATCH_MODULE_PATH|##&|g" \
   $LIBKRIGING_SRC_PATH/CMakeLists.txt  
 sed -i.bak -e "s|include(CTest)|##&|g" \
   $LIBKRIGING_SRC_PATH/CMakeLists.txt  
 sed -i.bak -e "s|add_subdirectory(tests)|##&|g" \
-  $LIBKRIGING_SRC_PATH/CMakeLists.txt  
-sed -i.bak -e "s|add_custom_target(run_unit_tests|##&|g" \
-  $LIBKRIGING_SRC_PATH/CMakeLists.txt  
-sed -i.bak -e "s|        COMMAND ${CMAKE_CTEST_COMMAND}|##&|g" \
-  $LIBKRIGING_SRC_PATH/CMakeLists.txt  
-sed -i.bak -e "s|        COMMENT "Executing unit tests."|##&|g" \
-  $LIBKRIGING_SRC_PATH/CMakeLists.txt  
-sed -i.bak -e "s|        DEPENDS all_test_binaries|##&|g" \
-  $LIBKRIGING_SRC_PATH/CMakeLists.txt  
+  $LIBKRIGING_SRC_PATH/CMakeLists.txt    
 sed -i.bak -e '/^add_custom_target(run_unit_tests$/,/^        )$/d;//d' \
   $LIBKRIGING_SRC_PATH/CMakeLists.txt  
 rm -rf $LIBKRIGING_SRC_PATH/CMakeLists.txt.bak
