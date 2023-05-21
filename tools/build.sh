@@ -39,6 +39,17 @@ export FC=`${R_HOME}/bin/R CMD config FC`
 export CMAKE_Fortran_COMPILER="$(${R_HOME}/bin/R CMD config FC | awk '{ print $1 }')"
 export Fortran_LINK_FLAGS="$(${R_HOME}/bin/R CMD config FLIBS)"
 
+echo "----------------------------------------------------------------"
+echo "Look for HDF5 installation"
+# Get HDF5 installation if available from R package Rhdf5lib
+RHDF5_PATH=$(${R_HOME}/bin/Rscript -e "system.file(package='Rhdf5lib')" | sed -e 's/^\[[0-9]\] "//' | sed -e 's/"$//')
+if [ -n "${RHDF5_PATH}" ]; then
+  export HDF5_ROOT=${RHDF5_PATH}
+  # find $HDF5_ROOT # for deep investigations
+fi
+# export EXTRA_CMAKE_OPTIONS="--debug-find-pkg=HDF5" # only for cmake ≥3.23
+echo "----------------------------------------------------------------"
+
 BUILD_TEST=false \
 MODE=Release \
 EXTRA_CMAKE_OPTIONS="${EXTRA_CMAKE_OPTIONS:-} -DCMAKE_INSTALL_LIBDIR=lib -DBUILD_SHARED_LIBS=${MAKE_SHARED_LIBS} -DEXTRA_SYSTEM_LIBRARY_PATH=${EXTRA_SYSTEM_LIBRARY_PATH}" \
