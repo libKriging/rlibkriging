@@ -2,10 +2,9 @@ name: rhub-local_check
 
 on:
   push:
-    branches: [ master ]
-    tags: [ '*.*' ]
   pull_request:
-    branches: [ master ]
+  schedule:
+    - cron: '0 2 * * SAT'
 
 env:
   DEBUG_CI: true
@@ -34,8 +33,8 @@ jobs:
         run: |
           echo "`cat /etc/*-release | grep ID | cut -d= -f2 | head -1 | tr -d '\t'`"; \
             if [ `cat /etc/*-release | grep ID | cut -d= -f2 | head -1 | tr -d '\t'` = "fedora" ]; \
-            then dnf install -y git cmake gfortran libcurl-devel libxml2-devel openssl-devel fontconfig-devel; \
-            else apt-get update; apt-get install -y git cmake gfortran libcurl4-openssl-dev libharfbuzz-dev libfribidi-dev libxml2-dev libssl-dev libfontconfig1-dev; \
+            then dnf install -y git cmake gfortran libcurl-devel libxml2-devel openssl-devel fontconfig-devel hdf5-devel; \
+            else apt-get update; apt-get install -y git cmake gfortran libcurl4-openssl-dev libharfbuzz-dev libfribidi-dev libxml2-dev libssl-dev libfontconfig1-dev libhdf5-dev; \
             fi
 
       - uses: actions/checkout@v3.0.2

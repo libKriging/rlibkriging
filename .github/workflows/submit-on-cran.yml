@@ -2,10 +2,7 @@ name: submit-CRAN
 
 on:
   push:
-    branches: [ master ]
-    tags: [ '*.*' ]
   pull_request:
-    branches: [ master ]
   schedule:
     - cron: '0 2 * * SAT'
 
@@ -32,6 +29,8 @@ jobs:
           rtools-version: '42'
 
       - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          cache: false
 
       - name: Setup cmake
         uses: jwlawson/actions-setup-cmake@v1.13
