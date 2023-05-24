@@ -69,6 +69,13 @@ jobs:
           export PATH=$PATH:/opt/R-devel/bin/:/opt/R-patched/bin/:/opt/R/bin
           Rscript -e "library(devtools); install_deps('.',dependencies = TRUE)"
 
+      - name: Install Bioconductor packages
+        shell: bash
+        run: |
+          export PATH=$PATH:/opt/R-devel/bin/:/opt/R-patched/bin/:/opt/R/bin
+          Rscript -e 'install.packages("BiocManager", repos="https://cran.irsn.fr/")'
+          Rscript -e 'BiocManager::install("Rhdf5lib")'
+
 #      - name: devtools install_github from ${{ env.BRANCH_NAME }}
 #        shell: bash
 #        run: |
