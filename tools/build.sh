@@ -45,9 +45,9 @@ echo "Look for HDF5 installation"
 RHDF5_PATH=$(${R_HOME}/bin/Rscript -e "system.file(package='Rhdf5lib')" | sed -e 's/^\[[0-9]\] "//' | sed -e 's/"$//')
 if [ -n "${RHDF5_PATH}" ]; then
   export HDF5_ROOT=${RHDF5_PATH}
-  # find "$HDF5_ROOT" # for deep investigations
+  find "$HDF5_ROOT" # for deep investigations
 fi
-# EXTRA_CMAKE_OPTIONS="${EXTRA_CMAKE_OPTIONS:-} --debug-find-pkg=HDF5" # only for cmake ≥3.23
+EXTRA_CMAKE_OPTIONS="${EXTRA_CMAKE_OPTIONS:-} --debug-find-pkg=HDF5" # only for cmake ≥3.23
 echo "----------------------------------------------------------------"
 
 # Prevent conflict with hdf5-targets.cmake (cf libKriging/cmake/FindHDF5.cmake:504)
