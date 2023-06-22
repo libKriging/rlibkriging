@@ -46,9 +46,9 @@ RHDF5_PATH=$(${R_HOME}/bin/Rscript -e "system.file(package='Rhdf5lib')" | sed -e
 if [ -n "${RHDF5_PATH}" ]; then
   rm -fr ../../inst/hdf5
   mkdir -p ../../inst/hdf5
-  cp -r ${RHDF5_PATH}/include ../../inst/hdf5/.
-  cp -r ${RHDF5_PATH}/lib ../../inst/hdf5/.
-  export HDF5_ROOT=$PWD/../../inst/hdf5
+  cp -r "${RHDF5_PATH}/include" ../../inst/hdf5/.
+  cp -r "${RHDF5_PATH}/lib" ../../inst/hdf5/.
+  export HDF5_ROOT="$PWD/../../inst/hdf5"
   # find "$HDF5_ROOT" # for deep investigations
 fi
 # EXTRA_CMAKE_OPTIONS="${EXTRA_CMAKE_OPTIONS:-} --debug-find-pkg=HDF5" # only for cmake ≥3.23
