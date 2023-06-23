@@ -3,6 +3,10 @@ from https://github.com/libKriging/bindings/R/rlibkriging content,
 so you can install it just using:
 
 ```r
+# explicitely install Rhdf5lib, coming from Bioconductor (Bioc deps not supported by devtools::install_github)
+install.packages("BiocManager")
+BiocManager::install("Rhdf5lib")
+
 install.packages('devtools')
 devtools::install_github("libKriging/rlibkriging")
 ```

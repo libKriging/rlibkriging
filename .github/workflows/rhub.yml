@@ -63,6 +63,12 @@ jobs:
           export PATH=$PATH:/opt/R-devel/bin/:/opt/R-patched/bin/:/opt/R/bin
           Rscript --no-save ./install_packages.R devtools
 
+      - name: BioConductor install Rhdf5lib (Bioconductor deps not suported by devtools::install_github)
+        shell: bash
+        run: |
+          export PATH=$PATH:/opt/R-devel/bin/:/opt/R-patched/bin/:/opt/R/bin
+          Rscript -e "install.packages('BiocManager'); BiocManager::install('Rhdf5lib'); remove.packages('BiocManager')"
+
       - name: devtools install_deps from ${{ env.BRANCH_NAME }}
         shell: bash
         run: |
