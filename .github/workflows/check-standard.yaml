@@ -40,7 +40,7 @@ jobs:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
-          rtools-version: '42'
+          rtools-version: '43'
 
       - name: Setup cmake
         uses: jwlawson/actions-setup-cmake@v1.13
