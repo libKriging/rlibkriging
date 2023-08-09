@@ -53,7 +53,9 @@ jobs:
         env:
           CC:   clang-17
           CXX:  clang++-17
-          
+          CC17:   clang-17
+          CXX17:  clang++-17
+
       - uses: actions/upload-artifact@v2
         with:
           path: ./R-*
