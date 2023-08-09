@@ -43,6 +43,8 @@ jobs:
 
       - name: Setup R Makevars
         run: |
+          mkdir -p ~/.R
+          touch ~/.R/Makevars
           echo "CC=clang-17" >> ~/.R/Makevars    
           echo "CXX=clang++-17" >> ~/.R/Makevars    
  
