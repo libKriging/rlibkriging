@@ -40,21 +40,18 @@ jobs:
         uses: jwlawson/actions-setup-cmake@v1.13
         with:
           cmake-version: '3.24.x'
-        env:
-         CC:   clang-17
-         CXX:  clang++-17
-         
+
+      - name: Setup R Makevars
+        run: |
+          echo "CC=clang-17" >> ~/.R/Makevars    
+          echo "CXX=clang++-17" >> ~/.R/Makevars    
+ 
       - run: |
           cd ..; R CMD INSTALL --build rlibkriging 
           mkdir rlibkriging/R-${{ matrix.R }}
           mv rlibkriging_*.* rlibkriging/R-${{ matrix.R }}/.
         shell: bash
         name: R CMD INSTALL
-        env:
-          CC:   clang-17
-          CXX:  clang++-17
-          CC17:   clang-17
-          CXX17:  clang++-17
 
       - uses: actions/upload-artifact@v2
         with:
