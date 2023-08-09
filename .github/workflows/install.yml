@@ -34,7 +34,7 @@ jobs:
           wget https://apt.llvm.org/llvm.sh
           chmod +x llvm.sh
           sudo ./llvm.sh 17
-          sudo apt install -y clang-17
+          sudo apt install -y clang-17 flang-17
                    
       - name: Setup cmake
         uses: jwlawson/actions-setup-cmake@v1.13
@@ -47,6 +47,7 @@ jobs:
           touch ~/.R/Makevars
           echo "CC=clang-17" >> ~/.R/Makevars    
           echo "CXX=clang++-17" >> ~/.R/Makevars    
+          echo "FC=flang-new-17" >> ~/.R/Makevars    
  
       - run: |
           cd ..; R CMD INSTALL --build rlibkriging 
