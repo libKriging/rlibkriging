@@ -50,7 +50,10 @@ jobs:
           mv rlibkriging_*.* rlibkriging/R-${{ matrix.R }}/.
         shell: bash
         name: R CMD INSTALL
-
+        env:
+          CC:   clang-17
+          CXX:  clang++-17
+          
       - uses: actions/upload-artifact@v2
         with:
           path: ./R-*
