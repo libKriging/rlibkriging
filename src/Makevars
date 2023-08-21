@@ -32,8 +32,9 @@ endif
 
 USE_FLANG=$(shell echo $(FC) | egrep "flang")
 ifneq ($(USE_FLANG),)
-  FLANG_LIB=$(shell $(FC) --help | egrep "InstalledDir" | cut -d: -f2 | tr -d ' ')
-  FLIBS=-L$(FLANG_LIB)/../lib -lFortran_main -lFortranRuntime -lFortranDecimal -lm
+  LLVM_PATH=$(shell $(USE_FLANG) --version | egrep "InstalledDir" | cut -d: -f2 | tr -d ' ')
+  FLIBS=-L$(LLVM_PATH)/../lib -lFortran_main -lFortranRuntime -lFortranDecimal -lm
+  $(info Use FLANG with FLIBS: $(FLIBS))
 endif
 
 EXTERNAL_LIBS=$(shell LIBKRIGING_PATH=${LIBKRIGING_PATH} ../src/libK/bindings/R/tools/ExternalLibsExtractor.sh)
