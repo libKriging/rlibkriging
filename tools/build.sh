@@ -42,7 +42,7 @@ export Fortran_LINK_FLAGS="$(${R_HOME}/bin/R CMD config FLIBS)"
 echo "----------------------------------------------------------------"
 echo "Look for HDF5 installation"
 # Get HDF5 installation if available from R package Rhdf5lib
-RHDF5_PATH=$(${R_HOME}/bin/R -e "system.file(package='Rhdf5lib')" | sed -e 's/^\[[0-9]\] "//' | sed -e 's/"$//')
+RHDF5_PATH=$(${R_HOME}/bin/R -s -e "system.file(package='Rhdf5lib')" | sed -e 's/^\[[0-9]\] "//' | sed -e 's/"$//')
 if [ -n "${RHDF5_PATH}" ]; then
   rm -fr ../../inst/hdf5
   mkdir -p ../../inst/hdf5
