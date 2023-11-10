@@ -42,7 +42,7 @@ export Fortran_LINK_FLAGS="$(${R_HOME}/bin/R CMD config FLIBS)"
 echo "----------------------------------------------------------------"
 echo "Look for HDF5 installation"
 # Get HDF5 installation if available from R package Rhdf5lib
-RHDF5_PATH=$(${R_HOME}/bin/Rscript -e "system.file(package='Rhdf5lib')" | sed -e 's/^\[[0-9]\] "//' | sed -e 's/"$//')
+RHDF5_PATH=$(${R_HOME}/bin/R -e "system.file(package='Rhdf5lib')" | sed -e 's/^\[[0-9]\] "//' | sed -e 's/"$//')
 if [ -n "${RHDF5_PATH}" ]; then
   rm -fr ../../inst/hdf5
   mkdir -p ../../inst/hdf5
@@ -73,6 +73,6 @@ mv build/installed/include ../../inst/.
 cd ../..
 
 # update doc
-#Rscript -e "roxygen2::roxygenise(package.dir = '.')" # No: it will loop on install, because roxygen2 requires loading package...
+#R -e "roxygen2::roxygenise(package.dir = '.')" # No: it will loop on install, because roxygen2 requires loading package...
 # update Rccp links
-${R_HOME}/bin/Rscript -e "Rcpp::compileAttributes(pkgdir = '.', verbose = TRUE)"
+${R_HOME}/bin/R -e "Rcpp::compileAttributes(pkgdir = '.', verbose = TRUE)"
