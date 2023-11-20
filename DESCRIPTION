@@ -2,7 +2,7 @@ Package: rlibkriging
 Type: Package
 Title: Kriging Models using the 'libKriging' Library
 Version: 0.8-0
-Date: 2023-06-17
+Date: 2023-11-20
 Authors@R:
     c(person(given = "Yann",
              family = "Richet",
@@ -20,10 +20,7 @@ Authors@R:
       person(given = "Conrad",
              family = "Sanderson",
              role = c("ctb"),
-             email = "conradsand.uq@gmail.com"),
-      person(given = "Colin",
-             family = "Fang",
-             role = c("ctb")),    
+             email = "conradsand.uq@gmail.com"),   
       person(given = "Ciyou",
              family = "Zhu",
              role = c("ctb")),
@@ -35,21 +32,26 @@ Authors@R:
              role = c("ctb")),
       person(given = "Jose Luis",
              family = "Morales",
-             role = c("ctb"))
+             role = c("ctb")),
+      person(given = "Mike",
+             family = "Smith",
+             role = c("ctb"),
+             email = "grimbough@gmail.com")
       )
 Maintainer: Yann Richet <yann.richet@irsn.fr>
 Description: Interface to 'libKriging' 'C++' library <https://github.com/libKriging> that should
     provide most standard Kriging / Gaussian process regression features
     (like in 'DiceKriging', 'kergp' or 'RobustGaSP' packages).
     'libKriging' relies on Armadillo linear algebra library (Apache 2 license) by Conrad Sanderson, 
-    and 'lbfgsb_cpp' is a 'C++' wrapper by Colin Fang around 'lbfgsb' library (BSD-3 license) by 
-    Ciyou Zhu, Richard Byrd, Jorge Nocedal and Jose Luis Morales used for hyperparameters optimization.
+    'lbfgsb_cpp' is a 'C++' port around 'lbfgsb' library (BSD-3 license) by 
+    Ciyou Zhu, Richard Byrd, Jorge Nocedal and Jose Luis Morales used for hyperparameters optimization,
+    and HDF5 features are coming from Rhdf5lib by Mike Smith (Artistic-2.0 license).
 License: Apache License (>= 2)
 Encoding: UTF-8
 LinkingTo: Rcpp, RcppArmadillo
 Depends: R (>= 4.2)
 Imports: Rcpp (>= 0.12.11), methods, DiceKriging, Rhdf5lib
 Suggests: testthat, RobustGaSP, utils, DiceDesign, foreach
-SystemRequirements: GNU make, cmake (>= 3.2.0), gcc, gfortran, HDF5
+SystemRequirements: GNU make, cmake (>= 3.2.0), gcc, gfortran
 URL: https://github.com/libKriging
 RoxygenNote: 7.2.3
