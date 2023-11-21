@@ -62,10 +62,14 @@ MODE=Release \
 EXTRA_CMAKE_OPTIONS="${EXTRA_CMAKE_OPTIONS:-} -DCMAKE_INSTALL_LIBDIR=lib -DBUILD_SHARED_LIBS=${MAKE_SHARED_LIBS} -DEXTRA_SYSTEM_LIBRARY_PATH=${EXTRA_SYSTEM_LIBRARY_PATH}" \
 $CI/linux-macos/build.sh # should support '.travis-ci' or 'travis-ci'"
 
-mv ../../inst/hdf5 ../../hdf5
+if [ -n "${HDF5_ROOT}" ]; then
+  mv ${HDF5_ROOT} ../../hdf5
+fi
 rm -rf ../../inst
 mkdir -p ../../inst
-mv ../../hdf5 ../../inst/hdf5
+if [ -n "${HDF5_ROOT}" ]; then
+  mv ../../hdf5 ${HDF5_ROOT}
+fi
 mv build/installed/lib ../../inst/.
 mv build/installed/share ../../inst/.
 mv build/installed/include ../../inst/.

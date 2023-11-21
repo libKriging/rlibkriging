@@ -2,7 +2,7 @@ Package: rlibkriging
 Type: Package
 Title: Kriging Models using the 'libKriging' Library
 Version: 0.8-0
-Date: 2023-11-20
+Date: 2023-11-21
 Authors@R:
     c(person(given = "Yann",
              family = "Richet",
@@ -45,13 +45,14 @@ Description: Interface to 'libKriging' 'C++' library <https://github.com/libKrig
     'libKriging' relies on Armadillo linear algebra library (Apache 2 license) by Conrad Sanderson, 
     'lbfgsb_cpp' is a 'C++' port around 'lbfgsb' library (BSD-3 license) by 
     Ciyou Zhu, Richard Byrd, Jorge Nocedal and Jose Luis Morales used for hyperparameters optimization,
-    and HDF5 features are coming from Rhdf5lib by Mike Smith (Artistic-2.0 license).
+    and HDF5 features coming from HDF Group (see HDF5_LICENSE file)
+    possibly provided by Rhdf5lib by Mike Smith (Artistic-2.0 license).
 License: Apache License (>= 2)
 Encoding: UTF-8
 LinkingTo: Rcpp, RcppArmadillo
 Depends: R (>= 4.2)
-Imports: Rcpp (>= 0.12.11), methods, DiceKriging, Rhdf5lib
+Imports: Rcpp (>= 0.12.11), methods, DiceKriging
 Suggests: testthat, RobustGaSP, utils, DiceDesign, foreach
-SystemRequirements: GNU make, cmake (>= 3.2.0), gcc, gfortran
+SystemRequirements: GNU make, cmake (>= 3.2.0), gcc, gfortran, HDF5
 URL: https://github.com/libKriging
 RoxygenNote: 7.2.3
