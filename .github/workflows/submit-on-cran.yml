@@ -36,8 +36,13 @@ jobs:
         uses: jwlawson/actions-setup-cmake@v1.13
         with:
           cmake-version: '3.24.x'
-
-      - name: setup for CRAN
+          
+      - name: Add sys HDF5 (for OSX, missing in setup-r-dependencies)
+        shell: bash
+        run: brew install hdf5
+        if: matrix.os == 'macOS-latest'
+        
+      - name: Setup for R build
         shell: bash
         run: |
           Rscript --no-save ./tools/install_packages.R pkgbuild roxygen2
