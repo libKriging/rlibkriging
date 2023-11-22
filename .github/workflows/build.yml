@@ -1,8 +1,6 @@
 name: R-CMD-INSTALL
 
 on:
-  tags:        
-    - '*'
   push:
   pull_request:
   schedule:
