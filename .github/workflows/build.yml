@@ -1,4 +1,4 @@
-name: R-CMD-INSTALL
+name: R-CMD-INSTALL-build
 
 on:
   push:
@@ -47,6 +47,9 @@ jobs:
       - uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: ./R-*
+          files: |
+            ./R-*/*.tar.gz
+            ./R-*/*.tgz
+            ./R-*/*.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
