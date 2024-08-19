@@ -33,8 +33,8 @@ jobs:
         run: |
           echo "`cat /etc/*-release | grep ID | cut -d= -f2 | head -1 | tr -d '\t'`"; \
             if [ `cat /etc/*-release | grep ID | cut -d= -f2 | head -1 | tr -d '\t'` = "fedora" ]; \
-            then dnf install -y git cmake gfortran libcurl-devel libxml2-devel openssl-devel fontconfig-devel hdf5-devel; \
-            else apt-get update; apt-get install -y git cmake gfortran libcurl4-openssl-dev libharfbuzz-dev libfribidi-dev libxml2-dev libssl-dev libfontconfig1-dev libhdf5-dev; \
+            then dnf install -y git cmake gfortran libcurl-devel libxml2-devel openssl-devel fontconfig-devel; \
+            else apt-get update; apt-get install -y git cmake gfortran libcurl4-openssl-dev libharfbuzz-dev libfribidi-dev libxml2-dev libssl-dev libfontconfig1-dev; \
             fi
 
       - name: Add workaround dependencies
@@ -68,12 +68,6 @@ jobs:
           curl --insecure --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' -LO https://raw.githubusercontent.com/libKriging/rlibkriging/${{ env.BRANCH_NAME }}/tools/install_packages.R
           export PATH=$PATH:/opt/R-devel/bin/:/opt/R-patched/bin/:/opt/R/bin
           Rscript --no-save ./install_packages.R devtools
-
-      - name: BioConductor install Rhdf5lib (Bioconductor deps not suported by devtools::install_github)
-        shell: bash
-        run: |
-          export PATH=$PATH:/opt/R-devel/bin/:/opt/R-patched/bin/:/opt/R/bin
-          Rscript -e "install.packages('BiocManager',repos='https://cloud.r-project.org'); BiocManager::install('Rhdf5lib'); remove.packages('BiocManager')"
 
       - name: devtools install_deps from ${{ env.BRANCH_NAME }}
         shell: bash

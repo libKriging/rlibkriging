@@ -44,9 +44,7 @@ Description: Interface to 'libKriging' 'C++' library <https://github.com/libKrig
     (like in 'DiceKriging', 'kergp' or 'RobustGaSP' packages).
     'libKriging' relies on Armadillo linear algebra library (Apache 2 license) by Conrad Sanderson, 
     'lbfgsb_cpp' is a 'C++' port around 'lbfgsb' library (BSD-3 license) by 
-    Ciyou Zhu, Richard Byrd, Jorge Nocedal and Jose Luis Morales used for hyperparameters optimization,
-    and HDF5 features coming from HDF Group (see HDF5_LICENSE file)
-    possibly provided by Rhdf5lib by Mike Smith (Artistic-2.0 license).
+    Ciyou Zhu, Richard Byrd, Jorge Nocedal and Jose Luis Morales used for hyperparameters optimization.
 License: Apache License (>= 2)
 Encoding: UTF-8
 LinkingTo: Rcpp, RcppArmadillo
