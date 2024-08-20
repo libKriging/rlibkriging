@@ -124,6 +124,7 @@ rm -rf tests/testthat.R
 rm -rf tests/test-KrigingCholCrash.R
 rm -rf tests/demo*
 rm -rf tests/bench*
+rm -rf tests/bug*
 
 # sync man content
 rm -rf man
