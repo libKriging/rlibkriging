@@ -32,19 +32,14 @@ jobs:
           rtools-version: ''
 
       - name: Install tools for Linux
-        run: sudo apt install -y cmake gfortran libcurl4-openssl-dev git
+        run: sudo apt install -y cmake gfortran libcurl4-openssl-dev
         shell: bash
         if: matrix.os == 'ubuntu-latest'
 
       - name: Install tools for macOS
-        run: brew install cmake gfortran git
+        run: brew install cmake gfortran
         shell: bash
         if: matrix.os == 'macOS-latest'
-
-      - name: Install tools for Windows
-        run: choco install -y git
-        shell: bash
-        if: matrix.os == 'windows-latest'
         
         # Should be temporary since it was ok without additional system packages one month ago
       - name: Install additional packages to compile devtools
