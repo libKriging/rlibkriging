@@ -102,7 +102,7 @@ find tests/testthat -type f -name test-*.R -exec sed -i.bak -e 's|library(testth
 find tests/testthat -type f -name test-*.R -exec sed -i.bak -e 's|library(rlibkriging|#library(rlibkriging|g' {} +
 #  prepend loading of testthat
 mv tests/testthat/test-*.R tests/.
-for f in `ls -d tests/*.R`; do
+for f in `ls -d tests/test-*.R`; do
   echo -e "library(testthat)\n Sys.setenv('OMP_THREAD_LIMIT'=2)\n library(rlibkriging)\n" > $f.new
   echo "$(cat $f)" >> $f.new
   mv $f.new $f
@@ -111,6 +111,8 @@ rm -rf tests/testthat/
 rm -rf tests/testthat.R
 # disable cholesky tests for fedora timeout (still to investigate deeper...)
 rm -rf tests/test-KrigingCholCrash.R
+rm -rf tests/demo*
+rm -rf tests/bench*
 
 # sync man content
 rm -rf man
