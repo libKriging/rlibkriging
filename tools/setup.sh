@@ -68,6 +68,11 @@ sed -i.bak -e '/^add_custom_target(run_unit_tests$/,/^        )$/d;//d' \
   $LIBKRIGING_SRC_PATH/CMakeLists.txt  
 rm -rf $LIBKRIGING_SRC_PATH/CMakeLists.txt.bak
 
+# Disable pragma that inhibit warnings
+sed -i.bak -e "s|#pragma|//&|g" \
+  $LIBKRIGING_SRC_PATH/src/lib/include/libKriging/utils/nlohmann/json.hpp
+rm -rf $LIBKRIGING_SRC_PATH/src/lib/include/libKriging/utils/nlohmann/json.hpp.bak
+
 # Switch slapack dependency as a local submodule (not a git clone)
 sed -i.bak -e "s|https://github.com/libKriging/slapack.git|\${CMAKE_CURRENT_SOURCE_DIR}/../../slapack|g" \
   $LIBKRIGING_SRC_PATH/armadillo/cmake_aux/Modules/ARMA_FindLAPACK.cmake
