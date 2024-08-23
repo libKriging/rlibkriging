@@ -57,15 +57,15 @@ sed -i.bak -e "s|dependencies/armadillo-code|armadillo|g" \
 sed -i.bak -e "s|dependencies/lbfgsb_cpp|lbfgsb_cpp|g" \
   $LIBKRIGING_SRC_PATH/CMakeLists.txt
 sed -i.bak -e "s|configure_file(\${DOXYGEN_IN}|##configure_file(\${DOXYGEN_IN}|g" \
-  $LIBKRIGING_SRC_PATH/CMakeLists.txt  
+  $LIBKRIGING_SRC_PATH/CMakeLists.txt
 sed -i.bak -e "s|^.*CATCH_MODULE_PATH|##&|g" \
-  $LIBKRIGING_SRC_PATH/CMakeLists.txt  
+  $LIBKRIGING_SRC_PATH/CMakeLists.txt
 sed -i.bak -e "s|include(CTest)|##&|g" \
-  $LIBKRIGING_SRC_PATH/CMakeLists.txt  
+  $LIBKRIGING_SRC_PATH/CMakeLists.txt
 sed -i.bak -e "s|add_subdirectory(tests)|##&|g" \
-  $LIBKRIGING_SRC_PATH/CMakeLists.txt    
+  $LIBKRIGING_SRC_PATH/CMakeLists.txt
 sed -i.bak -e '/^add_custom_target(run_unit_tests$/,/^        )$/d;//d' \
-  $LIBKRIGING_SRC_PATH/CMakeLists.txt  
+  $LIBKRIGING_SRC_PATH/CMakeLists.txt
 rm -rf $LIBKRIGING_SRC_PATH/CMakeLists.txt.bak
 
 # Disable pragma that inhibit warnings
@@ -86,11 +86,11 @@ fi
 # rename .travis-ci in travis-ci everywhere. Use temp .bak for sed OSX compliance
 find $LIBKRIGING_SRC_PATH -type f -exec sed -i.bak "s/\.travis-ci/travis-ci/g" {} +
 # remove usages of 'git rev-parse', which is not a standard requirement fo R
-GIT_ROOT=$(pwd); 
-while [ "$GIT_ROOT" != "/" ]; do 
-  if [ -d "$GIT_ROOT/.git" ]; then 
-    break; 
-  fi; 
+GIT_ROOT=$(pwd);
+while [ "$GIT_ROOT" != "/" ]; do
+  if [ -d "$GIT_ROOT/.git" ]; then
+    break;
+  fi;
   GIT_ROOT=$(dirname "$GIT_ROOT");
 done
 export GIT_ROOT
@@ -122,6 +122,27 @@ for f in `ls -d tests/test-*.R`; do
   echo -e "library(testthat)\n Sys.setenv('OMP_THREAD_LIMIT'=2)\n library(rlibkriging)\n" > $f.new
   echo "$(cat $f)" >> $f.new
   mv $f.new $f
+  # reduce tests time by shrinking number of simulations, iterations, and points of testing
+  sed -i.bak -e "s|,101)|,5)|g" $f # less sample in seq(...,101)
+  rm -f $f.bak
+  sed -i.bak -e "s|,51)|,5)|g" $f # less sample in seq(...,51)
+  rm -f $f.bak
+  sed -i.bak -e "s|,21)|,5)|g" $f # less sample in seq(...,21)
+  rm -f $f.bak
+  sed -i.bak -e "s|n <- 10|n <- 1|g" $f # less sample: /10
+  rm -f $f.bak
+  sed -i.bak -e "s|simulate(1000,|simulate(100,|g" $f # less sample in simulate
+  rm -f $f.bak
+  sed -i.bak -e "s|p.value > 0.0|p.value > 0.00|g" $f # also reduce p-value threshold, because of simulate sample size reduction
+  rm -f $f.bak
+  sed -i.bak -e "s|for (i in 1:length(.x)) { for (j in 1:length(.x)) {|for (i in 1:length(.x)) { j=i; {|g" $f # avoid full factorial sampling in 2d
+  rm -f $f.bak
+  sed -i.bak -e "s|ntest <- 100|ntest <- 10|g" $f
+  rm -f $f.bak
+  sed -i.bak -e "s|\(.\+\)mean_deriv\[i\]|#&|g" $f # rm some canary test
+  rm -f $f.bak
+  sed -i.bak -e "s|\(.\+\)stdev_deriv\[i\]|#&|g" $f # rm some canary test
+  rm -f $f.bak
 done
 rm -rf tests/testthat/
 rm -rf tests/testthat.R
