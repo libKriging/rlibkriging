@@ -94,7 +94,7 @@ while [ "$GIT_ROOT" != "/" ]; do
   GIT_ROOT=$(dirname "$GIT_ROOT");
 done
 export GIT_ROOT
-find $LIBKRIGING_SRC_PATH -type f -exec sed -i.bak "s|\$(git rev-parse --show-toplevel)|$GIT_ROOT|g" {} +
+find $LIBKRIGING_SRC_PATH -type f -name *.sh -exec sed -i.bak "s|\$(git rev-parse --show-toplevel)|$GIT_ROOT|g" {} +
 # cleanup
 find $LIBKRIGING_SRC_PATH -type f -name *.bak -exec rm -f {} +;
 
