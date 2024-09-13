@@ -10,6 +10,7 @@ name: R-hub
 run-name: ${{ github.event.inputs.name || format('Manually run by {0}', github.triggering_actor) }} (${{ github.event.inputs.id }})
 
 on:
+  push:
   workflow_dispatch:
     inputs:
       config:
