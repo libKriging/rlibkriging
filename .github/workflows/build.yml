@@ -40,7 +40,7 @@ jobs:
         shell: bash
         name: R CMD INSTALL
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           path: ./R-*
 
