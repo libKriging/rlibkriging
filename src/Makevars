@@ -37,7 +37,7 @@ ifneq ($(USE_FLANG),)
   $(info Use FLANG with FLIBS: $(FLIBS))
 endif
 
-EXTERNAL_LIBS=$(shell LIBKRIGING_PATH=${LIBKRIGING_PATH} ../src/libK/bindings/R/tools/ExternalLibsExtractor.sh)
+EXTERNAL_LIBS=$(subst $\",,$(shell LIBKRIGING_PATH=${LIBKRIGING_PATH} ../src/libK/bindings/R/tools/ExternalLibsExtractor.sh))
 
 CXX_STD = CXX17
 

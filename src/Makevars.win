@@ -11,7 +11,7 @@ else
 	LIB_SUFFIX=a
 endif
 
-EXTERNAL_LIBS=$(shell LIBKRIGING_PATH=${LIBKRIGING_PATH} ../src/libK/bindings/R/tools/ExternalLibsExtractor.sh | sed 's|\S*libopenblas\S*||g')
+EXTERNAL_LIBS=$(subst $\",,$(shell LIBKRIGING_PATH=${LIBKRIGING_PATH} ../src/libK/bindings/R/tools/ExternalLibsExtractor.sh | sed 's|\S*libopenblas\S*||g'))
 
 CXX_STD = CXX17
 
