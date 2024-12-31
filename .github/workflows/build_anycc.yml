@@ -21,9 +21,9 @@ jobs:
       - name: install gcc-15
         if: contains(matrix.os, 'ubuntu') && ${{matrix.cc}} == 'gcc-15'
         run: |
-          add-apt-repository ppa:ubuntu-toolchain-r/test & apt update
-          update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-15 12 --slave /usr/bin/g++ g++ /usr/bin/g++-15
-          update-alternatives --set gcc /usr/bin/gcc-15
+          sudo add-apt-repository ppa:ubuntu-toolchain-r/test & sudo apt update
+          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-15 12 --slave /usr/bin/g++ g++ /usr/bin/g++-15
+          sudo update-alternatives --set gcc /usr/bin/gcc-15
 
       - uses: actions/checkout@v2
         with:
