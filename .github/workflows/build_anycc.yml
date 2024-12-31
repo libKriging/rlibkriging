@@ -23,7 +23,7 @@ jobs:
         run: |
           sudo add-apt-repository ppa:ubuntu-toolchain-r/test & sudo apt update
           # try hard add gcc-15 & co.:
-          sudo echo "deb https://ppa.launchpadcontent.net/ubuntu-toolchain-r/test/ubuntu plucky main" >> /etc/apt/sources.list
+          echo "deb https://ppa.launchpadcontent.net/ubuntu-toolchain-r/test/ubuntu plucky main" | sudo tee -a /etc/apt/sources.list
           sudo apt update & sudo apt search gcc-15
           sudo apt install -y gcc-15 g++-15
           sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-15 15 --slave /usr/bin/g++ g++ /usr/bin/g++-15
