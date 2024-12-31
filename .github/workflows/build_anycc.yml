@@ -18,10 +18,20 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - name: switch to gcc-15 on linux
-        if: ${{matrix.os}} == "ubuntu-latest" & ${{matrix.cc}} == 'gcc-15'
+      - name: install gcc-15
+        if: contains(matrix.os, 'ubuntu') && ${{matrix.cc}} == 'gcc-15'
         run: |
-          sudo apt install gcc-15 g++-15
+          sudo apt install build-essential
+          sudo apt install libmpfr-dev libgmp3-dev libmpc-dev -y
+          wget http://mirror.koddos.net/gcc/snapshots/LATEST-15/gcc-15-20241229.tar.xz #http://ftp.gnu.org/gnu/gcc/gcc-14.1.0/gcc-14.1.0.tar.gz
+          tar -xf gcc-15-20241229.tar.xz #gcc-14.1.0.tar.gz
+          cd gcc-15-20241229 #gcc-14.1.0
+          ./configure -v --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu --prefix=/usr/local/gcc-14.1.0 --enable-checking=release --enable-languages=c,c++ --disable-multilib --program-suffix=-14.1.0
+          make && make install
+
+      - name: switch to gcc-15 by default
+        if: contains(matrix.os, 'ubuntu') && ${{matrix.cc}} == 'gcc-15'
+        run: |
           sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-15 100 --slave /usr/bin/g++ g++ /usr/bin/g++-15
           sudo update-alternatives --set gcc /usr/bin/gcc-15
 
