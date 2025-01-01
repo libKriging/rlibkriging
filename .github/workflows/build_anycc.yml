@@ -44,7 +44,7 @@ jobs:
         #  rtools-version: ''
 
       - name: install R deps
-        run: R -e "install.packages('Rcpp','RcppArmadillo','DiceKriging')"
+        run: R -e "install.packages(c('Rcpp','RcppArmadillo','DiceKriging'))"
         #uses: r-lib/actions/setup-r-dependencies@v2
 
       - name: Setup cmake
