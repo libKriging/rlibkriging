@@ -23,7 +23,7 @@ jobs:
         if: ${{matrix.cc}} == 'gcc-15'
         run: |
           apt update && apt install -y software-properties-common
-          add-apt-repository ppa:ubuntu-toolchain-r/test & apt update
+          add-apt-repository ppa:ubuntu-toolchain-r/test & apt update && apt search gcc-15
           apt install -y gcc-15 g++-15
           update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-15 15 --slave /usr/bin/g++ g++ /usr/bin/g++-15
           update-alternatives --set gcc /usr/bin/gcc-15
