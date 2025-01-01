@@ -30,7 +30,7 @@ jobs:
           update-alternatives --set gcc /usr/bin/gcc-15
 
       - name: install git
-        run: apt install -y git build-essentials
+        run: apt install -y git
 
       - uses: actions/checkout@v2
         with:
