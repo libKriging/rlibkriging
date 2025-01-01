@@ -29,6 +29,9 @@ jobs:
           update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-15 15 --slave /usr/bin/g++ g++ /usr/bin/g++-15
           update-alternatives --set gcc /usr/bin/gcc-15
 
+      - name: install git
+        run: apt install -y git buld-essentials
+
       - uses: actions/checkout@v2
         with:
           submodules: recursive
