@@ -43,7 +43,9 @@ jobs:
         #  r-version: ${{ matrix.R }}
         #  rtools-version: ''
 
-      #- uses: r-lib/actions/setup-r-dependencies@v2
+      - name: install R deps
+        run: R -e "install.packages('Rcpp','RcppArmadillo','DiceKriging')"
+        #uses: r-lib/actions/setup-r-dependencies@v2
 
       - name: Setup cmake
         run: apt install -y cmake
