@@ -13,6 +13,7 @@ export ENABLE_MATLAB_BINDING=OFF
 export ENABLE_PYTHON_BINDING=OFF
 
 export MAKE_SHARED_LIBS=off
+export STATIC_LIB=on
 
 : ${R_HOME=$(R RHOME)}
 if test -z "${R_HOME}"; then
