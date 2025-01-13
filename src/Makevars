@@ -10,6 +10,7 @@
 ##        $ install_name_tool -delete_rpath ${__OLD_LC_RPATH__} ./Rlibs/rlibkriging/libs/rlibkriging.so
 
 MAKE_SHARED_LIBS=off
+STATIC_LIB=on
 export LIBKRIGING_PATH=$(shell pwd)/../inst/
 
 ifneq ("${MAKE_SHARED_LIBS}","off")

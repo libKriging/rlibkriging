@@ -2,6 +2,7 @@
 ## https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Using-Makevars
 
 MAKE_SHARED_LIBS=off
+STATIC_LIB=on
 export LIBKRIGING_PATH=$(shell pwd)/../inst/
 EXTRA_SYSTEM_LIBRARY_PATH="."
 
