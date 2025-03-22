@@ -7,7 +7,7 @@ Authors@R:
     c(person(given = "Yann",
              family = "Richet",
              role = c("aut","cre"),
-             email = "yann.richet@irsn.fr",
+             email = "yann.richet@asnr.fr",
              comment = c(ORCID = "0000-0002-5677-8458")),
        person(given = "Pascal",
              family = "Havé",
