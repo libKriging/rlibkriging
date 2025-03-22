@@ -32,7 +32,7 @@ jobs:
           rtools-version: ''
 
       - name: Install tools for Linux
-        run: sudo apt install -y cmake gfortran libcurl4-openssl-dev
+        run: sudo apt install -y cmake gfortran libcurl4-openssl-dev libfontconfig1-dev
         shell: bash
         if: matrix.os == 'ubuntu-latest'
 
