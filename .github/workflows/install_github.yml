@@ -44,7 +44,7 @@ jobs:
         # Should be temporary since it was ok without additional system packages one month ago
       - name: Install additional packages to compile devtools
         shell: bash
-        run: sudo apt install -y libharfbuzz-dev libfribidi-dev
+        run: sudo apt install -y libharfbuzz-dev libfribidi-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev
         if: matrix.os == 'ubuntu-latest'
 
       - name: Setup cmake
