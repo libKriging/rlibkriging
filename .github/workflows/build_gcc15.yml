@@ -73,7 +73,3 @@ jobs:
 
       - name: Test rlibkriging
         run: R -e "library(rlibkriging); X=matrix(runif(10)); Kriging(sin(X),X,'gauss')"
-
-      - uses: actions/upload-artifact@v4
-        with:
-          path: ./R*

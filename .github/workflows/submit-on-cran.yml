@@ -66,14 +66,3 @@ jobs:
             test -f rlibkriging.Rcheck/00install.out && cat rlibkriging.Rcheck/00install.out | sed -e 's/^/00install.out| /' && echo "[The error may be shown before 00install.out| listing"; 
             exit 1
           )
-
-      - uses: actions/upload-artifact@v4
-        with:
-          path: ./CRAN-*
-
-      - uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          files: ./CRAN-*
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

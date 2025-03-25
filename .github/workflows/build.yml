@@ -44,14 +44,14 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          path: ./R-*
+          path: ./R-release/*
 
       - uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
-            ./R-*/*.tar.gz
-            ./R-*/*.tgz
-            ./R-*/*.zip
+            ./R-release/*.tar.gz
+            ./R-release/*.tgz
+            ./R-release/*.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
