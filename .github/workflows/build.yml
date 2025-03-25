@@ -44,6 +44,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
+          name: rlibkriging-${{ matrix.os }}
           path: ./R-release/*
 
       - uses: softprops/action-gh-release@v1
