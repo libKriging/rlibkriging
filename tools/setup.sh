@@ -72,6 +72,11 @@ sed -i.bak -e "s|APPEND CMAKE_SYSTEM_LIBRARY_PATH |APPEND CMAKE_SYSTEM_LIBRARY_P
   $LIBKRIGING_SRC_PATH/CMakeLists.txt
 rm -rf $LIBKRIGING_SRC_PATH/CMakeLists.txt.bak
 
+# Because CRAN policy : comment arma::cout ... in all .cpp and .hpp files
+if [ $_R_CHECK_CRAN_INCOMING_ = "TRUE" ]; then
+  find $LIBKRIGING_SRC_PATH/src/lib -type f \( -name "*.cpp" -o -name "*.hpp" \) \
+  -exec sed -i.bak -e "s|arma::cout|##&|g" {} +
+fi
 
 # Disable pragma that inhibit warnings
 sed -i.bak -e "s|#pragma|//&|g" \
