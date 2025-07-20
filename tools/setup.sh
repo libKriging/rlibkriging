@@ -21,10 +21,14 @@ rm -rf $LIBKRIGING_SRC_PATH/docs
  # then remove LinearRegressionOptim example
 sed -i.bak "s/LinearRegression/##LinearRegression/g" $LIBKRIGING_SRC_PATH/src/lib/CMakeLists.txt
 rm -f $LIBKRIGING_SRC_PATH/src/lib/CMakeLists.txt.bak
-
 rm -f $LIBKRIGING_SRC_PATH/bindings/R/rlibkriging/src/linear_regression*
  # & unsuitable tests
 rm -f $LIBKRIGING_SRC_PATH/bindings/R/rlibkriging/tests/testthat/test-binding-consistency.R
+ # and demo
+sed -i.bak "s|demo/|##demo/|g" $LIBKRIGING_SRC_PATH/src/lib/CMakeLists.txt
+rm -f $LIBKRIGING_SRC_PATH/src/lib/CMakeLists.txt.bak
+rm -rf $LIBKRIGING_SRC_PATH/src/lib/demo
+rm -rf $LIBKRIGING_SRC_PATH/src/lib/include/libKriging/demo
 
 # Move required on upper path to avoid path length issues
 if [ -d $LIBKRIGING_SRC_PATH/dependencies/lbfgsb_cpp ]; then
@@ -72,10 +76,39 @@ sed -i.bak -e "s|APPEND CMAKE_SYSTEM_LIBRARY_PATH |APPEND CMAKE_SYSTEM_LIBRARY_P
   $LIBKRIGING_SRC_PATH/CMakeLists.txt
 rm -rf $LIBKRIGING_SRC_PATH/CMakeLists.txt.bak
 
-# Because CRAN policy : comment arma::cout ... in all .cpp and .hpp files
-if [ $_R_CHECK_CRAN_INCOMING_ = "TRUE" ]; then
-  find $LIBKRIGING_SRC_PATH/src/lib -type f \( -name "*.cpp" -o -name "*.hpp" \) \
-  -exec sed -i.bak -e "s|arma::cout|##&|g" {} +
+# Because CRAN policy : disable or replace all *::cout ... in all .cpp and .hpp files
+if [ "$_R_CHECK_CRAN_INCOMING_" != "FALSE" ]; then
+  # enable Rcout & Rcerr:
+  # Get RcppArma include 
+  RCPP_INCLUDE_PATH="$(${R_HOME}/bin/Rscript -e 'invisible(write(system.file(package="Rcpp"),stdout()))')"/include
+    # Get R include
+  R_INCLUDE_PATH="$(${R_HOME}/bin/Rscript -e 'invisible(write(R.home("include"),stdout()))')"
+  # add includes in CMakeLists.txt
+  sed -i.bak -e "s|enable_language(CXX)|enable_language(CXX)\ninclude_directories(${RCPP_INCLUDE_PATH} ${R_INCLUDE_PATH})|g" \
+    $LIBKRIGING_SRC_PATH/CMakeLists.txt
+  rm -rf $LIBKRIGING_SRC_PATH/CMakeLists.txt.bak  
+
+  # replace cout/cerr in libkriging
+  find $LIBKRIGING_SRC_PATH/src/lib -type f -name lk_armadillo.hpp -exec sed -i.bak "s|#include <armadillo>|#include <Rcpp.h>\n#include <armadillo>|g" {} +
+  find $LIBKRIGING_SRC_PATH/src/lib -type f -name *.*pp -exec sed -i.bak "s|arma\:\:cout|Rcpp::Rcout|g" {} +
+  find $LIBKRIGING_SRC_PATH/src/lib -type f -name *.*pp -exec sed -i.bak "s|std\:\:cout|Rcpp::Rcout|g" {} +
+  find $LIBKRIGING_SRC_PATH/src/lib -type f -name *.*pp -exec sed -i.bak "s|arma\:\:cerr|Rcpp::Rcerr|g" {} +
+  find $LIBKRIGING_SRC_PATH/src/lib -type f -name *.*pp -exec sed -i.bak "s|std\:\:cerr|Rcpp::Rcerr|g" {} +
+  # also replace std::runtime_error by Rcpp::stop
+  find $LIBKRIGING_SRC_PATH/src/lib -type f -name base64.cpp -exec sed -i.bak "s|#include \"base64.h\"|#include <Rcpp.h>\n#include \"base64.h\"|g" {} +
+  find $LIBKRIGING_SRC_PATH/src/lib -type f -name *.*pp -exec sed -i.bak "s|throw std\:\:runtime_error|Rcpp::stop|g" {} +
+
+  # disable cout/cerr in lbfgsb_cpp
+  find $LIBKRIGING_SRC_PATH/lbfgsb_cpp -type f -name *.*pp -exec sed -i.bak "s|std\:\:cout|//&|g" {} +
+  find $LIBKRIGING_SRC_PATH/lbfgsb_cpp -type f -name *.*pp -exec sed -i.bak "s|std\:\:cerr|//&|g" {} +
+  # disable cout/cerr in slapack
+  find $LIBKRIGING_SRC_PATH/../slapack -type f -name *.*pp -exec sed -i.bak "s|std\:\:cout|//&|g" {} +
+  find $LIBKRIGING_SRC_PATH/../slapack -type f -name *.*pp -exec sed -i.bak "s|std\:\:cerr|//&|g" {} +
+  # Replace or remove std::cout/cerr in armadillo
+  find $LIBKRIGING_SRC_PATH/armadillo -type f -name *.*pp* -exec sed -i.bak "s|using std\:\:cout;|//&|g" {} +
+  find $LIBKRIGING_SRC_PATH/armadillo -type f -name *.*pp* -exec sed -i.bak "s|using std\:\:cerr;|//&|g" {} +
+  find $LIBKRIGING_SRC_PATH/armadillo -type f -name *.*pp* -exec sed -i.bak "s|ARMA_COUT_STREAM std\:\:cout|ARMA_COUT_STREAM Rcpp::Rcout|g" {} +
+  find $LIBKRIGING_SRC_PATH/armadillo -type f -name *.*pp* -exec sed -i.bak "s|ARMA_CERR_STREAM std\:\:cerr|ARMA_CERR_STREAM Rcpp::Rcerr|g" {} +
 fi
 
 # Disable pragma that inhibit warnings
