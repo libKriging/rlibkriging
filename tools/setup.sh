@@ -78,16 +78,9 @@ rm -rf $LIBKRIGING_SRC_PATH/CMakeLists.txt.bak
 
 # Because CRAN policy : disable or replace all *::cout ... in all .cpp and .hpp files
 if [ "$_R_CHECK_CRAN_INCOMING_" != "FALSE" ]; then
-  # enable Rcout & Rcerr:
-  # Get RcppArma include 
-  RCPP_INCLUDE_PATH="$(${R_HOME}/bin/Rscript -e 'invisible(write(system.file(package="Rcpp"),stdout()))')"/include
-    # Get R include
-  R_INCLUDE_PATH="$(${R_HOME}/bin/Rscript -e 'invisible(write(R.home("include"),stdout()))')"
-  # add includes in CMakeLists.txt
-  sed -i.bak -e "s|enable_language(CXX)|enable_language(CXX)\ninclude_directories(${RCPP_INCLUDE_PATH} ${R_INCLUDE_PATH})|g" \
-    $LIBKRIGING_SRC_PATH/CMakeLists.txt
-  rm -rf $LIBKRIGING_SRC_PATH/CMakeLists.txt.bak  
-
+  # Rcpp & R includes are now identified and added in CMakeLists.txt in (later) build.sh
+  # Following replacements assume that R & Rcpp are included
+  
   # replace cout/cerr in libkriging
   find $LIBKRIGING_SRC_PATH/src/lib -type f -name lk_armadillo.hpp -exec sed -i.bak "s|#include <armadillo>|#include <Rcpp.h>\n#include <armadillo>|g" {} +
   find $LIBKRIGING_SRC_PATH/src/lib -type f -name *.*pp -exec sed -i.bak "s|arma\:\:cout|Rcpp::Rcout|g" {} +
