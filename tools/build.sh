@@ -48,9 +48,10 @@ if [ "$_R_CHECK_CRAN_INCOMING_" != "FALSE" ]; then
   # Get R include
   export R_INCLUDE_PATH="$(${R_HOME}/bin/Rscript -e 'invisible(write(R.home("include"),stdout()))')"
   echo "build: R include path ${R_INCLUDE_PATH}"
-  sed -i.bak -e "s|enable_language(CXX)|enable_language(CXX)\ninclude_directories(${RCPP_INCLUDE_PATH} ${R_INCLUDE_PATH})\nmessage(STATUS \"Rcpp include path ${RCPP_INCLUDE_PATH}\")\nmessage(STATUS \"R include path ${R_INCLUDE_PATH}\")|g" \
+  sed -i.bak -e "s|enable_language(CXX)|enable_language(CXX)\ninclude_directories(\${RCPP_INCLUDE_PATH} \${R_INCLUDE_PATH})\nmessage(STATUS \"Rcpp include path \${RCPP_INCLUDE_PATH}\")\nmessage(STATUS \"R include path \${R_INCLUDE_PATH}\")|g" \
      CMakeLists.txt
-  rm -rf CMakeLists.txt.bak  
+  rm -rf CMakeLists.txt.bak
+  EXTRA_CMAKE_OPTIONS="-DRCPP_INCLUDE_PATH=${RCPP_INCLUDE_PATH} -DR_INCLUDE_PATH=${R_INCLUDE_PATH} ${EXTRA_CMAKE_OPTIONS}"
 fi
 
 BUILD_TEST=false \

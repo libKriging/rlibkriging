@@ -179,6 +179,8 @@ for f in `ls -d tests/test-*.R`; do
   rm -f $f.bak
   sed -i.bak -e "s|\(.\+\)stdev_deriv\[i\]|#&|g" $f # rm some canary test
   rm -f $f.bak
+  sed -i.bak -e "s|library(RobustGaSP)|if(!requireNamespace('RobustGaSP', quietly = TRUE)) {\n  skip('RobustGaSP not available')\n}\nlibrary(RobustGaSP)|g" $f # disable tests if missing RobustGaSP
+  rm -f $f.bak
 done
 rm -rf tests/testthat/
 rm -rf tests/testthat.R
