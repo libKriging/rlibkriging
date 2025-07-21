@@ -50,7 +50,7 @@ Encoding: UTF-8
 LinkingTo: Rcpp, RcppArmadillo
 Depends: R (>= 4.2)
 Imports: Rcpp (>= 1.0.12), methods, DiceKriging
-Suggests: testthat, RobustGaSP, utils, DiceDesign, foreach
+Suggests: testthat, RobustGaSP, utils, foreach
 SystemRequirements: GNU make, cmake (>= 3.2.0), gcc, gfortran
 URL: https://github.com/libKriging
 RoxygenNote: 7.3.2
