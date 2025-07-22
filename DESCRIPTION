@@ -2,7 +2,7 @@ Package: rlibkriging
 Type: Package
 Title: Kriging Models using the 'libKriging' Library
 Version: 0.9-2
-Date: 2025-07-21
+Date: 2025-07-22
 Authors@R:
     c(person(given = "Yann",
              family = "Richet",
@@ -50,7 +50,7 @@ Encoding: UTF-8
 LinkingTo: Rcpp, RcppArmadillo
 Depends: R (>= 4.2)
 Imports: Rcpp (>= 1.0.12), methods, DiceKriging
-Suggests: testthat, RobustGaSP, utils, foreach
+Suggests: testthat, RobustGaSP, utils
 SystemRequirements: GNU make, cmake (>= 3.2.0), gcc, gfortran
 URL: https://github.com/libKriging
 RoxygenNote: 7.3.2

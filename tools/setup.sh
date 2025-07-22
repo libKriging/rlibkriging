@@ -179,6 +179,8 @@ for f in `ls -d tests/test-*.R`; do
   rm -f $f.bak
   sed -i.bak -e "s|\(.\+\)stdev_deriv\[i\]|#&|g" $f # rm some canary test
   rm -f $f.bak
+  sed -i.bak -r "s|km\((.+)multistart(\s*)=(\s*)([[:digit:]]+)|km(\1 multistart = 1 |g" $f # reduce multistart to 1
+  rm -f $f.bak
   # if test file includes RobustGaSP, add conditional loading
   if grep -q "RobustGaSP" $f; then
     echo "if(requireNamespace('RobustGaSP', quietly = TRUE)) {" > $f.new
