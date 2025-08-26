@@ -104,7 +104,7 @@ if [ "$_R_CHECK_CRAN_INCOMING_" != "FALSE" ]; then
   find $LIBKRIGING_SRC_PATH/armadillo -type f -name *.*pp* -exec sed -i.bak "s|ARMA_CERR_STREAM std\:\:cerr|ARMA_CERR_STREAM Rcpp::Rcerr|g" {} +
 
   # fix inconsistent declaration in lbfgsb_cpp (found by gcc-SAN)
-  find $LIBKRIGING_SRC_PATH/lbfgsb_cpp -type f -name lbfgsb.hpp -exec sed -i.bak "s|void setulb_(|int setulb_(|g" {} +
+  find $LIBKRIGING_SRC_PATH/lbfgsb_cpp -type f -name lbfgsb.h* -exec sed -i.bak "s|void setulb_(|int setulb_(|g" {} +
 fi
 
 # Disable pragma that inhibit warnings
