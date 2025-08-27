@@ -38,7 +38,7 @@ Authors@R:
              role = c("ctb"),
              email = "grimbough@gmail.com")
       )
-Maintainer: Yann Richet <yann.richet@irsn.fr>
+Maintainer: Yann Richet <yann.richet@asnr.fr>
 Description: Interface to 'libKriging' 'C++' library <https://github.com/libKriging> that should
     provide most standard Kriging / Gaussian process regression features
     (like in 'DiceKriging', 'kergp' or 'RobustGaSP' packages).
