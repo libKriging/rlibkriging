@@ -1,6 +1,7 @@
 [submodule "src/libK"]
 	path = src/libK
 	url = https://github.com/libKriging/libKriging
+	branch = try-fix-gccUBSAN
 [submodule "src/slapack"]
 	path = src/slapack
 	url = https://github.com/libKriging/slapack.git
