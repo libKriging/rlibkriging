@@ -87,9 +87,9 @@ if [ "$_R_CHECK_CRAN_INCOMING_" != "FALSE" ]; then
   find $LIBKRIGING_SRC_PATH/src/lib -type f -name *.*pp -exec sed -i.bak "s|std\:\:cout|Rcpp::Rcout|g" {} +
   find $LIBKRIGING_SRC_PATH/src/lib -type f -name *.*pp -exec sed -i.bak "s|arma\:\:cerr|Rcpp::Rcerr|g" {} +
   find $LIBKRIGING_SRC_PATH/src/lib -type f -name *.*pp -exec sed -i.bak "s|std\:\:cerr|Rcpp::Rcerr|g" {} +
-  # also replace std::runtime_error by Rcpp::stop
-  find $LIBKRIGING_SRC_PATH/src/lib -type f -name base64.cpp -exec sed -i.bak "s|#include \"base64.h\"|#include <Rcpp.h>\n#include \"base64.h\"|g" {} +
-  find $LIBKRIGING_SRC_PATH/src/lib -type f -name *.*pp -exec sed -i.bak "s|throw std\:\:runtime_error|Rcpp::stop|g" {} +
+  ## also replace std::runtime_error by Rcpp::stop < NO, Rcpp::stop is not thread-safe !
+  #find $LIBKRIGING_SRC_PATH/src/lib -type f -name base64.cpp -exec sed -i.bak "s|#include \"base64.h\"|#include <Rcpp.h>\n#include \"base64.h\"|g" {} +
+  #find $LIBKRIGING_SRC_PATH/src/lib -type f -name *.*pp -exec sed -i.bak "s|throw std\:\:runtime_error|//Rcpp::stop|g" {} +
 
   # disable cout/cerr in lbfgsb_cpp
   find $LIBKRIGING_SRC_PATH/lbfgsb_cpp -type f -name *.*pp -exec sed -i.bak "s|std\:\:cout|//&|g" {} +
