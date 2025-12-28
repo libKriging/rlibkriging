@@ -196,7 +196,7 @@ for f in `ls -d tests/test-*.R`; do
     mv $f.new $f
   fi
   if grep -q "DiceKriging" $f; then
-    echo "if(requireNamespace('DiceKriging', quietly = TRUE) & requireNamespace('foreach', quietly = TRUE)) { " > $f.new
+    echo "if(requireNamespace('DiceKriging', quietly = TRUE)) { " > $f.new
     cat $f >> $f.new
     #sed -i.bak -e "s|library(RobustGaSP)|if(!requireNamespace('RobustGaSP', quietly = TRUE)) {\n  print('RobustGaSP not available')\n} else {\nlibrary(RobustGaSP)|g" $f # disable tests if missing RobustGaSP
     #rm -f $f.bak
