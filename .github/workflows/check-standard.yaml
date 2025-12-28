@@ -57,9 +57,10 @@ jobs:
       - name: Run pre-compile setup
         shell: bash
         run: |
-          Rscript --no-save ./tools/install_packages.R pkgbuild roxygen2
+          Rscript --no-save ./tools/install_packages.R pkgbuild roxygen2 devtools
           ./tools/setup.sh
           Rscript -e "remove.packages('roxygen2')"
+          Rscript -e "remove.packages('devtools')"
 
       - uses: r-lib/actions/check-r-package@v2
         with:
