@@ -195,6 +195,14 @@ for f in `ls -d tests/test-*.R`; do
     echo "}" >> $f.new
     mv $f.new $f
   fi
+  if grep -q "DiceKriging" $f; then
+    echo "if(requireNamespace('DiceKriging', quietly = TRUE)) { library(foreach); " > $f.new
+    cat $f >> $f.new
+    #sed -i.bak -e "s|library(RobustGaSP)|if(!requireNamespace('RobustGaSP', quietly = TRUE)) {\n  print('RobustGaSP not available')\n} else {\nlibrary(RobustGaSP)|g" $f # disable tests if missing RobustGaSP
+    #rm -f $f.bak
+    echo "}" >> $f.new
+    mv $f.new $f
+  fi
 done
 rm -rf tests/testthat/
 rm -rf tests/testthat.R
