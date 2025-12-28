@@ -51,13 +51,12 @@ jobs:
         with:
           extra-packages: |
             any::rcmdcheck
-            any::foreach
           needs: check
 
       - name: Run pre-compile setup
         shell: bash
         run: |
-          Rscript --no-save ./tools/install_packages.R pkgbuild roxygen2 devtools
+          Rscript --no-save ./tools/install_packages.R pkgbuild roxygen2 devtools foreach
           ./tools/setup.sh
           Rscript -e "remove.packages('roxygen2')"
           Rscript -e "remove.packages('devtools')"
