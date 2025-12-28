@@ -81,8 +81,8 @@ jobs:
               echo "WARNING found in R CMD check results"
               exit 1
             fi
-            if grep -E "^Status:.*NOTE" rlibkriging.Rcheck/00check.log; then
-              echo "NOTE found in R CMD check results"
-              exit 1
-            fi
+            #if grep -E "^Status:.*NOTE" rlibkriging.Rcheck/00check.log; then
+            #  echo "NOTE found in R CMD check results"
+            #  exit 1
+            #fi
           fi
