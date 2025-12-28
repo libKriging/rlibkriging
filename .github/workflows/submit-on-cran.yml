@@ -57,12 +57,32 @@ jobs:
           mv rlibkriging_*.* rlibkriging/CRAN-$OS/.
           popd
 
+      - name: Install dependencies for tests
+        shell: bash
+        run: |
+          Rscript --no-save ./tools/install_packages.R testthat DiceKriging foreach
+
       - name: R CMD check
         shell: bash
         env:
           OS: ${{ matrix.os }}
         run: |
           R CMD check --as-cran --no-manual CRAN-$OS/rlibkriging* || (
-            test -f rlibkriging.Rcheck/00install.out && cat rlibkriging.Rcheck/00install.out | sed -e 's/^/00install.out| /' && echo "[The error may be shown before 00install.out| listing"; 
+            test -f rlibkriging.Rcheck/00install.out && cat rlibkriging.Rcheck/00install.out | sed -e 's/^/00install.out| /' && echo "[The error may be shown before 00install.out| listing";
             exit 1
           )
+          # Verify no ERROR, WARNING or NOTE in check results
+          if test -f rlibkriging.Rcheck/00check.log; then
+            if grep -E "^Status:.*ERROR" rlibkriging.Rcheck/00check.log; then
+              echo "ERROR found in R CMD check results"
+              exit 1
+            fi
+            if grep -E "^Status:.*WARNING" rlibkriging.Rcheck/00check.log; then
+              echo "WARNING found in R CMD check results"
+              exit 1
+            fi
+            if grep -E "^Status:.*NOTE" rlibkriging.Rcheck/00check.log; then
+              echo "NOTE found in R CMD check results"
+              exit 1
+            fi
+          fi
