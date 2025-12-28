@@ -51,7 +51,7 @@ jobs:
         with:
           extra-packages: |
             any::rcmdcheck
-            any::foreach # missing on macOS by def. but needed by DiceKriging...
+            any::foreach
           needs: check
 
       - uses: r-lib/actions/check-r-package@v2
