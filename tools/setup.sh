@@ -18,6 +18,8 @@ rm -rf $LIBKRIGING_SRC_PATH/dependencies/carma
 rm -rf $LIBKRIGING_SRC_PATH/dependencies/pybind11
 rm -rf $LIBKRIGING_SRC_PATH/dependencies/optim
 rm -rf $LIBKRIGING_SRC_PATH/docs
+rm -rf $LIBKRIGING_SRC_PATH/tests
+rm -rf $LIBKRIGING_SRC_PATH/bench
  # then remove LinearRegressionOptim example
 sed -i.bak "s/LinearRegression/##LinearRegression/g" $LIBKRIGING_SRC_PATH/src/lib/CMakeLists.txt
 rm -f $LIBKRIGING_SRC_PATH/src/lib/CMakeLists.txt.bak
