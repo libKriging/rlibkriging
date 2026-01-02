@@ -166,10 +166,6 @@ for f in `ls -d tests/test-*.R`; do
   # if DiceKriging used, load it also
   if grep -q "DiceKriging::" $f; then
     echo "library(DiceKriging)\n" >> $f.new
-    # if multistart also used, then also load foreach
-    if grep -q "multistart" $f; then
-      echo "library(foreach)\n" >> $f.new
-    fi
   fi
   echo "$(cat $f)" >> $f.new
   mv $f.new $f
@@ -194,7 +190,7 @@ for f in `ls -d tests/test-*.R`; do
   rm -f $f.bak
   sed -i.bak -e "s|\(.\+\)stdev_deriv\[i\]|#&|g" $f # rm some canary test
   rm -f $f.bak
-  sed -i.bak -r "s|km\((.+)multistart(\s*)=(\s*)([[:digit:]]+)|km(\1 multistart = 1 |g" $f # reduce multistart to 1
+  sed -i.bak -r "s|km\((.+)multistart(\s*)=(\s*)([[:digit:]]+)|km(\1 |g" $f # delete multistart
   rm -f $f.bak
   # for the same thread-safe issue, disable chol_warning by default:
   sed -i.bak -e "s|linalg_set_chol_warning(TRUE)|linalg_set_chol_warning(FALSE)|g" $f
