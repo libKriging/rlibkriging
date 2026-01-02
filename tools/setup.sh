@@ -163,6 +163,10 @@ find tests/testthat -type f -name test-*.R -exec sed -i.bak -e 's|library(rlibkr
 mv tests/testthat/test-*.R tests/.
 for f in `ls -d tests/test-*.R`; do
   echo -e "library(testthat)\n Sys.setenv('OMP_THREAD_LIMIT'=2)\n library(rlibkriging)\n" > $f.new
+  # if DiceKriging used, load it also
+  if grep -q "DiceKriging::" $f; then
+    echo "library(DiceKriging)" >> $f.new
+  fi
   echo "$(cat $f)" >> $f.new
   mv $f.new $f
   # reduce tests time by shrinking number of simulations, iterations, and points of testing
