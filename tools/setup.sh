@@ -19,9 +19,9 @@ rm -rf $LIBKRIGING_SRC_PATH/dependencies/pybind11
 rm -rf $LIBKRIGING_SRC_PATH/dependencies/optim
 rm -rf $LIBKRIGING_SRC_PATH/docs
 rm -rf $LIBKRIGING_SRC_PATH/tests
-sed -i.bak "s/add_subdirectory(tests)/##add_subdirectory(tests)/g" $LIBKRIGING_SRC_PATH/src/lib/CMakeLists.txt
+sed -i.bak "s/add_subdirectory(tests)/##add_subdirectory(tests)/g" $LIBKRIGING_SRC_PATH/CMakeLists.txt
 rm -rf $LIBKRIGING_SRC_PATH/bench
-sed -i.bak "s/add_subdirectory(bench)/##add_subdirectory(bench)/g" $LIBKRIGING_SRC_PATH/src/lib/CMakeLists.txt
+sed -i.bak "s/add_subdirectory(bench)/##add_subdirectory(bench)/g" $LIBKRIGING_SRC_PATH/CMakeLists.txt
  # then remove LinearRegressionOptim example
 sed -i.bak "s/LinearRegression/##LinearRegression/g" $LIBKRIGING_SRC_PATH/src/lib/CMakeLists.txt
 rm -f $LIBKRIGING_SRC_PATH/src/lib/CMakeLists.txt.bak
