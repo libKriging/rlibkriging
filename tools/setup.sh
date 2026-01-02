@@ -165,7 +165,11 @@ for f in `ls -d tests/test-*.R`; do
   echo -e "library(testthat)\n Sys.setenv('OMP_THREAD_LIMIT'=2)\n library(rlibkriging)\n" > $f.new
   # if DiceKriging used, load it also
   if grep -q "DiceKriging::" $f; then
-    echo "library(DiceKriging)" >> $f.new
+    echo "library(DiceKriging)\n" >> $f.new
+    # if multistart also used, then also load foreach
+    if grep -q "multistart" $f; then
+      echo "library(foreach)\n" >> $f.new
+    fi
   fi
   echo "$(cat $f)" >> $f.new
   mv $f.new $f
