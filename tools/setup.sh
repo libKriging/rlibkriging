@@ -166,7 +166,7 @@ for f in `ls -d tests/test-*.R`; do
   # if DiceKriging used, load it but then load rlibkriging
   if grep -q "DiceKriging::" $f; then
     echo -e "library(DiceKriging)\n library(rlibkriging)\n" >> $f.new
-  elif grep -q "RobustGaSP::" $f; then
+  else
     echo -e "library(rlibkriging)\n" >> $f.new
   fi
   echo "$(cat $f)" >> $f.new
