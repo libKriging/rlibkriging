@@ -87,3 +87,10 @@ jobs:
             #  exit 1
             #fi
           fi
+
+      - name: Upload CRAN artifacts
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: CRAN-${{ matrix.os }}-${{ matrix.r-version }}
+          path: CRAN-${{ matrix.os }}/
