@@ -192,7 +192,7 @@ for f in `ls -d tests/test-*.R`; do
   rm -f $f.bak
   sed -i.bak -e "s|\(.\+\)stdev_deriv\[i\]|#&|g" $f # rm some canary test
   rm -f $f.bak
-  sed -i.bak -r "s|km\((.+)(\s*)multistart(\s*)=(\s*)([[:digit:]]+)|km(\1 multistart=1 |g" $f # no multistart (so foreach package not needed)
+  sed -i.bak -E "s|km\((.+)(\s*)multistart(\s*)=(\s*)([[:digit:]]+)|km(\1 multistart=1 |g" $f # no multistart (so foreach package not needed)
   rm -f $f.bak
   # for the same thread-safe issue, disable chol_warning by default:
   sed -i.bak -e "s|linalg_set_chol_warning(TRUE)|linalg_set_chol_warning(FALSE)|g" $f
