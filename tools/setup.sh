@@ -226,3 +226,8 @@ rm -rf tests/bug*
 rm -rf man
 "${R_HOME}"/bin/R -e "devtools::document('.')"
 rm -rf $LIBKRIGING_SRC_PATH/build
+
+# Ensure LF line endings for Makefiles and shell scripts (CRLF causes issues on Unix)
+find $LIBKRIGING_SRC_PATH -type f \( -name 'Makefile*' -o -name '*.sh' \) -exec sed -i.bak $'s/\r$//' {} +
+find . -type f \( -name 'Makefile*' -o -name '*.sh' \) -exec sed -i.bak $'s/\r$//' {} +
+find . -type f -name '*.bak' -exec rm -f {} +
