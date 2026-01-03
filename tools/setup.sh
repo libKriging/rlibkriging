@@ -162,10 +162,12 @@ find tests/testthat -type f -name test-*.R -exec sed -i.bak -e 's|library(rlibkr
 #  prepend loading of testthat
 mv tests/testthat/test-*.R tests/.
 for f in `ls -d tests/test-*.R`; do
-  echo -e "library(testthat)\n Sys.setenv('OMP_THREAD_LIMIT'=2)\n library(rlibkriging)\n" > $f.new
-  # if DiceKriging used, load it also, but then reload rlibkriging
+  echo -e "library(testthat)\n Sys.setenv('OMP_THREAD_LIMIT'=2)\n" > $f.new
+  # if DiceKriging used, load it but then load rlibkriging
   if grep -q "DiceKriging::" $f; then
     echo -e "library(DiceKriging)\n library(rlibkriging)\n" >> $f.new
+  elif grep -q "RobustGaSP::" $f; then
+    echo -e "library(rlibkriging)\n" >> $f.new
   fi
   echo "$(cat $f)" >> $f.new
   mv $f.new $f
