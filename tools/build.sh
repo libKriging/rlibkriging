@@ -79,3 +79,8 @@ cd ../..
 #R -e "roxygen2::roxygenise(package.dir = '.')" # No: it will loop on install, because roxygen2 requires loading package...
 # update Rccp links
 ${R_HOME}/bin/R -e "Rcpp::compileAttributes(pkgdir = '.', verbose = TRUE)"
+
+# Convert CRLF to LF in generated build files (CMake generates CRLF on Windows)
+if [[ "$(uname -s)" == MINGW* || "$(uname -s)" == MSYS* || "$(uname -s)" == CYGWIN* ]]; then
+  find src/libK/build -type f \( -name 'Makefile*' -o -name '*.c' -o -name '*.cpp' -o -name '*.h' -o -name '*.hpp' \) -exec sed -i $'s/\r$//' {} + 2>/dev/null || true
+fi
