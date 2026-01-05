@@ -42,13 +42,21 @@ export Fortran_LINK_FLAGS="$(${R_HOME}/bin/R CMD config FLIBS)"
 
 if [ "$_R_CHECK_CRAN_INCOMING_" != "FALSE" ]; then
   # enable Rcout & Rcerr:
-  # Get RcppArma include 
-  export RCPP_INCLUDE_PATH="$(${R_HOME}/bin/Rscript -e 'invisible(write(system.file(package="Rcpp"),stdout()))')"/include
+  # Get RcppArma include - use shortPathName on Windows to avoid spaces
+  case "$(uname -s)" in
+    MINGW*|MSYS*|CYGWIN*)
+      # Use shortPathName to avoid spaces, then convert to forward slashes
+      export RCPP_INCLUDE_PATH=$(${R_HOME}/bin/Rscript --vanilla -e "cat(gsub('\\\\\\\\', '/', shortPathName(file.path(system.file(package='Rcpp'),'include'))))")
+      export R_INCLUDE_PATH=$(${R_HOME}/bin/Rscript --vanilla -e "cat(gsub('\\\\\\\\', '/', shortPathName(R.home('include'))))")
+      ;;
+    *)
+      export RCPP_INCLUDE_PATH="$(${R_HOME}/bin/Rscript -e 'invisible(write(system.file(package="Rcpp"),stdout()))')"/include
+      export R_INCLUDE_PATH="$(${R_HOME}/bin/Rscript -e 'invisible(write(R.home("include"),stdout()))')"
+      ;;
+  esac
   echo "build: Rcpp include path ${RCPP_INCLUDE_PATH}"
-  # Get R include
-  export R_INCLUDE_PATH="$(${R_HOME}/bin/Rscript -e 'invisible(write(R.home("include"),stdout()))')"
   echo "build: R include path ${R_INCLUDE_PATH}"
-  sed -i.bak -e "s|enable_language(CXX)|enable_language(CXX)\ninclude_directories(\${RCPP_INCLUDE_PATH} \${R_INCLUDE_PATH})\nmessage(STATUS \"Rcpp include path \${RCPP_INCLUDE_PATH}\")\nmessage(STATUS \"R include path \${R_INCLUDE_PATH}\")|g" \
+  sed -i.bak -e "s|enable_language(CXX)|enable_language(CXX)\nfile(TO_CMAKE_PATH \"\${RCPP_INCLUDE_PATH}\" RCPP_INCLUDE_PATH)\nfile(TO_CMAKE_PATH \"\${R_INCLUDE_PATH}\" R_INCLUDE_PATH)\ninclude_directories(\"\${RCPP_INCLUDE_PATH}\" \"\${R_INCLUDE_PATH}\")\nmessage(STATUS \"Rcpp include path \${RCPP_INCLUDE_PATH}\")\nmessage(STATUS \"R include path \${R_INCLUDE_PATH}\")|g" \
      CMakeLists.txt
   rm -rf CMakeLists.txt.bak
   EXTRA_CMAKE_OPTIONS="-DRCPP_INCLUDE_PATH=${RCPP_INCLUDE_PATH} -DR_INCLUDE_PATH=${R_INCLUDE_PATH} ${EXTRA_CMAKE_OPTIONS}"
