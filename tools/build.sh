@@ -80,7 +80,11 @@ cd ../..
 # update Rccp links
 ${R_HOME}/bin/R -e "Rcpp::compileAttributes(pkgdir = '.', verbose = TRUE)"
 
-# Convert CRLF to LF in generated build files (CMake generates CRLF on Windows)
+# Convert CRLF to LF in generated files (CMake and Rcpp generate CRLF on Windows)
 if [[ "$(uname -s)" == MINGW* || "$(uname -s)" == MSYS* || "$(uname -s)" == CYGWIN* ]]; then
+  # Convert in build directory
   find src/libK/build -type f \( -name 'Makefile*' -o -name '*.c' -o -name '*.cpp' -o -name '*.h' -o -name '*.hpp' \) -exec sed -i $'s/\r$//' {} + 2>/dev/null || true
+  # Convert Rcpp-generated files
+  find src -maxdepth 1 -type f \( -name '*.cpp' -o -name '*.h' \) -exec sed -i $'s/\r$//' {} + 2>/dev/null || true
+  find R -maxdepth 1 -type f -name 'RcppExports.R' -exec sed -i $'s/\r$//' {} + 2>/dev/null || true
 fi
