@@ -62,6 +62,8 @@ jobs:
         shell: bash
         run: |
           Rscript --no-save ./tools/install_packages.R testthat DiceKriging
+          # Verify DiceKriging is properly installed
+          Rscript -e "if (!requireNamespace('DiceKriging', quietly = TRUE)) { stop('DiceKriging installation failed') } else { cat('DiceKriging version:', as.character(packageVersion('DiceKriging')), '\n') }"
 
       - name: R CMD check
         shell: bash
