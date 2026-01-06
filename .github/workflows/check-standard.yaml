@@ -42,6 +42,11 @@ jobs:
           use-public-rspm: true
           rtools-version: ''
 
+      - name: R dependencies
+        shell: bash
+        run: apt install libfontconfig1-dev
+
+
       - name: Setup cmake
         uses: jwlawson/actions-setup-cmake@v1.13
         with:
