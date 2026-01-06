@@ -43,6 +43,7 @@ jobs:
           rtools-version: ''
 
       - name: R dependencies
+        if: matrix.os == 'ubuntu-latest'
         shell: bash
         run: apt install libfontconfig1-dev
 
