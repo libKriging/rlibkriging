@@ -51,6 +51,7 @@ jobs:
         with:
           extra-packages: |
             any::rcmdcheck
+            any::foreach
           needs: check
 
       - name: Run pre-compile setup
