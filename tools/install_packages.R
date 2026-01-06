@@ -22,7 +22,7 @@ for (lib in packages) {
         cat(paste0("\n#########################\nCannot install ", lib, "\n"))
         cat(paste0("System info: ", Sys.info()["sysname"], " ", Sys.info()["release"], "\n"))
         cat(paste0("R version: ", R.version.string, "\n"))
-        cat("#########################\n\n"))
+        cat("#########################\n\n")
         quit(status=1, save='no')
     } else {
         cat(paste0("Successfully installed and loaded: ", lib, " (version ", packageVersion(lib), ")\n\n"))
