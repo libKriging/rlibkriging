@@ -43,9 +43,9 @@ jobs:
           rtools-version: ''
 
       - name: R dependencies
-        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt install -y libfontconfig1-dev
         shell: bash
-        run: apt install libfontconfig1-dev
+        if: matrix.config.os == 'ubuntu-latest'
 
 
       - name: Setup cmake
