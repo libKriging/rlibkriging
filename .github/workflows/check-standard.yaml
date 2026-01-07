@@ -43,7 +43,7 @@ jobs:
           rtools-version: ''
 
       - name: R dependencies
-        run: sudo apt install -y libfontconfig1-dev libharfbuzz-dev libfribidi-dev
+        run: sudo apt install -y libfontconfig1-dev libharfbuzz-dev libfribidi-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev libwebp-dev
         shell: bash
         if: matrix.config.os == 'ubuntu-latest'
 
