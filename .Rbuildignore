@@ -13,3 +13,4 @@
 ^inst$
 ^.*\.readthedocs.yaml$
 ^\.vscode$
+^src/libK/build$

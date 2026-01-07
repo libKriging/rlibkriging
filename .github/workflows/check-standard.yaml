@@ -42,6 +42,12 @@ jobs:
           use-public-rspm: true
           rtools-version: ''
 
+      - name: R dependencies
+        run: sudo apt install -y libfontconfig1-dev libharfbuzz-dev libfribidi-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev libwebp-dev
+        shell: bash
+        if: matrix.config.os == 'ubuntu-latest'
+
+
       - name: Setup cmake
         uses: jwlawson/actions-setup-cmake@v1.13
         with:
@@ -51,6 +57,7 @@ jobs:
         with:
           extra-packages: |
             any::rcmdcheck
+            any::foreach
           needs: check
 
       - name: Run pre-compile setup
