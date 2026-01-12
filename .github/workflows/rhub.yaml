@@ -55,7 +55,7 @@ jobs:
         with:
           submodules: recursive
       - name: Add devtools
-        run: Rscript -e "install.packages('devtools', repos='https://cloud.r-project.org')"
+        run: apt-get update && apt-get install -y r-cran-devtools
         shell: bash
       - name: Setup package
         run: cd $GITHUB_WORKSPACE && ./tools/setup.sh
