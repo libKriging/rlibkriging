@@ -11,6 +11,7 @@ tools/r_config.sh
 
 # It is required that setup.sh is run before R CMD build rlibkriging when submit to CRAN. 
 if [ ! -d R ]; then
+  echo "R directory does not exist, running setup.sh"
   tools/setup.sh
 else
   echo "R directory exists, skipping setup.sh"
