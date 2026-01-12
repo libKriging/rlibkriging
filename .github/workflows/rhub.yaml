@@ -55,9 +55,7 @@ jobs:
         with:
           submodules: recursive
       - name: Add devtools (using RSPM)
-        run: |
-          echo "RSPM=https://packagemanager.posit.co/cran/latest" >> /etc/rstudio-prefs/r-repos.conf
-          Rscript -e 'install.packages("devtools", repos="https://packagemanager.posit.co/cran/latest")'
+        run: Rscript -e 'remotes::install_github("cran4linux/rspm"); rspm::enable(); install.packages("devtools")'
         shell: bash
       - name: Setup package
         run: cd $GITHUB_WORKSPACE && ./tools/setup.sh
