@@ -15,3 +15,8 @@ sed -i.bak "s/Date:.*/Date: $DATE/g" DESCRIPTION
 rm -f DESCRIPTION.bak
 
 rm -rf src/libK/build
+
+# It is required that setup.sh is run before R CMD build rlibkriging when submit to CRAN. 
+if [ ! -d R ]; then
+  tools/setup.sh
+fi
