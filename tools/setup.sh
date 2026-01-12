@@ -5,6 +5,10 @@ if [[ "$DEBUG_CI" == "true" ]]; then
   set -x
 fi
 
+echo "========================================================================="
+echo "Running setup.sh to prepare R libkriging binding as a standard R package."
+echo "========================================================================="
+
 : ${R_HOME=$(R RHOME)}
 if test -z "${R_HOME}"; then
    as_fn_error $? "Could not determine R_HOME." "$LINENO" 5
@@ -236,6 +240,8 @@ rm -rf tests/bug*
 if Rscript -e "if (!requireNamespace('roxygen2', quietly=TRUE)) quit(status=1)" ; then
   rm -rf man
   "${R_HOME}"/bin/R -e "roxygen2::roxygenize('.')"  
+else
+  echo "roxygen2 not available, skipping man sync"
 fi
 
 rm -rf $LIBKRIGING_SRC_PATH/build
