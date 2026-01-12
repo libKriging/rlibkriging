@@ -232,10 +232,10 @@ rm -rf tests/demo*
 rm -rf tests/bench*
 rm -rf tests/bug*
 
-# sync man content, if devtools available
-if Rscript -e "if (!requireNamespace('devtools', quietly=TRUE)) quit(status=1)" ; then
+# sync man content, if roxygen2 available
+if Rscript -e "if (!requireNamespace('roxygen2', quietly=TRUE)) quit(status=1)" ; then
   rm -rf man
-  "${R_HOME}"/bin/R -e "devtools::document('.')"  
+  "${R_HOME}"/bin/R -e "roxygen2::roxygenize('.')"  
 fi
 
 rm -rf $LIBKRIGING_SRC_PATH/build
