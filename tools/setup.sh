@@ -213,6 +213,16 @@ for f in `ls -d tests/test-*.R`; do
     echo "}" >> $f.new
     mv $f.new $f
   fi
+  # properly cleanup created files if any
+  for ext in Rdata json; do
+    if grep -q ".$ext" $f; then
+      varnames=$(grep -oE "\"[^\"]+.$ext\"" $f | tr -d '"')
+      for varname in $varnames; do
+        echo -e "\nif (file.exists(\"$varname\")) {\n  file.remove(\"$varname\")\n}\n" >> $f
+      done
+      rm -f $f.bak
+    fi
+  done
 done
 rm -rf tests/testthat/
 rm -rf tests/testthat.R
