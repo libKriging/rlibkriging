@@ -19,4 +19,6 @@ rm -rf src/libK/build
 # It is required that setup.sh is run before R CMD build rlibkriging when submit to CRAN. 
 if [ ! -d R ]; then
   tools/setup.sh
+else
+  echo "R directory exists, skipping setup.sh"
 fi
