@@ -232,9 +232,12 @@ rm -rf tests/demo*
 rm -rf tests/bench*
 rm -rf tests/bug*
 
-# sync man content
-rm -rf man
-"${R_HOME}"/bin/R -e "devtools::document('.')"
+# sync man content, if devtools available
+if Rscript -e "if (!requireNamespace('devtools', quietly=TRUE)) quit(status=1)" ; then
+  rm -rf man
+  "${R_HOME}"/bin/R -e "devtools::document('.')"  
+fi
+
 rm -rf $LIBKRIGING_SRC_PATH/build
 
 # Ensure LF line endings for Makefiles and shell scripts (CRLF causes issues on Unix)
