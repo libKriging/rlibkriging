@@ -54,6 +54,8 @@ jobs:
       - uses: r-hub/actions/checkout@v1
         with:
           submodules: recursive
+      - run: cd $GITHUB_WORKSPACE && ./tools/setup.sh
+        shell: bash
       - uses: r-hub/actions/platform-info@v1
         with:
           token: ${{ secrets.RHUB_TOKEN }}
