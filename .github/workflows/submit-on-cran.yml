@@ -38,14 +38,6 @@ jobs:
         uses: jwlawson/actions-setup-cmake@v1.13
         with:
           cmake-version: '3.24.x'
-        
-      - name: Run pre-compile setup
-        shell: bash
-        run: |
-          Rscript --no-save ./tools/install_packages.R pkgbuild roxygen2 devtools
-          ./tools/setup.sh
-          Rscript -e "remove.packages('roxygen2')"
-          Rscript -e "remove.packages('devtools')"
 
       - name: R CMD build
         shell: bash
