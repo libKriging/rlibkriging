@@ -54,8 +54,10 @@ jobs:
       - uses: r-hub/actions/checkout@v1
         with:
           submodules: recursive
-      - name: Add devtools
-        run: apt-get update && apt-get install -y r-cran-devtools
+      - name: Add devtools (using RSPM)
+        run: |
+          echo "RSPM=https://packagemanager.posit.co/cran/latest" >> /etc/rstudio-prefs/r-repos.conf
+          Rscript -e 'install.packages("devtools", repos="https://packagemanager.posit.co/cran/latest")'
         shell: bash
       - name: Setup package
         run: cd $GITHUB_WORKSPACE && ./tools/setup.sh
