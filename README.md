@@ -17,8 +17,8 @@ install.packages('rlibkriging')
 
 ## Requirements
 
-* `c++`, `cmake` and `gfortran`, should be installed using:
-  * Linux/OSX: `brew/apt/yum/... install cpp cmake gfortran`
+* `c++` and `cmake`, should be installed using:
+  * Linux/OSX: `brew/apt/yum/... install cpp cmake`
   * Windows: install Rtools (see https://cran.r-project.org/bin/windows/Rtools/)
     Note:
       * R>=4.2 & Rtools>=42 are required for this 'devtools::install_github'
