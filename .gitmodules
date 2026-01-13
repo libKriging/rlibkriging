@@ -1,6 +1,8 @@
 [submodule "src/libK"]
 	path = src/libK
-	url = https://github.com/libKriging/libKriging
+	url = https://github.com/libKriging/libKriging.git
+	branch = main
 [submodule "src/slapack"]
 	path = src/slapack
 	url = https://github.com/libKriging/slapack.git
+	branch = main
