@@ -15,4 +15,9 @@
 ^\.vscode$
 
 ^src/libK/build$
+# Exclude compiled artifacts
+^src/.*\.o$
+^src/.*\.obj$
+^src/.*\.so$
+^src/.*\.dll$
 
