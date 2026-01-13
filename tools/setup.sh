@@ -167,8 +167,12 @@ for f in `ls R/*KrigingClass.R`; do
   # #' print(load.NuggetKriging(outfile))
   # #' unlink(outfile)
   # load.NuggetKriging <- function(...
-  sed -i.bak -E "/^save\..*Kriging/i \\\#' unlink(outfile)" $f
-  sed -i.bak -E "/^load\..*Kriging/i \\\#' unlink(outfile)" $f
+  sed -i.bak -E "/^save\..*Kriging/i\\
+#' unlink(outfile)
+" $f
+  sed -i.bak -E "/^load\..*Kriging/i\\
+#' unlink(outfile)
+" $f
   rm -f $f.bak
 done
 
