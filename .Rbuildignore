@@ -13,4 +13,9 @@
 ^inst$
 ^.*\.readthedocs.yaml$
 ^\.vscode$
+
 ^src/libK/build$
+^src/*.o$
+^src/*.so$
+^src/*.dll$
+^src/*.dylib$

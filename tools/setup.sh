@@ -86,9 +86,6 @@ rm -rf $LIBKRIGING_SRC_PATH/CMakeLists.txt.bak
 
 # Because CRAN policy : disable or replace all *::cout ... in all .cpp and .hpp files
 if [ "$_R_CHECK_CRAN_INCOMING_" != "FALSE" ]; then
-  # Rcpp & R includes are now identified and added in CMakeLists.txt in (later) build.sh
-  # Following replacements assume that R & Rcpp are included
-  
   # replace cout/cerr in libkriging
   find $LIBKRIGING_SRC_PATH/src/lib -type f -name lk_armadillo.hpp -exec sed -i.bak "s|#include <armadillo>|#include <Rcpp.h>\n#include <armadillo>|g" {} +
   find $LIBKRIGING_SRC_PATH/src/lib -type f -name *.*pp -exec sed -i.bak "s|arma\:\:cout|Rcpp::Rcout|g" {} +
@@ -119,6 +116,11 @@ fi
 sed -i.bak -e "s|#pragma|//&|g" \
   $LIBKRIGING_SRC_PATH/src/lib/include/libKriging/utils/nlohmann/json.hpp
 rm -rf $LIBKRIGING_SRC_PATH/src/lib/include/libKriging/utils/nlohmann/json.hpp.bak
+# replace #define JSON_THROW(exception) std::abort() 
+sed -i.bak -e "s|#define JSON_THROW(exception) std::abort()|#define JSON_THROW(exception) throw exception|g" \
+  $LIBKRIGING_SRC_PATH/src/lib/include/libKriging/utils/nlohmann/json.hpp
+rm -rf $LIBKRIGING_SRC_PATH/src/lib/include/libKriging/utils/nlohmann/json.hpp.bak
+
 
 # Switch slapack dependency as a local submodule (not a git clone)
 sed -i.bak -e "s|https://github.com/libKriging/slapack.git|\${CMAKE_CURRENT_SOURCE_DIR}/../../slapack|g" \
