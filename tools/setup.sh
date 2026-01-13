@@ -156,6 +156,22 @@ cp src/Makevars* $RLIBKRIGING_PATH/src/.
 # copy resources from libK/binding/R
 rm -rf R
 cp -r $RLIBKRIGING_PATH/R .
+# in *KrigingClass.R, ens ure no remaining files after examples
+for f in `ls R/*KrigingClass.R`; do
+  # append "#' unlink(outfile)" in examples block. Located just before function declaration: save.*Kriging and load.*Kriging. example:
+  # ...
+  # #' print(load.NuggetKriging(outfile))
+  # load.NuggetKriging <- function(...
+  # becomes
+  # ...
+  # #' print(load.NuggetKriging(outfile))
+  # #' unlink(outfile)
+  # load.NuggetKriging <- function(...
+  sed -i.bak -E "/^save\..*Kriging/i \\\#' unlink(outfile)" $f
+  sed -i.bak -E "/^load\..*Kriging/i \\\#' unlink(outfile)" $f
+  rm -f $f.bak
+done
+
 rm -rf src/*.cpp
 cp -r $RLIBKRIGING_PATH/src .
 cp -r $RLIBKRIGING_PATH/NAMESPACE .
