@@ -56,6 +56,11 @@ jobs:
         with:
           cmake-version: '3.24.x'
 
+      - name: Install R package dependencies
+        shell: bash
+        run: |
+          Rscript -e "install.packages(c('Rcpp', 'RcppArmadillo', 'DiceKriging'), repos='https://cloud.r-project.org/')"
+
       - name: Build and install package
         shell: bash
         run: |
