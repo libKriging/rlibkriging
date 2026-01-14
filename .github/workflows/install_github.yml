@@ -26,10 +26,6 @@ jobs:
       BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
     
     steps:
-      - uses: actions/checkout@v2
-        with:
-          submodules: recursive
-
       - uses: r-lib/actions/setup-r@v2
         with:
           r-version: ${{ matrix.R }}
@@ -56,80 +52,14 @@ jobs:
         with:
           cmake-version: '3.24.x'
 
-      - name: Install devtools and dependencies
+      - name: Install devtools
         shell: bash
         run: |
           # Add --insecure to workaround missing certificates on Windows
           # --header is not required by an useful example if the repo becomes private 
           curl --insecure --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' -LO https://raw.githubusercontent.com/libKriging/rlibkriging/${{ env.BRANCH_NAME }}/tools/install_packages.R
           Rscript --no-save ./install_packages.R devtools
-          Rscript -e "install.packages(c('remotes', 'Rcpp', 'RcppArmadillo', 'DiceKriging'), repos='https://cloud.r-project.org/')"
 
-      - name: Commit submodules as regular files for install_github
+      - name: install_github from ${{ env.BRANCH_NAME }}
         shell: bash
-        run: |
-          # Configure git
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          
-          # Save submodule contents to temporary location
-          echo "Saving submodule contents..."
-          mkdir -p /tmp/submodule-backup
-          cp -r src/libK /tmp/submodule-backup/
-          cp -r src/slapack /tmp/submodule-backup/
-          
-          # Deinitialize submodules (this clears the directories)
-          echo "Deinitializing submodules..."
-          git submodule deinit -f src/libK src/slapack
-          
-          # Remove submodule entries from .git/config and .git/modules
-          rm -rf .git/modules/src/libK .git/modules/src/slapack
-          
-          # Remove submodule entries from git index
-          git rm --cached src/libK src/slapack 2>/dev/null || true
-          
-          # Remove .gitmodules
-          git rm .gitmodules 2>/dev/null || true
-          
-          # Restore the contents as regular directories
-          echo "Restoring contents as regular directories..."
-          cp -r /tmp/submodule-backup/libK src/
-          cp -r /tmp/submodule-backup/slapack src/
-          
-          # Remove any remaining .git files/folders from the copied content
-          rm -rf src/libK/.git src/slapack/.git
-          
-          # Add them as regular directories
-          git add -f src/libK src/slapack
-          
-          # Show what will be committed
-          echo "Files to be committed:"
-          git status --short | head -20
-          
-          # Commit to a temporary local branch
-          git checkout -b temp-with-submodules
-          git commit -m "CI: Temporary commit with submodules as regular files for install_github test"
-          
-          # Verify the commit has the files
-          echo "Verifying commit contents..."
-          echo "Number of files in src/libK:"
-          git ls-tree -r --name-only HEAD | grep "^src/libK/" | wc -l
-          echo "Number of files in src/slapack:"
-          git ls-tree -r --name-only HEAD | grep "^src/slapack/" | wc -l
-          
-          # Push to a temporary branch on GitHub
-          git push -f origin temp-with-submodules
-
-      - name: install_github from temporary branch with baked-in submodules
-        shell: bash
-        run: |
-          # Now use install_github on the branch that has submodules as regular files
-          Rscript -e "library(devtools); install_github('libKriging/rlibkriging', ref='temp-with-submodules', auth_token='${{ secrets.GITHUB_TOKEN }}')"
-          # Verify installation
-          Rscript -e "if (!library('rlibkriging', character.only=TRUE, logical.return=TRUE)) quit(status=1, save='no')"
-      
-      - name: Cleanup temporary branch
-        if: always()
-        shell: bash
-        run: |
-          git push origin --delete temp-with-submodules || true
+        run: Rscript -e "library(devtools); install_github('libKriging/rlibkriging', ref='${{ env.BRANCH_NAME }}'); if (!library('rlibkriging', character.only=TRUE, logical.return=TRUE)) quit(status=1, save='no')"
