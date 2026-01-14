@@ -72,19 +72,21 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           
-          # Verify submodules have content
-          echo "Checking submodule contents..."
-          ls -la src/libK/ | head -20
-          ls -la src/slapack/ | head -20
+          # Properly deinitialize submodules and convert to regular directories
+          echo "Deinitializing submodules..."
+          git submodule deinit -f src/libK src/slapack
           
-          # Remove .git directories in submodules to make them regular directories
-          find src/libK -name ".git" -exec rm -rf {} + 2>/dev/null || true
-          find src/slapack -name ".git" -exec rm -rf {} + 2>/dev/null || true
+          # Remove submodule entries from .git/config and .git/modules
+          rm -rf .git/modules/src/libK .git/modules/src/slapack
+          
+          # Remove submodule entries from git index
+          git rm --cached src/libK src/slapack 2>/dev/null || true
           
           # Remove .gitmodules
-          rm -f .gitmodules
+          git rm .gitmodules 2>/dev/null || true
           
-          # Stage all submodule contents as regular files
+          # Now the directories are just regular untracked directories with files
+          # Add them as regular directories
           git add -f src/libK src/slapack
           
           # Show what will be committed
@@ -97,8 +99,10 @@ jobs:
           
           # Verify the commit has the files
           echo "Verifying commit contents..."
-          git ls-tree -r --name-only HEAD | grep "src/libK" | head -10
-          git ls-tree -r --name-only HEAD | grep "src/slapack" | head -10
+          echo "Number of files in src/libK:"
+          git ls-tree -r --name-only HEAD | grep "^src/libK/" | wc -l
+          echo "Number of files in src/slapack:"
+          git ls-tree -r --name-only HEAD | grep "^src/slapack/" | wc -l
           
           # Push to a temporary branch on GitHub
           git push -f origin temp-with-submodules
