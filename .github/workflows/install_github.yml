@@ -59,13 +59,39 @@ jobs:
       - name: Install devtools and dependencies
         shell: bash
         run: |
-          Rscript -e "install.packages(c('devtools', 'remotes', 'Rcpp', 'RcppArmadillo', 'DiceKriging'), repos='https://cloud.r-project.org/')"
+          # Add --insecure to workaround missing certificates on Windows
+          # --header is not required by an useful example if the repo becomes private 
+          curl --insecure --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' -LO https://raw.githubusercontent.com/libKriging/rlibkriging/${{ env.BRANCH_NAME }}/tools/install_packages.R
+          Rscript --no-save ./install_packages.R devtools
+          Rscript -e "install.packages(c('remotes', 'Rcpp', 'RcppArmadillo', 'DiceKriging'), repos='https://cloud.r-project.org/')"
 
-      - name: Install from local git repository (simulating install_github with submodules)
+      - name: Commit submodules as regular files for install_github
         shell: bash
         run: |
-          # Use remotes::install_local which handles the checked-out repo with submodules
-          # This simulates what install_github would do if it supported submodules
-          Rscript -e "remotes::install_local('.', force=TRUE, upgrade='never')"
+          # Configure git
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          # Remove .gitmodules and .git directories in submodules to make them regular directories
+          rm -f .gitmodules
+          rm -rf src/libK/.git src/slapack/.git
+          # Stage all submodule contents as regular files
+          git add -f src/libK src/slapack
+          # Commit to a temporary local branch
+          git checkout -b temp-with-submodules
+          git commit -m "CI: Temporary commit with submodules as regular files for install_github test" || echo "Nothing to commit"
+          # Push to a temporary branch on GitHub
+          git push -f origin temp-with-submodules
+
+      - name: install_github from temporary branch with baked-in submodules
+        shell: bash
+        run: |
+          # Now use install_github on the branch that has submodules as regular files
+          Rscript -e "library(devtools); install_github('libKriging/rlibkriging', ref='temp-with-submodules', auth_token='${{ secrets.GITHUB_TOKEN }}')"
           # Verify installation
           Rscript -e "if (!library('rlibkriging', character.only=TRUE, logical.return=TRUE)) quit(status=1, save='no')"
+      
+      - name: Cleanup temporary branch
+        if: always()
+        shell: bash
+        run: |
+          git push origin --delete temp-with-submodules || true
