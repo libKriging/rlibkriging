@@ -71,14 +71,35 @@ jobs:
           # Configure git
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          # Remove .gitmodules and .git directories in submodules to make them regular directories
+          
+          # Verify submodules have content
+          echo "Checking submodule contents..."
+          ls -la src/libK/ | head -20
+          ls -la src/slapack/ | head -20
+          
+          # Remove .git directories in submodules to make them regular directories
+          find src/libK -name ".git" -exec rm -rf {} + 2>/dev/null || true
+          find src/slapack -name ".git" -exec rm -rf {} + 2>/dev/null || true
+          
+          # Remove .gitmodules
           rm -f .gitmodules
-          rm -rf src/libK/.git src/slapack/.git
+          
           # Stage all submodule contents as regular files
           git add -f src/libK src/slapack
+          
+          # Show what will be committed
+          echo "Files to be committed:"
+          git status
+          
           # Commit to a temporary local branch
           git checkout -b temp-with-submodules
-          git commit -m "CI: Temporary commit with submodules as regular files for install_github test" || echo "Nothing to commit"
+          git commit -m "CI: Temporary commit with submodules as regular files for install_github test"
+          
+          # Verify the commit has the files
+          echo "Verifying commit contents..."
+          git ls-tree -r --name-only HEAD | grep "src/libK" | head -10
+          git ls-tree -r --name-only HEAD | grep "src/slapack" | head -10
+          
           # Push to a temporary branch on GitHub
           git push -f origin temp-with-submodules
 
