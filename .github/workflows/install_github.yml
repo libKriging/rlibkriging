@@ -56,17 +56,16 @@ jobs:
         with:
           cmake-version: '3.24.x'
 
-      - name: Install R package dependencies
+      - name: Install devtools and dependencies
         shell: bash
         run: |
-          Rscript -e "install.packages(c('Rcpp', 'RcppArmadillo', 'DiceKriging'), repos='https://cloud.r-project.org/')"
+          Rscript -e "install.packages(c('devtools', 'remotes', 'Rcpp', 'RcppArmadillo', 'DiceKriging'), repos='https://cloud.r-project.org/')"
 
-      - name: Build and install package
+      - name: Install from local git repository (simulating install_github with submodules)
         shell: bash
         run: |
-          cd ..
-          R CMD INSTALL --build rlibkriging
-          # Install the built package
-          R CMD INSTALL rlibkriging_*.tar.gz || R CMD INSTALL rlibkriging_*.tgz || R CMD INSTALL rlibkriging_*.zip
+          # Use remotes::install_local which handles the checked-out repo with submodules
+          # This simulates what install_github would do if it supported submodules
+          Rscript -e "remotes::install_local('.', force=TRUE, upgrade='never')"
           # Verify installation
           Rscript -e "if (!library('rlibkriging', character.only=TRUE, logical.return=TRUE)) quit(status=1, save='no')"
