@@ -16,13 +16,6 @@ fi
 
 LIBKRIGING_SRC_PATH=src/libK
 
-# Verify libKriging source path exists
-if [ ! -d "$LIBKRIGING_SRC_PATH" ]; then
-  echo "ERROR: libKriging source path not found: $LIBKRIGING_SRC_PATH"
-  exit 1
-fi
-echo "✓ Found libKriging source at: $LIBKRIGING_SRC_PATH"
-
 # Cleanup unused (for R) libKriging deps
 echo "Cleaning up unused libKriging dependencies..."
 rm -rf $LIBKRIGING_SRC_PATH/dependencies/Catch2
