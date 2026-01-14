@@ -74,8 +74,9 @@ jobs:
           
           # Save submodule contents to temporary location
           echo "Saving submodule contents..."
-          cp -r src/libK /tmp/libK-backup
-          cp -r src/slapack /tmp/slapack-backup
+          mkdir -p /tmp/submodule-backup
+          cp -r src/libK /tmp/submodule-backup/
+          cp -r src/slapack /tmp/submodule-backup/
           
           # Deinitialize submodules (this clears the directories)
           echo "Deinitializing submodules..."
@@ -92,8 +93,8 @@ jobs:
           
           # Restore the contents as regular directories
           echo "Restoring contents as regular directories..."
-          cp -r /tmp/libK-backup src/libK
-          cp -r /tmp/slapack-backup src/slapack
+          cp -r /tmp/submodule-backup/libK src/
+          cp -r /tmp/submodule-backup/slapack src/
           
           # Remove any remaining .git files/folders from the copied content
           rm -rf src/libK/.git src/slapack/.git
