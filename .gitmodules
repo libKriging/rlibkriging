@@ -1,7 +1,7 @@
 [submodule "src/libK"]
 	path = src/libK
 	url = https://github.com/libKriging/libKriging.git
-	branch = fix-openmp-cmake
+	branch = master
 [submodule "src/slapack"]
 	path = src/slapack
 	url = https://github.com/libKriging/slapack.git
