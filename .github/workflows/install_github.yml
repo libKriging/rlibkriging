@@ -72,7 +72,12 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           
-          # Properly deinitialize submodules and convert to regular directories
+          # Save submodule contents to temporary location
+          echo "Saving submodule contents..."
+          cp -r src/libK /tmp/libK-backup
+          cp -r src/slapack /tmp/slapack-backup
+          
+          # Deinitialize submodules (this clears the directories)
           echo "Deinitializing submodules..."
           git submodule deinit -f src/libK src/slapack
           
@@ -85,13 +90,20 @@ jobs:
           # Remove .gitmodules
           git rm .gitmodules 2>/dev/null || true
           
-          # Now the directories are just regular untracked directories with files
+          # Restore the contents as regular directories
+          echo "Restoring contents as regular directories..."
+          cp -r /tmp/libK-backup src/libK
+          cp -r /tmp/slapack-backup src/slapack
+          
+          # Remove any remaining .git files/folders from the copied content
+          rm -rf src/libK/.git src/slapack/.git
+          
           # Add them as regular directories
           git add -f src/libK src/slapack
           
           # Show what will be committed
           echo "Files to be committed:"
-          git status
+          git status --short | head -20
           
           # Commit to a temporary local branch
           git checkout -b temp-with-submodules
