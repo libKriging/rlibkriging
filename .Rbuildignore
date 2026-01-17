@@ -5,6 +5,14 @@
 ^\.github$
 ^\.git$
 ^\.git-hooks$
+^src/libK/\.git$
+^src/libK/cmake/\.gitkeep$
+^src/libK/lbfgsb_cpp/\.git$
+^src/slapack/\.git$
+^\.claude$
+^src/libK/\.git-hooks$
+^src/libK/\.github$
+^src/libK/lbfgsb_cpp/\.github$
 ^\.gitignore$
 ^\.gitattributes$
 ^.*\.clang.*

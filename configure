@@ -1,5 +1,9 @@
 #!/usr/bin/env sh
 
+# Set TMPDIR to avoid creating temp directories in /tmp for CRAN compliance
+export TMPDIR="${PWD}/src/libK/build_tmp"
+mkdir -p "${TMPDIR}"
+
 . tools/cmake_config.sh
 if test -z "${CMAKE_BIN}"; then
    ## also error to end configure here
@@ -18,3 +22,15 @@ else
 fi
 
 tools/build.sh
+
+# Clean up temporary directory used for CMake
+rm -rf "${TMPDIR}"
+
+# Also clean up any CMake temp directories that were created in /tmp during this build
+# Find temp directories created in the last 10 minutes
+find /tmp -maxdepth 1 -name "tmp.*" -type d -user $(id -u) -mmin -10 2>/dev/null | while read dir; do
+  # Only remove if it contains CMake files (to be safe)
+  if [ -f "$dir/CMakeCache.txt" ] || [ -d "$dir/CMakeFiles" ]; then
+    rm -rf "$dir" 2>/dev/null || true
+  fi
+done

@@ -16,6 +16,8 @@ CFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CFLAGS`
 CPICFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CPICFLAGS`
 
 CFLAGS="$CPPFLAGS $CPICFLAGS $CFLAGS"
+# Remove non-portable flag for CRAN compatibility
+CFLAGS=`echo "$CFLAGS" | sed 's/-mno-omit-leaf-frame-pointer//g'`
 echo set CFLAGS=$CFLAGS
 export CFLAGS
 
@@ -28,6 +30,8 @@ CXXFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CXX17FLAGS`
 CXXPICFLAGS=`"${R_HOME}/bin${R_ARCH_BIN}/R" CMD config CXX17PICFLAGS`
 
 CXXFLAGS="$CXXSTD $CPPFLAGS $CXXPICFLAGS $CXXFLAGS"
+# Remove non-portable flag for CRAN compatibility
+CXXFLAGS=`echo "$CXXFLAGS" | sed 's/-mno-omit-leaf-frame-pointer//g'`
 echo set CXXFLAGS=$CXXFLAGS
 export CXXFLAGS
 

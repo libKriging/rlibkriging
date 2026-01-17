@@ -35,6 +35,14 @@ export CC=`${R_HOME}/bin/R CMD config CC`
 export CXX=`${R_HOME}/bin/R CMD config CXX`
 export FC=`${R_HOME}/bin/R CMD config FC`
 
+# Get CXXFLAGS and remove non-portable flag for CRAN compatibility (if not already set by configure)
+if [ -z "$CXXFLAGS" ]; then
+  export CXXFLAGS=`${R_HOME}/bin/R CMD config CXXFLAGS | sed 's/-mno-omit-leaf-frame-pointer//g'`
+fi
+if [ -z "$CFLAGS" ]; then
+  export CFLAGS=`${R_HOME}/bin/R CMD config CFLAGS | sed 's/-mno-omit-leaf-frame-pointer//g'`
+fi
+
 # R workflow requires to use R cmd with full path.
 # These declarations help to skip declaration without full path in libKriging build scripts.
 export CMAKE_Fortran_COMPILER="$(${R_HOME}/bin/R CMD config FC | awk '{ print $1 }')"
@@ -66,6 +74,13 @@ BUILD_TEST=false \
 MODE=Release \
 EXTRA_CMAKE_OPTIONS="${EXTRA_CMAKE_OPTIONS:-} -DCMAKE_INSTALL_LIBDIR=lib -DBUILD_SHARED_LIBS=${MAKE_SHARED_LIBS} -DSTATIC_LIB=${STATIC_LIB} -DEXTRA_SYSTEM_LIBRARY_PATH=${EXTRA_SYSTEM_LIBRARY_PATH}" \
 $CI/linux-macos/build.sh # should support '.travis-ci' or 'travis-ci'"
+
+# Clean up CMake temp directories immediately after build
+find /tmp -maxdepth 1 -name "tmp.*" -type d -user $(id -u) -mmin -10 2>/dev/null | while read dir; do
+  if [ -f "$dir/CMakeCache.txt" ] || [ -d "$dir/CMakeFiles" ]; then
+    rm -rf "$dir" 2>/dev/null || true
+  fi
+done
 
 rm -rf ../../inst
 mkdir -p ../../inst

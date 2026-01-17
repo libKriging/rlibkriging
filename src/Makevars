@@ -45,6 +45,10 @@ EXTERNAL_LIBS=$(subst $\",,$(shell LIBKRIGING_PATH=${LIBKRIGING_PATH} ../src/lib
 
 CXX_STD = CXX17
 
+# Remove non-portable flag for CRAN compatibility by overriding ALL_CXXFLAGS
+# R sets ALL_CXXFLAGS = $(R_XTRA_CXXFLAGS) $(PKG_CXXFLAGS) $(CXXPICFLAGS) $(SHLIB_CXXFLAGS) $(CXXFLAGS)
+override CXXFLAGS := $(filter-out -mno-omit-leaf-frame-pointer,$(CXXFLAGS))
+
 PKG_CPPFLAGS=-I"${LIBKRIGING_PATH}"/include -include "libKriging/utils/lkalloc.hpp" -DARMA_ALIEN_MEM_ALLOC_FUNCTION=lkalloc::malloc -DARMA_ALIEN_MEM_FREE_FUNCTION=lkalloc::free
 # https://stat.ethz.ch/pipermail/r-package-devel/2018q3/003033.html
 PKG_CXXFLAGS=$(SHLIB_OPENMP_CXXFLAGS)
