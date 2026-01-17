@@ -4,7 +4,9 @@
 ^install$
 ^\.github$
 ^\.git$
-^.*\.git.*
+^\.git-hooks$
+^\.gitignore$
+^\.gitattributes$
 ^.*\.clang.*
 ^.*\.valgrind.*
 ^.*\.docker.*

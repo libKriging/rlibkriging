@@ -20,8 +20,41 @@ LIBKRIGING_SRC_PATH=src/libK
 if [ ! -f "$LIBKRIGING_SRC_PATH/CMakeLists.txt" ]; then
   echo "Submodules appear to be uninitialized. Checking for git and .gitmodules..."
   if [ -f ".gitmodules" ] && command -v git >/dev/null 2>&1; then
-    echo "Initializing git submodules..."
-    git submodule update --init --recursive
+    echo "Initializing submodules..."
+    
+    # Check if this is a git repository
+    if [ -d ".git" ]; then
+      # Regular git repository - use submodule commands
+      echo "  → Using git submodule update..."
+      git submodule update --init --recursive
+    else
+      # Not a git repo (e.g., downloaded via install_github tarball)
+      # Manually clone each submodule
+      echo "  → Not a git repository, manually cloning submodules..."
+      
+      # Parse .gitmodules and clone each submodule
+      while IFS= read -r line; do
+        if echo "$line" | grep -q "^\[submodule"; then
+          current_submodule=""
+          current_path=""
+          current_url=""
+        elif echo "$line" | grep -q "path = "; then
+          current_path=$(echo "$line" | sed 's/.*path = //' | tr -d '[:space:]')
+        elif echo "$line" | grep -q "url = "; then
+          current_url=$(echo "$line" | sed 's/.*url = //' | tr -d '[:space:]')
+          
+          # When we have both path and URL, clone the submodule
+          if [ -n "$current_path" ] && [ -n "$current_url" ]; then
+            echo "    → Cloning $current_url into $current_path..."
+            rm -rf "$current_path"
+            git clone --depth 1 --recursive "$current_url" "$current_path"
+            current_path=""
+            current_url=""
+          fi
+        fi
+      done < .gitmodules
+    fi
+    
     echo "  ✓ Submodules initialized successfully"
   else
     echo "ERROR: $LIBKRIGING_SRC_PATH is empty/incomplete but cannot initialize submodules"
