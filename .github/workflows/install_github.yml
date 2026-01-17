@@ -2,6 +2,8 @@ name: devtools-install_github
 
 on:
   push:
+    tags:
+      - '*'
   pull_request:
   schedule:
     - cron: '0 2 * * SAT'
@@ -23,7 +25,6 @@ jobs:
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-      TAG_NAME: ${{ github.ref_name }}
     
     steps:
       - uses: r-lib/actions/setup-r@v2
@@ -55,11 +56,22 @@ jobs:
       - name: Install devtools
         shell: bash
         run: |
+          # Download install_packages.R - use tag if available, otherwise master
+          if [ -n "${{ github.ref_type == 'tag' && github.ref_name || '' }}" ]; then
+            REF="${{ github.ref_name }}"
+          else
+            REF="master"
+          fi
           # Add --insecure to workaround missing certificates on Windows
-          # --header is not required by an useful example if the repo becomes private 
-          curl --insecure --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' -LO https://raw.githubusercontent.com/libKriging/rlibkriging/${{ env.TAG_NAME }}/tools/install_packages.R
+          curl --insecure --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' -LO "https://raw.githubusercontent.com/libKriging/rlibkriging/${REF}/tools/install_packages.R"
           Rscript --no-save ./install_packages.R devtools
 
-      - name: install_github from release tag ${{ env.TAG_NAME }}
+      - name: install_github (with tag)
+        if: github.ref_type == 'tag'
         shell: bash
-        run: Rscript -e "library(devtools); install_github('libKriging/rlibkriging@${{ env.TAG_NAME }}'); if (!library('rlibkriging', character.only=TRUE, logical.return=TRUE)) quit(status=1, save='no')"
+        run: Rscript -e "library(devtools); install_github('libKriging/rlibkriging@${{ github.ref_name }}'); if (!library('rlibkriging', character.only=TRUE, logical.return=TRUE)) quit(status=1, save='no')"
+
+      - name: install_github (without tag)
+        if: github.ref_type != 'tag'
+        shell: bash
+        run: Rscript -e "library(devtools); install_github('libKriging/rlibkriging'); if (!library('rlibkriging', character.only=TRUE, logical.return=TRUE)) quit(status=1, save='no')"
