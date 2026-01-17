@@ -16,6 +16,21 @@ fi
 
 LIBKRIGING_SRC_PATH=src/libK
 
+# Check if submodules need to be initialized (e.g., when installing via install_github)
+if [ ! -f "$LIBKRIGING_SRC_PATH/CMakeLists.txt" ]; then
+  echo "Submodules appear to be uninitialized. Checking for git and .gitmodules..."
+  if [ -f ".gitmodules" ] && command -v git >/dev/null 2>&1; then
+    echo "Initializing git submodules..."
+    git submodule update --init --recursive
+    echo "  ✓ Submodules initialized successfully"
+  else
+    echo "ERROR: $LIBKRIGING_SRC_PATH is empty/incomplete but cannot initialize submodules"
+    echo "       Either .gitmodules is missing or git is not available"
+    echo "       Please ensure you have git installed or download a release package instead"
+    exit 1
+  fi
+fi
+
 # Cleanup unused (for R) libKriging deps
 echo "Cleaning up unused libKriging dependencies..."
 rm -rf $LIBKRIGING_SRC_PATH/dependencies/Catch2
