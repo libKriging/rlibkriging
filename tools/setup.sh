@@ -32,6 +32,12 @@ if [ ! -f "$LIBKRIGING_SRC_PATH/CMakeLists.txt" ]; then
       # Manually clone each submodule
       echo "  → Not a git repository, manually cloning submodules..."
       
+      # Check if .gitmodules-shas file exists (contains specific commit SHAs)
+      SHAS_FILE=".gitmodules-shas"
+      if [ -f "$SHAS_FILE" ]; then
+        echo "  → Found $SHAS_FILE with pinned submodule versions"
+      fi
+      
       # Parse .gitmodules and clone each submodule
       while IFS= read -r line; do
         if echo "$line" | grep -q "^\[submodule"; then
@@ -45,9 +51,30 @@ if [ ! -f "$LIBKRIGING_SRC_PATH/CMakeLists.txt" ]; then
           
           # When we have both path and URL, clone the submodule
           if [ -n "$current_path" ] && [ -n "$current_url" ]; then
-            echo "    → Cloning $current_url into $current_path..."
-            rm -rf "$current_path"
-            git clone --depth 1 --recursive "$current_url" "$current_path"
+            # Check if we have a specific commit SHA for this submodule
+            target_sha=""
+            if [ -f "$SHAS_FILE" ]; then
+              target_sha=$(grep "^${current_path} " "$SHAS_FILE" | awk '{print $2}')
+            fi
+            
+            if [ -n "$target_sha" ]; then
+              echo "    → Cloning $current_url into $current_path at commit $target_sha..."
+              rm -rf "$current_path"
+              # Clone and checkout specific commit
+              git clone --no-checkout "$current_url" "$current_path"
+              cd "$current_path"
+              git checkout "$target_sha"
+              # Initialize nested submodules if any
+              if [ -f ".gitmodules" ]; then
+                git submodule update --init --recursive
+              fi
+              cd - > /dev/null
+            else
+              echo "    → Cloning $current_url into $current_path (latest)..."
+              rm -rf "$current_path"
+              git clone --depth 1 --recursive "$current_url" "$current_path"
+            fi
+            
             current_path=""
             current_url=""
           fi
