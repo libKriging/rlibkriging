@@ -32,8 +32,8 @@ if [ ! -f "$LIBKRIGING_SRC_PATH/CMakeLists.txt" ]; then
       # Manually clone each submodule
       echo "  → Not a git repository, manually cloning submodules..."
       
-      # Check if .gitmodules-shas file exists (contains specific commit SHAs)
-      SHAS_FILE=".gitmodules-shas"
+      # Check if tools/gitmodules-shas file exists (contains specific commit SHAs)
+      SHAS_FILE="tools/gitmodules-shas"
       if [ -f "$SHAS_FILE" ]; then
         echo "  → Found $SHAS_FILE with pinned submodule versions"
       fi
