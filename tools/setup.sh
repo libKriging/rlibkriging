@@ -233,10 +233,12 @@ echo "Renaming hidden files for CRAN compliance..."
 if [ -d $LIBKRIGING_SRC_PATH/.travis-ci ]; then
   echo "  → Renaming .travis-ci to travis-ci..."
   mv $LIBKRIGING_SRC_PATH/.travis-ci $LIBKRIGING_SRC_PATH/travis-ci
+  # rename .travis-ci in travis-ci everywhere. Use temp .bak for sed OSX compliance
+  echo "  → Updating .travis-ci references in shell scripts..."
+  find $LIBKRIGING_SRC_PATH -type f -name *.sh -exec sed -i.bak "s/\.travis-ci/travis-ci/g" {} +
+else
+  echo "  ✓ No .travis-ci directory (already renamed to tools/)"
 fi
-# rename .travis-ci in travis-ci everywhere. Use temp .bak for sed OSX compliance
-echo "  → Updating .travis-ci references in shell scripts..."
-find $LIBKRIGING_SRC_PATH -type f -name *.sh -exec sed -i.bak "s/\.travis-ci/travis-ci/g" {} +
 echo "  → Removing git rev-parse dependencies..."
 # remove usages of 'git rev-parse', which is not a standard requirement fo R
 GIT_ROOT=$(pwd);

@@ -62,7 +62,7 @@ jobs:
           fi
           # Add --insecure to workaround missing certificates on Windows
           curl --insecure --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' -LO "https://raw.githubusercontent.com/libKriging/rlibkriging/${REF}/tools/install_packages.R"
-          Rscript --no-save ./install_packages.R devtools
+          Rscript --no-save ./install_packages.R remotes devtools
 
       - name: install_github (with tag)
         if: github.ref_type == 'tag'
