@@ -20,9 +20,14 @@ if test -z "${R_HOME}"; then
    as_fn_error $? "Could not determine R_HOME." "$LINENO" 5
 fi
 
-# Static libKriging build (using libK/.ci)
+# Static libKriging build (using libK CI scripts)
 cd src/libK
-CI=`ls -a | grep travis-ci`
+# Find CI scripts directory: 'tools' (new name since libKriging PR#314), or '.travis-ci'/'travis-ci' (legacy)
+if [ -d tools/common ]; then
+  CI=tools
+else
+  CI=`ls -a | grep travis-ci`
+fi
 echo "CI: "$CI
 
 {
@@ -73,7 +78,7 @@ fi
 BUILD_TEST=false \
 MODE=Release \
 EXTRA_CMAKE_OPTIONS="${EXTRA_CMAKE_OPTIONS:-} -DCMAKE_INSTALL_LIBDIR=lib -DBUILD_SHARED_LIBS=${MAKE_SHARED_LIBS} -DSTATIC_LIB=${STATIC_LIB} -DEXTRA_SYSTEM_LIBRARY_PATH=${EXTRA_SYSTEM_LIBRARY_PATH}" \
-$CI/linux-macos/build.sh # should support '.travis-ci' or 'travis-ci'"
+$CI/linux-macos/build.sh
 
 # Clean up CMake temp directories immediately after build
 find /tmp -maxdepth 1 -name "tmp.*" -type d -user $(id -u) -mmin -10 2>/dev/null | while read dir; do
