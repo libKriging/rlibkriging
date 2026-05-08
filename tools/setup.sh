@@ -277,20 +277,12 @@ cp -r $RLIBKRIGING_PATH/R .
 
 echo "Adding unlink(outfile) calls to documentation examples..."
 # in *KrigingClass.R, ensure no remaining files after examples
+# Insert "#' unlink(outfile)" AFTER lines that use outfile as an argument in @examples,
+# i.e. lines matching "#' ...(<,>outfile" (function call with outfile as argument).
+# This avoids inserting after @export tags (which have no @examples block in new classes),
+# which would cause roxygen2 to interpret "unlink(outfile)" as an explicit export name.
 for f in `ls R/*KrigingClass.R`; do
-  # append "#' unlink(outfile)" in examples block. Located just before function declaration: save.*Kriging and load.*Kriging. example:
-  # ...
-  # #' print(load.NuggetKriging(outfile))
-  # load.NuggetKriging <- function(...
-  # becomes
-  # ...
-  # #' print(load.NuggetKriging(outfile))
-  # #' unlink(outfile)
-  # load.NuggetKriging <- function(...
-  sed -i.bak -E "/^save\..*Kriging/i\\
-#' unlink(outfile)
-" $f
-  sed -i.bak -E "/^load\..*Kriging/i\\
+  sed -i.bak -E "/#' .*[,(]outfile/a\\
 #' unlink(outfile)
 " $f
   rm -f $f.bak
