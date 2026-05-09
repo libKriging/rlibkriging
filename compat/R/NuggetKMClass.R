@@ -7,10 +7,6 @@
 #    stop("Package \"DiceKriging\" not found")
 #}
 
-## Register the S3 class "NuggetKriging" to define the class of the @NuggetKriging
-## slot in a `NuggetKM` object
-setOldClass("NuggetKriging")
-
 #if (requireNamespace("DiceKriging", quietly = TRUE))
 ## *****************************************************************************
 #' @title S4 class for NuggetKriging Models Extending the \code{"km"} Class
@@ -63,7 +59,7 @@ setOldClass("NuggetKriging")
 #' @seealso \code{\link[DiceKriging]{km-class}} in the
 #'     \pkg{DiceKriging} package. The creator \code{\link{NuggetKM}}.
 #' 
-setClass("NuggetKM", slots = c("NuggetKriging" = "NuggetKriging"), contains = "km")
+setClass("NuggetKM", slots = c("NuggetKriging" = "Kriging"), contains = "km")
 
 ## *****************************************************************************
 #' Create an object of S4 class \code{"NuggetKM"} similar to a
@@ -232,7 +228,8 @@ NuggetKM <- function(formula = ~1, design, response,
     optim_set_theta_upper_factor(upper)
 
     if (multistart<=1) multistart=""
-    r <- rlibkriging::NuggetKriging(y = response, X = design, kernel = covtype,
+    r <- rlibkriging::Kriging(y = response, X = design, kernel = covtype,
+                               noise = "nugget",
                               regmodel = formula,
                               normalize = FALSE,
                               objective = estim.method,
@@ -244,7 +241,7 @@ NuggetKM <- function(formula = ~1, design, response,
     optim_set_theta_lower_factor(theta_lower_factor)
     optim_set_theta_upper_factor(theta_upper_factor)
 
-    return(as.km.NuggetKriging(r, .call = match.call()))
+    return(as.km.Kriging(r, .call = match.call()))
 }
 
 ## *****************************************************************************
@@ -264,7 +261,7 @@ predict.NuggetKM <- function(object, newdata, type = "UK",
     if (!isTRUE(light.return)) stop("'light.return = FALSE' unsupported.")
     if (type != "UK") stop("'type != UK' unsupported.")
     
-    y.predict <- predict.NuggetKriging(object@NuggetKriging, x = newdata,
+    y.predict <- predict.Kriging(object@NuggetKriging, x = newdata,
                                  return_stdev = se.compute, return_cov = cov.compute)
     
     output.list <- list()
@@ -370,8 +367,8 @@ simulate.NuggetKM <- function(object, nsim = 1, seed = NULL, newdata,
   if (!isTRUE(cond)) stop("'cond = FALSE' unsupported.")
   if (nugget.sim!=0) stop("'nugget.sim != 0' unsupported.")
   
-  return(simulate.NuggetKriging(object = object@NuggetKriging,
-                          x = newdata,nsim = nsim, seed = seed))
+  return(simulate.Kriging(object = object@NuggetKriging,
+                          x = newdata, nsim = nsim, seed = seed, with_noise = TRUE))
 }
 
 ## *****************************************************************************
@@ -461,7 +458,7 @@ update.NuggetKM <- function(object,
     ## duplicate to avoid changing 'object' in an inconsistent
     ## way (
     obK <- object@NuggetKriging
-    update.NuggetKriging(obK, newy, newX)
+    update.Kriging(obK, newy, newX)
     
     return(as.km(obK))
     
