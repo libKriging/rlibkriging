@@ -274,6 +274,9 @@ echo "  → Copying R sources..."
 # copy resources from libK/binding/R
 rm -rf R
 cp -r $RLIBKRIGING_PATH/R .
+echo "  → Adding DiceKriging compat classes..."
+SCRIPT_DIR=$(dirname "${BASH_SOURCE[0]}")
+cp "${SCRIPT_DIR}/../compat/R/"*.R R/
 
 echo "Adding unlink(outfile) calls to documentation examples..."
 # in *KrigingClass.R, ensure no remaining files after examples
@@ -299,6 +302,7 @@ cp -r $RLIBKRIGING_PATH/NAMESPACE .
 echo "Preparing test files..."
 rm -rf tests
 cp -r $RLIBKRIGING_PATH/tests .
+cp "${SCRIPT_DIR}/../compat/tests/"*.R tests/testthat/
 # detailed tests
 echo "  → Modifying test files for R CMD check..."
 #  remove previous loading of previous custom testthat & rlibkriging (that should not be there, anyway)
