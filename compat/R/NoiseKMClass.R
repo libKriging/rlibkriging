@@ -1,6 +1,5 @@
 ## *****************************************************************************
-## This file contains stuff related to the S4 class "NoiseKM" including its
-## definition as a class extending "km" from the DiceKriging package.
+## This file contains the DiceKriging-compatible NoiseKM constructor wrapper.
 ## ****************************************************************************
     
 #if (!requireNamespace("DiceKriging", quietly = TRUE)) {
@@ -10,15 +9,14 @@
 
 
 ## *****************************************************************************
-#' Create an object of S4 class \code{"NoiseKM"} similar to a
-#' \code{km} object in the \pkg{DiceKriging} package.
+#' Create a DiceKriging-compatible \code{KM} object with the historical
+#' \code{NoiseKM} constructor interface.
 #' 
-#' The class \code{"NoiseKM"} extends the \code{"km"} class of the
-#' \pkg{DiceKriging} package, hence has all slots of \code{"km"}. It
-#' also has an extra slot \code{"NoiseKriging"} slot which contains a copy
-#' of the original object. 
+#' The \code{NoiseKM} wrapper preserves the legacy constructor API while
+#' delegating to \code{Kriging(noise = noise.var)} and returning the resulting
+#' \code{KM} object.
 #'
-#' @title Create an \code{NoiseKM} Object
+#' @title Create a \code{KM} Object with \code{NoiseKM}
 #' 
 #' @author Yann Richet \email{yann.richet@asnr.fr}
 #' 
