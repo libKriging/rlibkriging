@@ -57,6 +57,7 @@ as.km.Kriging <- function(x, .call = NULL, ...) {
         stop("Package \"DiceKriging\" not found")
 
     is_nugget <- kriging_noise_model(x) == "nugget"
+    is_hetero <- kriging_noise_model(x) == "heterogeneous"
     model <- new("KM")
     model@Kriging <- x
 
@@ -76,8 +77,13 @@ as.km.Kriging <- function(x, .call = NULL, ...) {
     model@F <- m$F
     colnames(model@F) <- colnames(model.matrix(model@trend.formula,data))
     model@p <- ncol(m$F)
-    model@noise.flag <- FALSE
-    model@noise.var <- 0
+    if (is_hetero) {
+        model@noise.flag <- TRUE
+        model@noise.var <- as.numeric(m$noise)
+    } else {
+        model@noise.flag <- FALSE
+        model@noise.var <- 0
+    }
 
     if (is_nugget)
       model@case <- "LLconcentration_beta_v_alpha"

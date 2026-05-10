@@ -97,7 +97,9 @@ setClass("KM", slots = c("Kriging" = "Kriging"), contains = "km")
 #' @param coef.var Optional value for a fixed variance. If given, no
 #'     optimization is done.
 #'
-#' @param nugget,nugget.estim,noise.var Not implemented yet. 
+#' @param nugget Ignored (kept for DiceKriging API compatibility).
+#' @param nugget.estim Logical. If \code{TRUE}, fit a nugget effect.
+#' @param noise.var Numeric vector of known per-point noise variances.
 #'
 #' @param estim.method Estimation criterion. \code{"MLE"} for
 #'     Maximum-Likelihood or \code{"LOO"} for Leave-One-Out
@@ -160,13 +162,8 @@ KM <- function(formula = ~1, design, response,
     if (!is.null(penalty)) {
         stop("The formal arg 'penalty' can not be used for now.")
     }
-    if (nugget.estim) {
-        stop("The formal args 'nugget.estim' ",
-             "can only be used with NuggetKM()")
-    }
-    if (!is.null(nugget) || !is.null(noise.var)) {
-        stop("The formal args 'nugget' and 'noise.var' ",
-             "can only be used with NoiseKM() or NuggetKM()")
+    if (!is.null(nugget)) {
+        warning("The formal arg 'nugget' is ignored; use 'nugget.estim=TRUE' for nugget effect.")
     }
     if (!is.null(control) || !gr || iso) {
          stop("The formal args'control', 'gr' ",
@@ -225,11 +222,14 @@ KM <- function(formula = ~1, design, response,
     optim_set_theta_upper_factor(upper)
 
     if (multistart<=1) multistart=""
+
+    noise <- if (nugget.estim) "nugget" else if (!is.null(noise.var)) noise.var else NULL
     r <- rlibkriging::Kriging(y = response, X = design, kernel = covtype,
                               regmodel = formula,
                               normalize = FALSE,
                               objective = estim.method,
                               optim = paste0(optim.method, multistart),
+                              noise = noise,
                               parameters = parameters)
     
     # Back to previous setup
