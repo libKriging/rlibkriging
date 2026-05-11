@@ -278,6 +278,42 @@ echo "  → Adding DiceKriging compat classes..."
 SCRIPT_DIR=$(dirname "${BASH_SOURCE[0]}")
 cp "${SCRIPT_DIR}/../compat/R/"*.R R/
 
+echo "Patching zzz.R: fix ::: call and 'no definition for class' warning in setMethod..."
+# zzz.R (from the submodule) contains .register_warpkriging_simulate_s4() which:
+#   1. Uses rlibkriging:::simulate.WarpKriging — triggers R CMD check NOTE
+#      ("there are ::: calls to the package's namespace").
+#      Fix: remove the rlibkriging::: prefix; inside the package the function
+#      is in scope without it.
+#   2. Calls setMethod("simulate","WarpKriging",...,where=.GlobalEnv) without
+#      first ensuring "WarpKriging" is known in that context — triggers
+#      "no definition for class 'WarpKriging'" at startup.
+#      Fix: call setOldClass("WarpKriging") just before setMethod so the class
+#      is always registered before the method is added.
+if [ -f R/zzz.R ]; then
+  python3 - R/zzz.R << 'PYEOF'
+import sys
+
+with open(sys.argv[1]) as fh:
+    content = fh.read()
+
+# Fix 1: remove rlibkriging::: prefix – in-package code needs no ::: qualifier
+content = content.replace('rlibkriging:::simulate.WarpKriging',
+                           'simulate.WarpKriging')
+
+# Fix 2: ensure setOldClass("WarpKriging") is called just before setMethod so
+# the class is always registered in the current dispatch context, suppressing
+# the "no definition for class" startup warning.
+old = '      methods::setMethod(\n        "simulate", "WarpKriging",'
+new = ('      methods::setOldClass("WarpKriging")\n'
+       '      methods::setMethod(\n        "simulate", "WarpKriging",')
+content = content.replace(old, new)
+
+with open(sys.argv[1], 'w') as fh:
+    fh.write(content)
+PYEOF
+  echo "  ✓ zzz.R patched"
+fi
+
 echo "Adding unlink(outfile) calls to documentation examples..."
 # in *KrigingClass.R, ensure no remaining files after examples
 # Insert "#' unlink(outfile)" AFTER the LAST line in each roxygen example block that
