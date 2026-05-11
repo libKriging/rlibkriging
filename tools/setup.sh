@@ -357,7 +357,13 @@ cp -r $RLIBKRIGING_PATH/NAMESPACE .
 echo "Preparing test files..."
 rm -rf tests
 cp -r $RLIBKRIGING_PATH/tests .
-cp "${SCRIPT_DIR}/../compat/tests/"*.R tests/testthat/
+# Copy compat tests, excluding RobustGaSP tests (RobustGaSP not in DESCRIPTION)
+for f in "${SCRIPT_DIR}/../compat/tests/"*.R; do
+  case "$(basename "$f")" in
+    test-RobustGaSP*) echo "  ⚠ Skipping RobustGaSP test: $(basename "$f")" ;;
+    *) cp "$f" tests/testthat/ ;;
+  esac
+done
 # detailed tests
 echo "  → Modifying test files for R CMD check..."
 #  remove previous loading of previous custom testthat & rlibkriging (that should not be there, anyway)
@@ -443,8 +449,9 @@ rm -rf tests/test-KrigingCholCrash.R
 rm -rf tests/demo*
 rm -rf tests/bench*
 rm -rf tests/bug*
-echo "  → Adding compat bench files (DiceDesign-free)..."
-cp "${SCRIPT_DIR}/../compat/bench/"*.R tests/
+# bench files are benchmarks only (not R CMD check tests); place in inst/bench for manual use
+mkdir -p inst/bench
+cp "${SCRIPT_DIR}/../compat/bench/"*.R inst/bench/
 
 echo "Syncing documentation with roxygen2..."
 # sync man content, if roxygen2 available
@@ -464,9 +471,11 @@ echo "Cleaning up build directory..."
 rm -rf $LIBKRIGING_SRC_PATH/build
 
 echo "Ensuring LF line endings for Unix compatibility..."
-# Ensure LF line endings for Makefiles and shell scripts (CRLF causes issues on Unix)
+# Ensure LF line endings for Makefiles, shell scripts, and C/C++ headers
 find $LIBKRIGING_SRC_PATH -type f \( -name 'Makefile*' -o -name '*.sh' \) -exec sed -i.bak $'s/\r$//' {} +
 find . -type f \( -name 'Makefile*' -o -name '*.sh' \) -exec sed -i.bak $'s/\r$//' {} +
+# Fix CRLF in inst/include headers (R CMD check --as-cran flags these)
+find inst/include -type f \( -name '*.h' -o -name '*.hpp' \) -exec sed -i.bak $'s/\r$//' {} + 2>/dev/null || true
 find . -type f -name '*.bak' -exec rm -f {} +
 
 echo "========================================================================="
