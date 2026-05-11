@@ -280,16 +280,35 @@ cp "${SCRIPT_DIR}/../compat/R/"*.R R/
 
 echo "Adding unlink(outfile) calls to documentation examples..."
 # in *KrigingClass.R, ensure no remaining files after examples
-# Insert "#' unlink(outfile)" AFTER lines that use outfile as an argument in @examples,
-# i.e. lines matching "#' ...(<,>outfile" (function call with outfile as argument).
+# Insert "#' unlink(outfile)" AFTER the LAST line in each roxygen example block that
+# uses outfile as a function argument (matching "#' ...(<,>outfile").
+# Inserting only after the last use avoids deleting the file before a subsequent
+# load call in the same example (e.g. save(k,outfile) followed by load.Kriging(outfile)).
 # This avoids inserting after @export tags (which have no @examples block in new classes),
 # which would cause roxygen2 to interpret "unlink(outfile)" as an explicit export name.
-for f in `ls R/*KrigingClass.R`; do
-  sed -i.bak -E "/#' .*[,(]outfile/a\\
-#' unlink(outfile)
-" $f
-  rm -f $f.bak
-done
+python3 - R/*KrigingClass.R << 'PYEOF'
+import re, sys
+
+for fname in sys.argv[1:]:
+    with open(fname) as fh:
+        lines = fh.readlines()
+    result = []
+    for i, line in enumerate(lines):
+        result.append(line)
+        if re.search(r"#' .*[,(]outfile", line):
+            # Only add unlink after the LAST outfile use in the roxygen block
+            has_later = False
+            for j in range(i + 1, len(lines)):
+                if not lines[j].startswith("#'"):
+                    break
+                if 'outfile' in lines[j]:
+                    has_later = True
+                    break
+            if not has_later:
+                result.append("#' unlink(outfile)\n")
+    with open(fname, 'w') as fh:
+        fh.writelines(result)
+PYEOF
 echo "  ✓ Documentation cleanup added"
 
 echo "  → Copying C++ sources..."
