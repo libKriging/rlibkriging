@@ -17,6 +17,7 @@ setOldClass("Kriging")
 setOldClass("WarpKriging")
 setOldClass("MLPKriging")
 
+#' @import methods
 #' @importFrom stats setNames
 NULL
 
