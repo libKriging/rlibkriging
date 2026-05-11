@@ -9,18 +9,14 @@ SHAS_FILE="$SCRIPT_DIR/gitmodules-shas"
 
 echo "Updating tools/gitmodules-shas with current submodule commits..."
 
-# Get the list of submodules and their commits
-git ls-tree HEAD $(git config --file .gitmodules --get-regexp path | awk '{ print $2 }') > "$SHAS_FILE.tmp"
-
-# Add header and format
+# Use staged index if available (during pre-commit), otherwise fall back to HEAD
+# git ls-files --stage shows the staged state; for submodules mode=160000
 {
   echo "# This file records the specific commit SHAs for each submodule"
   echo "# It is automatically generated and should be updated when submodules are updated"
   echo "# Format: <submodule_path> <commit_sha>"
-  awk '{print $4, $3}' "$SHAS_FILE.tmp"
+  git ls-files --stage | awk '$1 == "160000" { print $4, $2 }'
 } > "$SHAS_FILE"
-
-rm -f "$SHAS_FILE.tmp"
 
 echo "✓ Updated tools/gitmodules-shas:"
 cat "$SHAS_FILE"
