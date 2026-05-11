@@ -270,14 +270,6 @@ else
   echo "WARNING: src/Makevars not found, skipping copy"
 fi
 
-echo "  → Patching submodule DESCRIPTION: removing DiceKriging/RobustGaSP/DiceDesign from Suggests..."
-sed -i.bak \
-  -e 's/,\s*DiceKriging//g' \
-  -e 's/,\s*RobustGaSP//g' \
-  -e 's/,\s*DiceDesign//g' \
-  "$RLIBKRIGING_PATH/DESCRIPTION"
-rm -f "$RLIBKRIGING_PATH/DESCRIPTION.bak"
-
 echo "  → Copying R sources..."
 # copy resources from libK/binding/R
 rm -rf R
