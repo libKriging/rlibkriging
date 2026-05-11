@@ -11,6 +11,15 @@
 ## slot in a `KM` object
 setOldClass("Kriging")
 
+## Register WarpKriging and MLPKriging as S4-known S3 classes so that the
+## S4 simulate generic (exported via exportMethods) can bridge to their
+## S3 simulate.* methods without "no definition for class" warnings.
+setOldClass("WarpKriging")
+setOldClass("MLPKriging")
+
+#' @importFrom stats setNames
+NULL
+
 #if (requireNamespace("DiceKriging", quietly = TRUE))
 ## *****************************************************************************
 #' @title S4 class for Kriging Models Extending the \code{"km"} Class
