@@ -12,7 +12,28 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  check-gitmodules-shas:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: false
+      - name: Verify tools/gitmodules-shas is up to date
+        shell: bash
+        run: |
+          expected="src/libK $(git ls-tree HEAD src/libK | awk '{print $3}')"
+          actual=$(grep "^src/libK " tools/gitmodules-shas | head -1)
+          if [ "$expected" != "$actual" ]; then
+            echo "ERROR: tools/gitmodules-shas is out of date!"
+            echo "  Expected: $expected"
+            echo "  Actual:   $actual"
+            echo "Run: bash tools/update_submodule_shas.sh && git add tools/gitmodules-shas && git commit"
+            exit 1
+          fi
+          echo "✓ tools/gitmodules-shas is up to date: $actual"
+
   install_github:
+    needs: check-gitmodules-shas
     strategy:
       fail-fast: false
       matrix:
