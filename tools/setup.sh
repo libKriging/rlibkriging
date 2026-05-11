@@ -443,6 +443,8 @@ rm -rf tests/test-KrigingCholCrash.R
 rm -rf tests/demo*
 rm -rf tests/bench*
 rm -rf tests/bug*
+echo "  → Adding compat bench files (DiceDesign-free)..."
+cp "${SCRIPT_DIR}/../compat/bench/"*.R tests/
 
 echo "Syncing documentation with roxygen2..."
 # sync man content, if roxygen2 available
