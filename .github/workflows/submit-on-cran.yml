@@ -41,14 +41,13 @@ jobs:
 
       - name: R CMD build
         shell: bash
-        env: # this alias helps to reuse following line as script
+        env:
           OS: ${{ matrix.os }}
         run: |
-          pushd ..
-          R CMD build rlibkriging 
-          mkdir rlibkriging/CRAN-$OS
-          mv rlibkriging_*.* rlibkriging/CRAN-$OS/.
-          popd
+          R CMD build .
+          mkdir CRAN-$OS
+          mv rlibkriging_*.tar.gz CRAN-$OS/.
+          echo "PKG_FILE=$(ls CRAN-$OS/rlibkriging_*.tar.gz)" >> $GITHUB_ENV
 
       - name: Install dependencies for tests
         shell: bash
@@ -60,10 +59,8 @@ jobs:
 
       - name: R CMD check
         shell: bash
-        env:
-          OS: ${{ matrix.os }}
         run: |
-          R CMD check --as-cran --no-manual CRAN-$OS/rlibkriging* || (
+          R CMD check --as-cran --no-manual "$PKG_FILE" || (
             test -f rlibkriging.Rcheck/00install.out && cat rlibkriging.Rcheck/00install.out | sed -e 's/^/00install.out| /' && echo "[The error may be shown before 00install.out| listing";
             exit 1
           )
