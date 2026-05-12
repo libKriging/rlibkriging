@@ -467,6 +467,21 @@ fi
 echo "Cleaning up build directory..."
 rm -rf $LIBKRIGING_SRC_PATH/build
 
+echo "Removing unused bindings from src/libK..."
+# Julia, Octave, Python bindings are not needed for R
+rm -rf $LIBKRIGING_SRC_PATH/bindings/Julia
+rm -rf $LIBKRIGING_SRC_PATH/bindings/Octave
+rm -rf $LIBKRIGING_SRC_PATH/bindings/Python
+rm -rf $LIBKRIGING_SRC_PATH/bindings/README.md
+# R binding sources have already been copied to the package root; only
+# bindings/R/check.mk and bindings/R/tools/ are still referenced by src/Makevars
+rm -rf $LIBKRIGING_SRC_PATH/bindings/R/rlibkriging
+rm -rf $LIBKRIGING_SRC_PATH/bindings/R/Rcpp
+rm -rf $LIBKRIGING_SRC_PATH/bindings/R/Makefile
+rm -rf $LIBKRIGING_SRC_PATH/bindings/R/README.md
+rm -rf $LIBKRIGING_SRC_PATH/bindings/R/*.ipynb
+echo "  ✓ Unused bindings removed"
+
 echo "Ensuring LF line endings for Unix compatibility..."
 # Ensure LF line endings for Makefiles, shell scripts, and C/C++ headers
 find $LIBKRIGING_SRC_PATH -type f \( -name 'Makefile*' -o -name '*.sh' \) -exec sed -i.bak $'s/\r$//' {} +
