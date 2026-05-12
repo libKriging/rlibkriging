@@ -53,9 +53,10 @@ jobs:
       - name: Install dependencies for tests
         shell: bash
         run: |
-          Rscript --no-save ./tools/install_packages.R testthat DiceKriging
-          # Verify DiceKriging is properly installed
+          Rscript --no-save ./tools/install_packages.R testthat DiceKriging RobustGaSP
+          # Verify DiceKriging and RobustGaSP are properly installed
           Rscript -e "if (!requireNamespace('DiceKriging', quietly = TRUE)) { stop('DiceKriging installation failed') } else { cat('DiceKriging version:', as.character(packageVersion('DiceKriging')), '\n') }"
+          Rscript -e "if (!requireNamespace('RobustGaSP', quietly = TRUE)) { stop('RobustGaSP installation failed') } else { cat('RobustGaSP version:', as.character(packageVersion('RobustGaSP')), '\n') }"
 
       - name: R CMD check
         shell: bash

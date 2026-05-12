@@ -357,12 +357,9 @@ cp -r $RLIBKRIGING_PATH/NAMESPACE .
 echo "Preparing test files..."
 rm -rf tests
 cp -r $RLIBKRIGING_PATH/tests .
-# Copy compat tests, excluding RobustGaSP tests (RobustGaSP not in DESCRIPTION)
+# Copy compat tests (RobustGaSP tests are wrapped with requireNamespace guard below)
 for f in "${SCRIPT_DIR}/../compat/tests/"*.R; do
-  case "$(basename "$f")" in
-    test-RobustGaSP*) echo "  ⚠ Skipping RobustGaSP test: $(basename "$f")" ;;
-    *) cp "$f" tests/testthat/ ;;
-  esac
+  cp "$f" tests/testthat/
 done
 # detailed tests
 echo "  → Modifying test files for R CMD check..."
