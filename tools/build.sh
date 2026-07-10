@@ -75,6 +75,37 @@ if [ "$_R_CHECK_CRAN_INCOMING_" != "FALSE" ]; then
   EXTRA_CMAKE_OPTIONS="-DRCPP_INCLUDE_PATH=${RCPP_INCLUDE_PATH} -DR_INCLUDE_PATH=${R_INCLUDE_PATH} ${EXTRA_CMAKE_OPTIONS}"
 fi
 
+# macOS: align the static-lib build's deployment target with the one R links
+# against. cmake otherwise defaults CMAKE_OSX_DEPLOYMENT_TARGET to the host OS
+# (e.g. 26.4), so the static libs are "built for newer macOS than being linked"
+# (e.g. 26.0); ld warns and R CMD check reports
+# "checking whether package can be installed ... WARNING".
+if [ "$(uname -s)" = "Darwin" ]; then
+  MACOS_TARGET="${MACOSX_DEPLOYMENT_TARGET:-}"
+  if [ -z "$MACOS_TARGET" ]; then
+    MACOS_TARGET=$(printf '%s %s' "${CFLAGS:-}" "${CXXFLAGS:-}" | tr ' ' '\n' | sed -n 's/^-mmacosx-version-min=//p' | head -1)
+  fi
+  if [ -z "$MACOS_TARGET" ]; then
+    MACOS_TARGET=$(${R_HOME}/bin/Rscript -e 'cat(Sys.getenv("MACOSX_DEPLOYMENT_TARGET"))' 2>/dev/null || true)
+  fi
+  if [ -z "$MACOS_TARGET" ]; then
+    # Most reliable: ask R's own C compiler what min macOS version it targets.
+    # The macro value is major*10000 + minor*100 + patch (e.g. 260000 -> 26.0).
+    _min=$(printf '' | ${CC:-cc} ${CFLAGS:-} -dM -E - 2>/dev/null \
+             | awk '/__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__/ {print $3; exit}')
+    if [ -n "$_min" ]; then
+      MACOS_TARGET="$(( _min / 10000 )).$(( (_min / 100) % 100 ))"
+    fi
+  fi
+  if [ -n "$MACOS_TARGET" ]; then
+    export MACOSX_DEPLOYMENT_TARGET="$MACOS_TARGET"
+    EXTRA_CMAKE_OPTIONS="-DCMAKE_OSX_DEPLOYMENT_TARGET=${MACOS_TARGET} ${EXTRA_CMAKE_OPTIONS:-}"
+    echo "build: macOS deployment target aligned with R -> ${MACOS_TARGET}"
+  else
+    echo "build: could not determine R macOS deployment target; leaving cmake default"
+  fi
+fi
+
 BUILD_TEST=false \
 MODE=Release \
 EXTRA_CMAKE_OPTIONS="${EXTRA_CMAKE_OPTIONS:-} -DCMAKE_INSTALL_LIBDIR=lib -DBUILD_SHARED_LIBS=${MAKE_SHARED_LIBS} -DSTATIC_LIB=${STATIC_LIB} -DEXTRA_SYSTEM_LIBRARY_PATH=${EXTRA_SYSTEM_LIBRARY_PATH}" \
