@@ -99,6 +99,9 @@ rm -rf $LIBKRIGING_SRC_PATH/dependencies/pybind11
 rm -rf $LIBKRIGING_SRC_PATH/dependencies/optim
 rm -rf $LIBKRIGING_SRC_PATH/docs
 rm -rf $LIBKRIGING_SRC_PATH/tests
+# libKriging repo root files that are not part of the R package and would
+# otherwise trip R CMD check (e.g. a CITATION.cff in a non-standard place).
+rm -f $LIBKRIGING_SRC_PATH/CITATION.cff
 
 echo "Disabling tests and benchmarks in CMakeLists.txt..."
 if [ ! -f "$LIBKRIGING_SRC_PATH/CMakeLists.txt" ]; then

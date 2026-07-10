@@ -88,9 +88,23 @@ jobs:
       - name: install_github (with tag)
         if: github.ref_type == 'tag'
         shell: bash
-        run: Rscript -e "library(devtools); install_github('libKriging/rlibkriging@${{ github.ref_name }}'); if (!library('rlibkriging', character.only=TRUE, logical.return=TRUE)) quit(status=1, save='no')"
+        run: |
+          for attempt in 1 2 3; do
+            echo "install_github attempt ${attempt}/3"
+            Rscript -e "library(devtools); install_github('libKriging/rlibkriging@${{ github.ref_name }}'); if (!library('rlibkriging', character.only=TRUE, logical.return=TRUE)) quit(status=1, save='no')" && exit 0
+            echo "install_github attempt ${attempt} failed (e.g. transient pak subprocess error); retrying in 20s..."
+            sleep 20
+          done
+          echo "install_github failed after 3 attempts"; exit 1
 
       - name: install_github (without tag)
         if: github.ref_type != 'tag'
         shell: bash
-        run: Rscript -e "library(devtools); install_github('libKriging/rlibkriging'); if (!library('rlibkriging', character.only=TRUE, logical.return=TRUE)) quit(status=1, save='no')"
+        run: |
+          for attempt in 1 2 3; do
+            echo "install_github attempt ${attempt}/3"
+            Rscript -e "library(devtools); install_github('libKriging/rlibkriging'); if (!library('rlibkriging', character.only=TRUE, logical.return=TRUE)) quit(status=1, save='no')" && exit 0
+            echo "install_github attempt ${attempt} failed (e.g. transient pak subprocess error); retrying in 20s..."
+            sleep 20
+          done
+          echo "install_github failed after 3 attempts"; exit 1
