@@ -104,6 +104,12 @@ if [ "$(uname -s)" = "Darwin" ]; then
   else
     echo "build: could not determine R macOS deployment target; leaving cmake default"
   fi
+
+  # Silence the char_traits<unsigned char> deprecation emitted by newer macOS
+  # libc++ for the vendored nlohmann/json specialization (a false positive from a
+  # vendored dependency). Otherwise R CMD check flags it as a significant install
+  # warning. Scoped to the C++ static-lib build (cmake reads CXXFLAGS).
+  export CXXFLAGS="${CXXFLAGS:-} -Wno-deprecated-declarations"
 fi
 
 BUILD_TEST=false \
