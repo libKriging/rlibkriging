@@ -39,6 +39,14 @@ jobs:
         with:
           cmake-version: '3.24.x'
 
+      # Assemble the R package from the libKriging submodule (generate R/, docs,
+      # tests; strip non-package files). Without this, `R CMD build .` packages
+      # an incomplete tree (missing R code/docs/tests -> many spurious WARNINGs).
+      # Mirrors the pre-compile step in check-standard.yaml.
+      - name: pre-compile step
+        shell: bash
+        run: ./tools/setup.sh
+
       - name: R CMD build
         shell: bash
         env:
