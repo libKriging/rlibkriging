@@ -1,3 +1,11 @@
+# rlibkriging 1.1-1
+
+## Fixes
+
+* Shrink `test-NestedKriging.R` design/test sizes to avoid a check timeout on
+  slow CRAN workers (e.g. `r-devel-linux-x86_64-fedora-*`, which exceeded the
+  45-minute test time limit under 1.1-0).
+
 # rlibkriging 1.1-0
 
 ## New features

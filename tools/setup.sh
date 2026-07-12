@@ -412,6 +412,13 @@ for f in `ls -d tests/test-*.R 2>/dev/null`; do
   rm -f $f.bak
   # for the same thread-safe issue, disable chol_warning by default:
   sed -i.bak -e "s|linalg_set_chol_warning(TRUE)|linalg_set_chol_warning(FALSE)|g" $f
+  rm -f $f.bak
+  # NestedKriging: shrink design/test sizes (fit is O(n^3) per BFGS iteration,
+  # and the test file chains ~10 fits); avoids timeout on slow CRAN workers
+  # (e.g. Fedora, see r-devel-linux-x86_64-fedora-* timing out at 45min)
+  sed -i.bak -e "s|runif(2 \* 200)|runif(2 * 40)|g" $f
+  rm -f $f.bak
+  sed -i.bak -e "s|runif(2 \* 100)|runif(2 * 25)|g" $f
   # if test file includes RobustGaSP, add conditional loading
   if grep -q "RobustGaSP" $f; then
     echo "if(requireNamespace('RobustGaSP', quietly = TRUE)) {" > $f.new

@@ -1,16 +1,17 @@
 ## Submission
 
-This is a feature update of rlibkriging (1.1-0), updating the current CRAN
-version 0.9-3. (Version 1.0-0 was a GitHub-only release and was not submitted
-to CRAN.)
+This is a bugfix update of rlibkriging (1.1-1), fixing a check timeout in the
+previous submission (1.1-0). No user-visible feature changes.
 
-Main user-visible changes (see NEWS.md):
-
-* new `NestedKriging` class (divide-and-conquer GP for large designs);
-* new Vecchia approximated log-likelihood fit objective `"VLL(m)"`;
-* `objective` also accepts `"VLL"`/`"VLL(m)"` and `regmodel` accepts
-  `"quadratic"`; the `noise` argument of `Kriging()`/`fit()` moved to the last
-  position (named calls are unaffected).
+The 1.1-0 check failed with 1 ERROR on r-devel-linux-x86_64-fedora-clang and
+r-devel-linux-x86_64-fedora-gcc: `tests/test-NestedKriging.R` exceeded the
+45-minute test time limit on these (apparently slower) workers, while passing
+comfortably on all other 11 platforms (Linux Debian/patched/release, Windows,
+macOS). The test itself was not failing logically; it was simply too costly
+(it chains about ten `Kriging`/`NestedKriging` fits, each O(n^3) per BFGS
+iteration). We have reduced the design/test sample sizes used in that test
+file (see NEWS.md), cutting its runtime by roughly two orders of magnitude
+while keeping the same (relative) assertions and coverage.
 
 ## Test environments
 
