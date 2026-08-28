@@ -289,20 +289,11 @@ cp -r $RLIBKRIGING_PATH/src .
 echo "  → Copying NAMESPACE..."
 cp -r $RLIBKRIGING_PATH/NAMESPACE .
 
-# Cosmetic post-copy tweaks to the copied R sources (R CMD check NOTEs, example
-# file cleanup):
-#   - R/zzz.R: drop the rlibkriging::: self-qualifier on simulate.WarpKriging
-#     and add setOldClass("WarpKriging") just before the setMethod() call
-#     (silences the "no definition for class 'WarpKriging'" startup warning).
-#   - R/*KrigingClass.R: append `#' unlink(outfile)` after the last outfile use
-#     in each roxygen block, so run examples leave no file behind.
-# Run AFTER the C++ sources and NAMESPACE are in place, and never allowed to
-# abort the build: a failure here (previously: no python3 on a minimal image
-# such as rocker/r-ver) must not yield a bindings-less package with a default
-# NAMESPACE. Implemented in R so setup.sh needs no python3 interpreter.
-echo "Patching copied R sources (zzz.R / *KrigingClass.R)..."
-"${R_HOME}/bin/Rscript" "${SCRIPT_DIR}/patch-r-sources.R" \
-  || echo "  WARNING: R source doc-patches skipped (non-fatal)"
+# NB: the R binding sources are used as-is. The zzz.R ::: self-call /
+# setOldClass("WarpKriging") fix and the `unlink(outfile)` example cleanup that
+# used to be applied here with inline python3 heredocs now live in the
+# libKriging sources themselves (libKriging/libKriging#360). Nothing to patch,
+# and setup.sh no longer needs a python3 interpreter.
 
 echo "Preparing test files..."
 rm -rf tests
