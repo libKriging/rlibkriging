@@ -55,7 +55,10 @@ for (f in Sys.glob("R/*KrigingClass.R")) {
   out <- character(0)
   for (i in seq_along(lines)) {
     out <- c(out, lines[i])
-    if (grepl("#' .*[,(]outfile", lines[i])) {
+    # skip the line we may have inserted on an earlier run, so re-running is a
+    # no-op (the original python heredoc was not idempotent)
+    if (grepl("#' .*[,(]outfile", lines[i]) &&
+        !grepl("unlink(outfile)", lines[i], fixed = TRUE)) {
       has_later <- FALSE
       j <- i + 1L
       while (j <= length(lines) && startsWith(lines[j], "#'")) {
