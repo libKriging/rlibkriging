@@ -282,81 +282,18 @@ echo "  → Adding DiceKriging compat classes..."
 SCRIPT_DIR=$(dirname "${BASH_SOURCE[0]}")
 cp "${SCRIPT_DIR}/../compat/R/"*.R R/
 
-echo "Patching zzz.R: fix ::: call and 'no definition for class' warning in setMethod..."
-# zzz.R (from the submodule) contains .register_warpkriging_simulate_s4() which:
-#   1. Uses rlibkriging:::simulate.WarpKriging — triggers R CMD check NOTE
-#      ("there are ::: calls to the package's namespace").
-#      Fix: remove the rlibkriging::: prefix; inside the package the function
-#      is in scope without it.
-#   2. Calls setMethod("simulate","WarpKriging",...,where=.GlobalEnv) without
-#      first ensuring "WarpKriging" is known in that context — triggers
-#      "no definition for class 'WarpKriging'" at startup.
-#      Fix: call setOldClass("WarpKriging") just before setMethod so the class
-#      is always registered before the method is added.
-if [ -f R/zzz.R ]; then
-  python3 - R/zzz.R << 'PYEOF'
-import sys
-
-with open(sys.argv[1]) as fh:
-    content = fh.read()
-
-# Fix 1: remove rlibkriging::: prefix – in-package code needs no ::: qualifier
-content = content.replace('rlibkriging:::simulate.WarpKriging',
-                           'simulate.WarpKriging')
-
-# Fix 2: ensure setOldClass("WarpKriging") is called just before setMethod so
-# the class is always registered in the current dispatch context, suppressing
-# the "no definition for class" startup warning.
-old = '      methods::setMethod(\n        "simulate", "WarpKriging",'
-new = ('      methods::setOldClass("WarpKriging")\n'
-       '      methods::setMethod(\n        "simulate", "WarpKriging",')
-content = content.replace(old, new)
-
-with open(sys.argv[1], 'w') as fh:
-    fh.write(content)
-PYEOF
-  echo "  ✓ zzz.R patched"
-fi
-
-echo "Adding unlink(outfile) calls to documentation examples..."
-# in *KrigingClass.R, ensure no remaining files after examples
-# Insert "#' unlink(outfile)" AFTER the LAST line in each roxygen example block that
-# uses outfile as a function argument (matching "#' ...(<,>outfile").
-# Inserting only after the last use avoids deleting the file before a subsequent
-# load call in the same example (e.g. save(k,outfile) followed by load.Kriging(outfile)).
-# This avoids inserting after @export tags (which have no @examples block in new classes),
-# which would cause roxygen2 to interpret "unlink(outfile)" as an explicit export name.
-python3 - R/*KrigingClass.R << 'PYEOF'
-import re, sys
-
-for fname in sys.argv[1:]:
-    with open(fname) as fh:
-        lines = fh.readlines()
-    result = []
-    for i, line in enumerate(lines):
-        result.append(line)
-        if re.search(r"#' .*[,(]outfile", line):
-            # Only add unlink after the LAST outfile use in the roxygen block
-            has_later = False
-            for j in range(i + 1, len(lines)):
-                if not lines[j].startswith("#'"):
-                    break
-                if 'outfile' in lines[j]:
-                    has_later = True
-                    break
-            if not has_later:
-                result.append("#' unlink(outfile)\n")
-    with open(fname, 'w') as fh:
-        fh.writelines(result)
-PYEOF
-echo "  ✓ Documentation cleanup added"
-
 echo "  → Copying C++ sources..."
 rm -rf src/*.cpp
 cp -r $RLIBKRIGING_PATH/src .
 
 echo "  → Copying NAMESPACE..."
 cp -r $RLIBKRIGING_PATH/NAMESPACE .
+
+# NB: the R binding sources are used as-is. The zzz.R ::: self-call /
+# setOldClass("WarpKriging") fix and the `unlink(outfile)` example cleanup that
+# used to be applied here with inline python3 heredocs now live in the
+# libKriging sources themselves (libKriging/libKriging#360). Nothing to patch,
+# and setup.sh no longer needs a python3 interpreter.
 
 echo "Preparing test files..."
 rm -rf tests
