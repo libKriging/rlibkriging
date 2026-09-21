@@ -103,6 +103,11 @@ rm -rf $LIBKRIGING_SRC_PATH/.tsan-suppressions
 # libKriging repo root files that are not part of the R package and would
 # otherwise trip R CMD check (e.g. a CITATION.cff in a non-standard place).
 rm -f $LIBKRIGING_SRC_PATH/CITATION.cff
+# Claude Code plugin/agent files (dot-directory .claude-plugin, plus skills/commands/AGENTS.md)
+# are not part of the R package; hidden files/directories trigger an R CMD check NOTE.
+rm -rf $LIBKRIGING_SRC_PATH/.claude-plugin $LIBKRIGING_SRC_PATH/.claude
+rm -rf $LIBKRIGING_SRC_PATH/skills $LIBKRIGING_SRC_PATH/commands
+rm -f $LIBKRIGING_SRC_PATH/AGENTS.md
 
 echo "Disabling tests and benchmarks in CMakeLists.txt..."
 if [ ! -f "$LIBKRIGING_SRC_PATH/CMakeLists.txt" ]; then
@@ -288,6 +293,9 @@ cp -r $RLIBKRIGING_PATH/src .
 
 echo "  → Copying NAMESPACE..."
 cp -r $RLIBKRIGING_PATH/NAMESPACE .
+# add compat classes (KM, as.km...) directives: roxygen2 may be missing/broken, and
+# without them the package fails to install (superclass "km" undefined)
+cat "${SCRIPT_DIR}/../compat/NAMESPACE.compat" >> NAMESPACE
 
 # NB: the R binding sources are used as-is. The zzz.R ::: self-call /
 # setOldClass("WarpKriging") fix and the `unlink(outfile)` example cleanup that
@@ -406,7 +414,7 @@ if Rscript -e "if (!requireNamespace('roxygen2', quietly=TRUE)) quit(status=1)" 
   if "${R_HOME}"/bin/R -e "roxygen2::roxygenize('.')" ; then
     echo "  ✓ Documentation synced successfully"
   else
-    echo "WARNING: roxygen2 failed, continuing anyway..."
+    echo "WARNING: roxygen2 failed, continuing anyway: man/ and NAMESPACE are NOT regenerated (do not submit this build to CRAN)"
   fi
 else
   echo "  ⚠ roxygen2 not available, skipping man sync"

@@ -11,6 +11,8 @@
 ^src/slapack/\.git$
 ^\.claude$
 ^src/libK/\.git-hooks$
+^src/libK/\.claude-plugin$
+^src/libK/\.claude$
 ^src/libK/\.github$
 ^src/libK/lbfgsb_cpp/\.github$
 ^\.gitignore$

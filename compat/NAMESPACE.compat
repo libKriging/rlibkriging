@@ -1,0 +1,19 @@
+# NAMESPACE directives required by the DiceKriging-compat R files in compat/R/
+# (KM, NoiseKM, NuggetKM, as.km). They are normally produced by roxygen2 from the
+# @export / @importFrom tags of these files, but the libKriging NAMESPACE that
+# tools/setup.sh starts from does not know about them. tools/setup.sh appends this
+# file so that the package installs even if roxygen2 is unavailable or broken.
+# Keep in sync with the roxygen tags of compat/R/*.R.
+import(methods)
+importFrom(DiceKriging,km)
+importFrom(methods,new)
+importFrom(stats,model.matrix)
+importFrom(stats,qt)
+importFrom(stats,setNames)
+export(KM)
+export(as.km)
+exportClasses(KM)
+exportMethods(predict)
+exportMethods(simulate)
+exportMethods(update)
+S3method(as.km,Kriging)
