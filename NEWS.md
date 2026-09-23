@@ -41,8 +41,9 @@ Based on libKriging 1.2.2. Supersedes 1.2-1, which failed to install on CRAN
   registered with `setOldClass` (no load-time warning), and the `save` / `load`
   examples remove their temporary file.
 * Packaging: `NAMESPACE` no longer depends on `roxygen2` succeeding at build
-  time, and hidden files of the bundled libKriging sources are no longer
-  shipped.
+  time, hidden files of the bundled libKriging sources are no longer shipped,
+  and `libgomp` is no longer linked on macOS, where it is missing with the
+  flang Fortran compiler used by R-devel.
 
 # rlibkriging 1.1-1
 
