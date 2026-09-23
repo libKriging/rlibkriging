@@ -1,8 +1,8 @@
 Package: rlibkriging
 Type: Package
 Title: Kriging Models using the 'libKriging' Library
-Version: 1.1-1
-Date: 2026-07-12
+Version: 1.2-2
+Date: 2026-09-23
 Authors@R:
     c(person(given = "Yann",
              family = "Richet",
@@ -53,4 +53,4 @@ Imports: Rcpp (>= 1.0.12), methods, DiceKriging
 Suggests: testthat, utils, foreach, roxygen2, RobustGaSP
 SystemRequirements: GNU make, cmake (>= 3.2.0), gcc
 URL: https://github.com/libKriging
-Config/roxygen2/version: 8.0.0
+Config/roxygen2/version: 8.1.0
