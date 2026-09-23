@@ -1,15 +1,20 @@
 ## Submission
 
-This is an update of rlibkriging to 1.2-2 (currently 1.1-1 on CRAN), based on
-libKriging 1.2.2. See NEWS.md for the user-visible changes (a renamed
-objective, new large-design methods and several numerical fixes).
+This is a bugfix update of rlibkriging (1.2-3), submitted shortly after 1.2-2
+because 1.2-2 fails to install on macOS with the flang Fortran compiler
+(R-devel). No user-visible changes otherwise.
 
-It also fixes the installation error of the previous submission (1.2-1):
-the submitted `NAMESPACE` lacked `importFrom(DiceKriging, km)` and the
-`KM` / `as.km` exports, so installation failed with "no definition of
-superclass km". `NAMESPACE` is now built without relying on roxygen2
-succeeding at package-preparation time. The hidden files of the bundled
-libKriging sources flagged by the same check are no longer shipped.
+Two build issues, both only hit when `gfortran` is not available:
+
+* `src/Makevars` linked `-lgomp` unconditionally. On macOS the bundled
+  libKriging is built without OpenMP and `libgomp` is only provided by the
+  gfortran runtime, so the link failed with "library 'gomp' not found". It is
+  no longer linked on macOS.
+* The libKriging build script looked up the Fortran compiler with a bare
+  `R CMD config FC`; under `R CMD check` a bare `R` refuses to run, so the
+  bundled library was silently not built and compilation failed with
+  "'libKriging/utils/lkalloc.hpp' file not found". It now calls
+  `${R_HOME}/bin/R`.
 
 ## Test environments
 

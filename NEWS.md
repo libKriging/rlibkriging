@@ -1,3 +1,14 @@
+# rlibkriging 1.2-3
+
+## Fixes
+
+* Fix installation on macOS with the flang Fortran compiler (R-devel):
+  - `libgomp` is no longer linked on macOS, where libKriging is built without
+    OpenMP and `libgomp` only comes with gfortran ("library 'gomp' not found");
+  - the libKriging build now calls R through `R_HOME` to find the Fortran
+    compiler: under `R CMD check`, a bare `R` refuses to run, so libKriging was
+    silently not built ("'libKriging/utils/lkalloc.hpp' file not found").
+
 # rlibkriging 1.2-2
 
 Based on libKriging 1.2.2. Supersedes 1.2-1, which failed to install on CRAN
@@ -41,9 +52,8 @@ Based on libKriging 1.2.2. Supersedes 1.2-1, which failed to install on CRAN
   registered with `setOldClass` (no load-time warning), and the `save` / `load`
   examples remove their temporary file.
 * Packaging: `NAMESPACE` no longer depends on `roxygen2` succeeding at build
-  time, hidden files of the bundled libKriging sources are no longer shipped,
-  and `libgomp` is no longer linked on macOS, where it is missing with the
-  flang Fortran compiler used by R-devel.
+  time, and hidden files of the bundled libKriging sources are no longer
+  shipped.
 
 # rlibkriging 1.1-1
 

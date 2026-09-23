@@ -259,6 +259,13 @@ while [ "$GIT_ROOT" != "/" ]; do
 done
 export GIT_ROOT
 find $LIBKRIGING_SRC_PATH -type f -name *.sh -exec sed -i.bak "s|\$(git rev-parse --show-toplevel)|$GIT_ROOT|g" {} +
+echo "  → Calling R through R_HOME in loadenv.sh..."
+# R CMD check puts a stub 'R' first in PATH that refuses to run without a path: with no
+# gfortran in PATH (flang toolchain, macOS R-devel), 'R CMD config FC' then failed and
+# libKriging was never built. R CMD INSTALL always sets R_HOME.
+sed -i.bak -e 's|command -v R >|command -v "${R_HOME:+$R_HOME/bin/}R" >|' \
+           -e 's|Ftmp=$(R CMD config FC)|Ftmp=$("${R_HOME:+$R_HOME/bin/}R" CMD config FC)|' \
+  $LIBKRIGING_SRC_PATH/tools/linux-macos/loadenv.sh
 # cleanup
 echo "  → Cleaning up .bak files..."
 find $LIBKRIGING_SRC_PATH -type f -name *.bak -exec rm -f {} +;
