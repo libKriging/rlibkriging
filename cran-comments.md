@@ -18,26 +18,26 @@ Two build issues, both only hit when `gfortran` is not available:
 
 ## Test environments
 
-Tested locally (Ubuntu 24.04, R 4.6.1) and via GitHub Actions and R-hub on:
-
-* Ubuntu 22.04, R release, R-devel and R oldrel-1
-* macOS (Apple Silicon), R release, R-devel and R oldrel-1
-* Windows Server, R release, R-devel and R oldrel-1
-
-using `R CMD check --as-cran`.
+* local: Ubuntu 24.04, R 4.6.1
+* GitHub Actions (`R CMD check --as-cran`): Ubuntu 24.04, macOS (Apple
+  Silicon) and Windows Server, each with R release, R-devel and R oldrel-1
 
 ## R CMD check results
 
 0 errors | 0 warnings | 1 note
 
-* checking installed package size ... NOTE
-  installed size is ~40Mb (sub-directories `lib`, `include`, `libs`).
+* checking CRAN incoming feasibility ... NOTE
+  Days since last update: 1
 
-  rlibkriging bundles the 'libKriging' C++ library together with its C++
-  dependencies (Armadillo and lbfgsb) as source and static libraries; the size
-  comes entirely from these vendored components, as in the previous CRAN
-  release. There is no run-time download.
+  This quick resubmission fixes the macOS R-devel installation failure of
+  1.2-2 described above.
+
+The installed package size is reported as INFO only: rlibkriging bundles the
+'libKriging' C++ library and its C++ dependencies (Armadillo and lbfgsb) as
+source and static libraries, as in the previous CRAN releases. There is no
+run-time download.
 
 ## Reverse dependencies
 
-There are no reverse dependencies on CRAN. <!-- please confirm before submitting -->
+We checked the one reverse dependency on CRAN, DiceView 4.0 (Suggests), with
+`R CMD check` against this version: Status OK.
