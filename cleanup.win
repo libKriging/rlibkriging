@@ -6,10 +6,12 @@ RLIBKRIGING_PATH="src/libK/bindings/R/rlibkriging"
 
 # sync Version number & date (only if submodules are initialized)
 if [ -f "$RLIBKRIGING_PATH/DESCRIPTION" ]; then
-  VERSION=`grep "Version:" $RLIBKRIGING_PATH/DESCRIPTION`
-  # update Version only if not the same[+patch]
-  if ! grep -q "$VERSION" DESCRIPTION; then
-    sed -i.bak "s/Version:.*/$VERSION/g" DESCRIPTION
+  LK_VERSION=`sed -n 's/^Version: *//p' $RLIBKRIGING_PATH/DESCRIPTION`
+  R_VERSION=`sed -n 's/^Version: *//p' DESCRIPTION`
+  # update Version only if libKriging's is newer: keeps rlibkriging-only bumps (1.2-3, 1.2-2.1)
+  if [ "$LK_VERSION" != "$R_VERSION" ] && \
+     [ "`printf '%s\n%s\n' "$R_VERSION" "$LK_VERSION" | sort -V | tail -n 1`" = "$LK_VERSION" ]; then
+    sed -i.bak "s/^Version:.*/Version: $LK_VERSION/" DESCRIPTION
   fi
   DATE=`date '+%Y-%m-%d'`
   sed -i.bak "s/Date:.*/Date: $DATE/g" DESCRIPTION
