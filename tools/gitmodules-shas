@@ -1,5 +1,5 @@
 # This file records the specific commit SHAs for each submodule
 # It is automatically generated and should be updated when submodules are updated
 # Format: <submodule_path> <commit_sha>
-src/libK f71be626840cf89f4cd349522fb7617be234d62c
+src/libK 99840a1d0c3b69c60ffc599567ab9b894afa6c6a
 src/slapack 72a7f3753e02b0471e93296f2b22877c6fee7328
